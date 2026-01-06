@@ -1,0 +1,28 @@
+{
+  "services": [
+    {
+      "id": 1,
+      "title": "Web Design",
+      "description": "The most modern and high-quality design made at a professional level.",
+      "icon": "design"
+    },
+    {
+      "id": 2,
+      "title": "Web Development",
+      "description": "High-quality development of sites at the professional level.",
+      "icon": "dev"
+    },
+    {
+      "id": 3,
+      "title": "Mobile Apps",
+      "description": "Professional development of applications for iOS and Android.",
+      "icon": "app"
+    },
+    {
+      "id": 4,
+      "title": "Photography",
+      "description": "I make high-quality photos of any category at a professional level.",
+      "icon": "photo"
+    }
+  ]
+}

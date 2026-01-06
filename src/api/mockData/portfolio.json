@@ -1,0 +1,77 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "Finance",
+      "category": "web development",
+      "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop",
+      "description": "A comprehensive financial management platform with real-time analytics.",
+      "link": "#"
+    },
+    {
+      "id": 2,
+      "title": "Orizon",
+      "category": "web development",
+      "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop",
+      "description": "Modern SaaS platform for team collaboration and project management.",
+      "link": "#"
+    },
+    {
+      "id": 3,
+      "title": "Fundo",
+      "category": "web design",
+      "image": "https://images.unsplash.com/photo-1559028012-481c04fa702d?w=400&h=300&fit=crop",
+      "description": "Creative funding platform with beautiful UI/UX design.",
+      "link": "#"
+    },
+    {
+      "id": 4,
+      "title": "Brawlhalla",
+      "category": "applications",
+      "image": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=300&fit=crop",
+      "description": "Mobile gaming application with multiplayer features.",
+      "link": "#"
+    },
+    {
+      "id": 5,
+      "title": "DSM.",
+      "category": "web design",
+      "image": "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=400&h=300&fit=crop",
+      "description": "Design system management tool for enterprise teams.",
+      "link": "#"
+    },
+    {
+      "id": 6,
+      "title": "MetaSpark",
+      "category": "web design",
+      "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+      "description": "Analytics dashboard with interactive data visualizations.",
+      "link": "#"
+    },
+    {
+      "id": 7,
+      "title": "Summary",
+      "category": "web development",
+      "image": "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop",
+      "description": "Document summarization tool powered by AI.",
+      "link": "#"
+    },
+    {
+      "id": 8,
+      "title": "Task Manager",
+      "category": "applications",
+      "image": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=400&h=300&fit=crop",
+      "description": "Productivity application for task and project management.",
+      "link": "#"
+    },
+    {
+      "id": 9,
+      "title": "Arrival",
+      "category": "web development",
+      "image": "https://images.unsplash.com/photo-1517292987719-0369a794ec0f?w=400&h=300&fit=crop",
+      "description": "Travel booking platform with seamless user experience.",
+      "link": "#"
+    }
+  ],
+  "categories": ["all", "web design", "applications", "web development"]
+}

@@ -1,0 +1,40 @@
+{
+  "clients": [
+    {
+      "id": 1,
+      "name": "TechCorp",
+      "logo": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=150&h=80&fit=crop&q=80",
+      "url": "#"
+    },
+    {
+      "id": 2,
+      "name": "InnovateTech",
+      "logo": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=150&h=80&fit=crop&q=80",
+      "url": "#"
+    },
+    {
+      "id": 3,
+      "name": "DesignStudio",
+      "logo": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=150&h=80&fit=crop&q=80",
+      "url": "#"
+    },
+    {
+      "id": 4,
+      "name": "CreativeAgency",
+      "logo": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=150&h=80&fit=crop&q=80",
+      "url": "#"
+    },
+    {
+      "id": 5,
+      "name": "StartupHub",
+      "logo": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=150&h=80&fit=crop&q=80",
+      "url": "#"
+    },
+    {
+      "id": 6,
+      "name": "GlobalBrand",
+      "logo": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=150&h=80&fit=crop&q=80",
+      "url": "#"
+    }
+  ]
+}

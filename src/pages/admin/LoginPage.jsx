@@ -1,0 +1,136 @@
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { User, Lock, LogIn, Eye, EyeOff } from 'lucide-react';
+
+const LoginPage = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/admin';
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    const result = await login(email, password);
+    
+    if (result.success) {
+      navigate(from, { replace: true });
+    } else {
+      setError(result.message || 'Invalid credentials');
+    }
+    
+    setLoading(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Login Card */}
+        <div 
+          className="relative bg-card border border-border rounded-[20px] p-8 shadow-portfolio-5"
+          style={{ background: 'var(--bg-gradient-jet)' }}
+        >
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 mx-auto mb-4 rounded-[20px] flex items-center justify-center" style={{ background: 'var(--bg-gradient-onyx)' }}>
+              <User className="w-10 h-10 text-primary" />
+            </div>
+            <h1 className="h2 text-white-2 mb-2">Admin Login</h1>
+            <p className="text-light-gray text-sm font-light">Enter your credentials to continue</p>
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 bg-destructive/20 border border-destructive rounded-lg text-destructive text-sm text-center">
+              {error}
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            {/* Email */}
+            <div className="mb-4">
+              <label className="text-light-gray/70 text-xs uppercase mb-2 block">Email</label>
+              <div className="relative">
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="form-input pl-12"
+                  placeholder="admin@example.com"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Password */}
+            <div className="mb-6">
+              <label className="text-light-gray/70 text-xs uppercase mb-2 block">Password</label>
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="form-input pl-12 pr-12"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="form-btn disabled:opacity-50"
+            >
+              <LogIn className="w-5 h-5" />
+              <span>{loading ? 'Signing in...' : 'Sign In'}</span>
+            </button>
+          </form>
+
+          {/* Demo Credentials */}
+          <div className="mt-6 p-4 bg-onyx/50 rounded-lg">
+            <p className="text-light-gray/70 text-xs text-center mb-2">Demo Credentials:</p>
+            <p className="text-light-gray text-sm text-center">
+              Email: <span className="text-primary">admin@example.com</span>
+            </p>
+            <p className="text-light-gray text-sm text-center">
+              Password: <span className="text-primary">password</span>
+            </p>
+          </div>
+        </div>
+
+        {/* Back to Portfolio Link */}
+        <div className="text-center mt-6">
+          <a 
+            href="/" 
+            className="text-light-gray text-sm hover:text-primary transition-colors"
+          >
+            ← Back to Portfolio
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LoginPage;

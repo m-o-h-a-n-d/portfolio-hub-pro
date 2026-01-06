@@ -1,0 +1,58 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "Design conferences in 2022",
+      "category": "Design",
+      "date": "2022-02-23",
+      "image": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop",
+      "excerpt": "Veritatis et quasi architecto beatae vitae dicta sunt, explicabo.",
+      "content": "Full blog post content here..."
+    },
+    {
+      "id": 2,
+      "title": "Best fonts every designer",
+      "category": "Design",
+      "date": "2022-02-23",
+      "image": "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=250&fit=crop",
+      "excerpt": "Sed ut perspiciatis, nam libero tempore, cum soluta nobis est eligendi.",
+      "content": "Full blog post content here..."
+    },
+    {
+      "id": 3,
+      "title": "Design digest #80",
+      "category": "Design",
+      "date": "2022-02-23",
+      "image": "https://images.unsplash.com/photo-1558655146-364adaf1fcc9?w=400&h=250&fit=crop",
+      "excerpt": "Excepteur sint occaecat cupidatat no proident, quis nostrum exercitationem ullam corporis suscipit.",
+      "content": "Full blog post content here..."
+    },
+    {
+      "id": 4,
+      "title": "UI interactions of the week",
+      "category": "Design",
+      "date": "2022-02-23",
+      "image": "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=400&h=250&fit=crop",
+      "excerpt": "Enim ad minim veniam, consectetur adipiscing elit, quis nostrud exercitation ullamco laboris nisi.",
+      "content": "Full blog post content here..."
+    },
+    {
+      "id": 5,
+      "title": "The forgotten art of spacing",
+      "category": "Design",
+      "date": "2022-02-23",
+      "image": "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=400&h=250&fit=crop",
+      "excerpt": "Maxime placeat, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "content": "Full blog post content here..."
+    },
+    {
+      "id": 6,
+      "title": "Design digest #79",
+      "category": "Design",
+      "date": "2022-02-23",
+      "image": "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400&h=250&fit=crop",
+      "excerpt": "Optio cumque nihil impedit uo minus quod maxime placeat, velit esse cillum.",
+      "content": "Full blog post content here..."
+    }
+  ]
+}

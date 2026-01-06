@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: ["./pages/**/*.{ts,tsx,js,jsx}", "./components/**/*.{ts,tsx,js,jsx}", "./app/**/*.{ts,tsx,js,jsx}", "./src/**/*.{ts,tsx,js,jsx}"],
   prefix: "",
   theme: {
     container: {
@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -57,33 +60,62 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Portfolio specific colors
+        jet: "hsl(var(--jet))",
+        onyx: "hsl(var(--onyx))",
+        "eerie-black-1": "hsl(var(--eerie-black-1))",
+        "eerie-black-2": "hsl(var(--eerie-black-2))",
+        "smoky-black": "hsl(var(--smoky-black))",
+        "white-1": "hsl(var(--white-1))",
+        "white-2": "hsl(var(--white-2))",
+        "orange-yellow": "hsl(var(--orange-yellow-crayola))",
+        "vegas-gold": "hsl(var(--vegas-gold))",
+        "light-gray": "hsl(var(--light-gray))",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      boxShadow: {
+        "portfolio-1": "var(--shadow-1)",
+        "portfolio-2": "var(--shadow-2)",
+        "portfolio-3": "var(--shadow-3)",
+        "portfolio-4": "var(--shadow-4)",
+        "portfolio-5": "var(--shadow-5)",
+      },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "fade-in": {
+          from: { opacity: "0", transform: "translateY(10px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "scale-up": {
+          from: { transform: "scale(0.95)", opacity: "0" },
+          to: { transform: "scale(1)", opacity: "1" },
+        },
+        "glow": {
+          "0%, 100%": { 
+            boxShadow: "0 0 5px hsl(var(--primary)), 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary) / 0.5)" 
           },
-          to: {
-            height: "0",
+          "50%": { 
+            boxShadow: "0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--primary) / 0.8)" 
           },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.5s ease forwards",
+        "scale-up": "scale-up 0.3s ease forwards",
+        "glow": "glow 2s ease-in-out infinite",
       },
     },
   },

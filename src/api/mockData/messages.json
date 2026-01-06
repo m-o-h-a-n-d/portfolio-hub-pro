@@ -1,0 +1,45 @@
+{
+  "messages": [
+    {
+      "id": 1,
+      "name": "John Smith",
+      "email": "john.smith@example.com",
+      "message": "Hi Richard, I'm interested in working with you on a web development project. Can we schedule a call to discuss?",
+      "date": "2024-01-15T10:30:00Z",
+      "read": false
+    },
+    {
+      "id": 2,
+      "name": "Sarah Johnson",
+      "email": "sarah.j@company.com",
+      "message": "Hello! I saw your portfolio and I'm impressed with your work. We're looking for a UI/UX designer for our startup.",
+      "date": "2024-01-14T15:45:00Z",
+      "read": true
+    },
+    {
+      "id": 3,
+      "name": "Michael Brown",
+      "email": "m.brown@techcorp.io",
+      "message": "Great portfolio! Would love to discuss a potential collaboration on an upcoming mobile app project.",
+      "date": "2024-01-13T09:15:00Z",
+      "read": true
+    },
+    {
+      "id": 4,
+      "name": "Emily Davis",
+      "email": "emily.davis@designstudio.com",
+      "message": "Hi there! I'm reaching out regarding a freelance opportunity. Please let me know if you're available.",
+      "date": "2024-01-12T14:20:00Z",
+      "read": false
+    },
+    {
+      "id": 5,
+      "name": "David Wilson",
+      "email": "dwilson@agency.net",
+      "message": "We'd like to feature your work in our design magazine. Would you be interested?",
+      "date": "2024-01-11T11:00:00Z",
+      "read": true
+    }
+  ],
+  "unread_count": 2
+}

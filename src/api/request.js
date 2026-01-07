@@ -11,6 +11,7 @@ import messagesData from './mockData/messages.json';
 import servicesData from './mockData/services.json';
 import testimonialsData from './mockData/testimonials.json';
 import clientsData from './mockData/clients.json';
+import settingsData from './mockData/settings.json';
 
 // Mock data mapping
 const mockDataMap = {
@@ -22,6 +23,7 @@ const mockDataMap = {
   '/services': servicesData,
   '/testimonials': testimonialsData,
   '/clients': clientsData,
+  '/settings': settingsData,
 };
 
 // Simulated network delay (300-800ms)
@@ -56,7 +58,7 @@ export const isAuthenticated = () => {
  * @param {object|FormData} body - Request body
  * @returns {Promise} - Response data
  */
-export const apiFetch = async (endpoint, method = 'GET', body = null) => {
+export const apiFetch = async (endpoint, method = 'GET', body = null, isFile = false) => {
   // Mock Mode Logic
   if (MOCK_MODE) {
     await simulateDelay();

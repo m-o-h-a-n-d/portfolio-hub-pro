@@ -11,7 +11,9 @@ const ResumeManager = () => {
   const [editingItem, setEditingItem] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
-    period: '',
+    startYear: new Date().getFullYear().toString(),
+    endYear: new Date().getFullYear().toString(),
+    isPresent: false,
     description: ''
   });
 
@@ -34,16 +36,32 @@ const ResumeManager = () => {
   const openAddModal = () => {
     setModalMode('add');
     setEditingItem(null);
-    setFormData({ title: '', period: '', description: '' });
+    setFormData({ 
+      title: '', 
+      startYear: new Date().getFullYear().toString(),
+      endYear: new Date().getFullYear().toString(),
+      isPresent: false,
+      description: '' 
+    });
     setModalOpen(true);
   };
 
   const openEditModal = (item) => {
     setModalMode('edit');
     setEditingItem(item);
+    
+    // Parse period "2019 — 2022" or "2019 — Present"
+    const parts = item.period.split(' — ');
+    const startYear = parts[0] || new Date().getFullYear().toString();
+    const endPart = parts[1] || '';
+    const isPresent = endPart === 'Present';
+    const endYear = isPresent ? new Date().getFullYear().toString() : endPart;
+
     setFormData({
       title: item.title,
-      period: item.period,
+      startYear,
+      endYear,
+      isPresent,
       description: item.description
     });
     setModalOpen(true);
@@ -52,12 +70,21 @@ const ResumeManager = () => {
   const closeModal = () => {
     setModalOpen(false);
     setEditingItem(null);
-    setFormData({ title: '', period: '', description: '' });
+    setFormData({ 
+      title: '', 
+      startYear: new Date().getFullYear().toString(),
+      endYear: new Date().getFullYear().toString(),
+      isPresent: false,
+      description: '' 
+    });
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: type === 'checkbox' ? checked : value 
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -67,23 +94,27 @@ const ResumeManager = () => {
       const endpoint = activeTab === 'education' ? '/resume/education' : '/resume/experience';
       const method = modalMode === 'add' ? 'POST' : 'PUT';
       
-      await apiPost(endpoint, {
-        ...formData,
+      const period = `${formData.startYear} — ${formData.isPresent ? 'Present' : formData.endYear}`;
+      const submissionData = {
+        title: formData.title,
+        period,
+        description: formData.description,
         id: editingItem?.id || Date.now()
-      });
+      };
+
+      await apiPost(endpoint, submissionData);
 
       // Optimistic update
       if (modalMode === 'add') {
-        const newItem = { ...formData, id: Date.now() };
         setResume(prev => ({
           ...prev,
-          [activeTab]: [...(prev[activeTab] || []), newItem]
+          [activeTab]: [...(prev[activeTab] || []), submissionData]
         }));
       } else {
         setResume(prev => ({
           ...prev,
           [activeTab]: prev[activeTab].map(item => 
-            item.id === editingItem.id ? { ...item, ...formData } : item
+            item.id === editingItem.id ? submissionData : item
           )
         }));
       }
@@ -295,17 +326,48 @@ const ResumeManager = () => {
                     required
                   />
                 </div>
-                <div>
-                  <label className="text-light-gray/70 text-xs uppercase mb-2 block">Period</label>
-                  <input
-                    type="text"
-                    name="period"
-                    value={formData.period}
-                    onChange={handleInputChange}
-                    className="form-input"
-                    placeholder="e.g., 2020 — Present"
-                    required
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-light-gray/70 text-xs uppercase mb-2 block">Start Year</label>
+                    <select
+                      name="startYear"
+                      value={formData.startYear}
+                      onChange={handleInputChange}
+                      className="form-input bg-onyx"
+                      required
+                    >
+                      {Array.from({ length: 31 }, (_, i) => 2010 + i).map(year => (
+                        <option key={year} value={year}>{year}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-light-gray/70 text-xs uppercase mb-2 block">End Year</label>
+                    <div className="flex flex-col gap-2">
+                      <select
+                        name="endYear"
+                        value={formData.endYear}
+                        onChange={handleInputChange}
+                        className="form-input bg-onyx disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={formData.isPresent}
+                        required={!formData.isPresent}
+                      >
+                        {Array.from({ length: 31 }, (_, i) => 2010 + i).map(year => (
+                          <option key={year} value={year}>{year}</option>
+                        ))}
+                      </select>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          name="isPresent"
+                          checked={formData.isPresent}
+                          onChange={handleInputChange}
+                          className="w-4 h-4 rounded border-jet bg-onyx text-primary focus:ring-primary"
+                        />
+                        <span className="text-xs text-muted-foreground uppercase">Currently Working Here</span>
+                      </label>
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <label className="text-light-gray/70 text-xs uppercase mb-2 block">Description</label>

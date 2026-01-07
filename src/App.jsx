@@ -14,6 +14,10 @@ import ProfileManager from "./pages/admin/ProfileManager";
 import ResumeManager from "./pages/admin/ResumeManager";
 import PortfolioManager from "./pages/admin/PortfolioManager";
 import MessagesInbox from "./pages/admin/MessagesInbox";
+import SettingsManager from "./pages/admin/SettingsManager";
+import BlogsManager from "./pages/admin/BlogsManager";
+import ClientsManager from "./pages/admin/ClientsManager";
+import TestimonialsManager from "./pages/admin/TestimonialsManager";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +46,10 @@ const App = () => (
               <Route path="resume" element={<ResumeManager />} />
               <Route path="portfolio" element={<PortfolioManager />} />
               <Route path="messages" element={<MessagesInbox />} />
+              <Route path="settings" element={<SettingsManager />} />
+              <Route path="blogs" element={<BlogsManager />} />
+              <Route path="clients" element={<ClientsManager />} />
+              <Route path="testimonials" element={<TestimonialsManager />} />
             </Route>
             
             {/* 404 */}

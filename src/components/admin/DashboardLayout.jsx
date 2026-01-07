@@ -12,7 +12,11 @@ import {
   X, 
   Bell,
   Home,
-  ChevronRight
+  ChevronRight,
+  Settings,
+  Newspaper,
+  Users,
+  Quote
 } from 'lucide-react';
 
 const DashboardLayout = () => {
@@ -26,7 +30,11 @@ const DashboardLayout = () => {
     { path: '/admin/profile', icon: User, label: 'Profile' },
     { path: '/admin/resume', icon: FileText, label: 'Resume' },
     { path: '/admin/portfolio', icon: Briefcase, label: 'Portfolio' },
+    { path: '/admin/blogs', icon: Newspaper, label: 'Blogs' },
+    { path: '/admin/clients', icon: Users, label: 'Clients' },
+    { path: '/admin/testimonials', icon: Quote, label: 'Testimonials' },
     { path: '/admin/messages', icon: MessageSquare, label: 'Messages' },
+    { path: '/admin/settings', icon: Settings, label: 'Settings' },
   ];
 
   const isActive = (path, exact = false) => {

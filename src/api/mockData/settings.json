@@ -1,0 +1,20 @@
+{
+  "site_identity": {
+    "admin_username": "Richard Hanrick",
+    "logo_url": "/placeholder.svg",
+    "favicon_url": "/favicon.ico"
+  },
+  "social_links": {
+    "facebook": "https://facebook.com",
+    "instagram": "https://instagram.com",
+    "github": "https://github.com",
+    "linkedin": "https://linkedin.com"
+  },
+  "layout_control": {
+    "resume_order": [
+      { "id": "education", "label": "Education", "order": 1 },
+      { "id": "experience", "label": "Experience", "order": 2 },
+      { "id": "skills", "label": "Skills", "order": 3 }
+    ]
+  }
+}

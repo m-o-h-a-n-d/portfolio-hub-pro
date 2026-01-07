@@ -13,6 +13,10 @@ export const API_PROFILE_UPDATE = `${BASE_URL}/profile/update`;
 export const API_PROFILE_AVATAR = `${BASE_URL}/profile/avatar`;
 export const API_PROFILE_CV = `${BASE_URL}/profile/cv`;
 
+// Settings Endpoints
+export const API_SETTINGS = `${BASE_URL}/settings`;
+export const API_SETTINGS_UPDATE = `${BASE_URL}/settings/update`;
+
 // Resume Endpoints
 export const API_RESUME = `${BASE_URL}/resume`;
 export const API_EDUCATION = `${BASE_URL}/resume/education`;

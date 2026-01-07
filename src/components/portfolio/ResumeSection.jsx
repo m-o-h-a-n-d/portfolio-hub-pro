@@ -51,10 +51,10 @@ const ResumeSection = () => {
         </div>
 
         <ol className="ml-16 md:ml-[65px]">
-          {resume.experience?.map((item, index) => (
+          {resume.experince?.map((item, index) => (
             <li 
               key={item.id} 
-              className={`timeline-item ${index !== resume.experience.length - 1 ? 'pb-5' : ''}`}
+              className={`timeline-item ${index !== resume.experince.length - 1 ? 'pb-5' : ''}`}
             >
               <h4 className="h4 mb-2 leading-tight">{item.title}</h4>
               <span className="text-vegas-gold font-normal leading-relaxed block mb-2">

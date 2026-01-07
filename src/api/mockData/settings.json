@@ -13,7 +13,7 @@
   "layout_control": {
     "resume_order": [
       { "id": "education", "label": "Education", "order": 1 },
-      { "id": "experience", "label": "Experience", "order": 2 },
+      { "id": "experince", "label": "Experience", "order": 2 },
       { "id": "skills", "label": "Skills", "order": 3 }
     ]
   }

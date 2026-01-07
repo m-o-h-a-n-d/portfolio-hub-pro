@@ -142,7 +142,7 @@ const ResumeManager = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const endpoint = activeTab === 'education' ? '/resume/education' : '/resume/experience';
+      const endpoint = activeTab === 'education' ? '/resume/education' : '/resume/experince';
       const period = `${formData.startYear} — ${formData.isPresent ? 'Present' : formData.endYear}`;
       const submissionData = {
         title: formData.title,
@@ -189,13 +189,13 @@ const ResumeManager = () => {
   const getIcon = (id) => {
     switch(id) {
       case 'education': return BookOpen;
-      case 'experience': return Briefcase;
+      case 'experince': return Briefcase;
       case 'skills': return Award;
       default: return BookOpen;
     }
   };
 
-  const currentData = activeTab === 'education' ? resume?.education : resume?.experience;
+  const currentData = activeTab === 'education' ? resume?.education : resume?.experince;
 
   if (loading) {
     return (

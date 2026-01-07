@@ -40,13 +40,13 @@ export const API_SKILLS_DELETE = `${BASE_URL}/resume/skills`;
 // 5. Resume Section - Experience
 // ==========================================
 // [GET] List all experience items
-export const API_EXPERIENCE_LIST = `${BASE_URL}/resume/experience`;
+export const API_EXPERIENCE_LIST = `${BASE_URL}/resume/experince`;
 // [POST] Add new experience
-export const API_EXPERIENCE_CREATE = `${BASE_URL}/resume/experience`;
+export const API_EXPERIENCE_CREATE = `${BASE_URL}/resume/experince`;
 // [PUT] Update experience item
-export const API_EXPERIENCE_UPDATE = `${BASE_URL}/resume/experience`;
+export const API_EXPERIENCE_UPDATE = `${BASE_URL}/resume/experince`;
 // [DELETE] Delete experience item
-export const API_EXPERIENCE_DELETE = `${BASE_URL}/resume/experience`;
+export const API_EXPERIENCE_DELETE = `${BASE_URL}/resume/experince`;
 
 // ==========================================
 // 6. Resume Section - Education

@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
-import { Save, Globe, Share2, Layout, Upload } from 'lucide-react';
+import { Save, Globe, Share2, Layout, Upload, GripHorizontal } from 'lucide-react';
 
 const SettingsManager = () => {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [dragActive, setDragActive] = useState({ logo: false, favicon: false });
+  const [draggedItemIndex, setDraggedItemIndex] = useState(null);
 
   useEffect(() => {
     fetchSettings();
@@ -15,7 +17,12 @@ const SettingsManager = () => {
     try {
       setLoading(true);
       const response = await apiGet('/settings');
-      setSettings(response.data);
+      // Ensure items are sorted by order initially
+      const data = response.data;
+      if (data.layout_control?.resume_order) {
+        data.layout_control.resume_order.sort((a, b) => a.order - b.order);
+      }
+      setSettings(data);
     } catch (error) {
       console.error('Error fetching settings:', error);
     } finally {
@@ -33,20 +40,72 @@ const SettingsManager = () => {
     }));
   };
 
-  const handleOrderChange = (id, newOrder) => {
+  // Drag and Drop for Sections
+  const onDragStart = (e, index) => {
+    setDraggedItemIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    // Add a ghost image or styling if needed
+  };
+
+  const onDragOver = (e, index) => {
+    e.preventDefault();
+    if (draggedItemIndex === null || draggedItemIndex === index) return;
+
+    const newOrder = [...settings.layout_control.resume_order];
+    const draggedItem = newOrder[draggedItemIndex];
+    
+    // Remove dragged item and insert at new position
+    newOrder.splice(draggedItemIndex, 1);
+    newOrder.splice(index, 0, draggedItem);
+
+    // Update order values based on new positions
+    const updatedOrder = newOrder.map((item, idx) => ({
+      ...item,
+      order: idx + 1
+    }));
+
+    setDraggedItemIndex(index);
     setSettings(prev => ({
       ...prev,
       layout_control: {
         ...prev.layout_control,
-        resume_order: prev.layout_control.resume_order.map(item => 
-          item.id === id ? { ...item, order: parseInt(newOrder) } : item
-        ).sort((a, b) => a.order - b.order)
+        resume_order: updatedOrder
       }
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const onDragEnd = () => {
+    setDraggedItemIndex(null);
+  };
+
+  // File Upload Logic
+  const handleFileUpload = (type, file) => {
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        handleInputChange('site_identity', type === 'logo' ? 'logo_url' : 'favicon_url', reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDragFile = (e, type, active) => {
     e.preventDefault();
+    e.stopPropagation();
+    setDragActive(prev => ({ ...prev, [type]: active }));
+  };
+
+  const handleDropFile = (e, type) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(prev => ({ ...prev, [type]: false }));
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFileUpload(type, e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
     try {
       setSaving(true);
       await apiPost('/settings/update', settings);
@@ -84,7 +143,7 @@ const SettingsManager = () => {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Site Identity */}
         <div className="bg-card border border-border rounded-[20px] p-6 space-y-6" style={{ background: 'var(--bg-gradient-jet)' }}>
           <div className="flex items-center gap-2 mb-2">
@@ -104,32 +163,72 @@ const SettingsManager = () => {
               />
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Logo Upload */}
               <div>
                 <label className="text-light-gray/70 text-xs uppercase mb-2 block">Logo</label>
-                <div className="flex flex-col gap-3">
-                  <div className="w-16 h-16 rounded-lg bg-onyx border border-border flex items-center justify-center overflow-hidden">
-                    <img src={settings.site_identity.logo_url} alt="Logo" className="max-w-full max-h-full object-contain" />
-                  </div>
-                  <label className="flex items-center gap-2 px-3 py-2 rounded-lg bg-onyx text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors border border-border">
-                    <Upload className="w-4 h-4" />
-                    <span>Upload Logo</span>
-                    <input type="file" className="hidden" accept="image/*" />
-                  </label>
+                <div 
+                  className={`relative border-2 border-dashed rounded-xl p-4 transition-all flex flex-col items-center justify-center min-h-[160px] ${
+                    dragActive.logo ? 'border-primary bg-primary/5' : 'border-border bg-onyx/50'
+                  }`}
+                  onDragEnter={(e) => handleDragFile(e, 'logo', true)}
+                  onDragLeave={(e) => handleDragFile(e, 'logo', false)}
+                  onDragOver={(e) => handleDragFile(e, 'logo', true)}
+                  onDrop={(e) => handleDropFile(e, 'logo')}
+                >
+                  {settings.site_identity.logo_url ? (
+                    <div className="relative group w-full h-full flex items-center justify-center">
+                      <img src={settings.site_identity.logo_url} alt="Logo" className="max-w-full max-h-24 object-contain rounded-lg" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
+                        <label className="cursor-pointer p-2 bg-primary rounded-full text-white-1 hover:scale-110 transition-transform">
+                          <Upload className="w-4 h-4" />
+                          <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload('logo', e.target.files[0])} />
+                        </label>
+                      </div>
+                    </div>
+                  ) : (
+                    <label className="cursor-pointer flex flex-col items-center gap-2 text-center">
+                      <Upload className="w-8 h-8 text-muted-foreground" />
+                      <div className="text-xs text-muted-foreground">
+                        <span className="text-primary font-medium">Click to upload</span> or drag and drop
+                      </div>
+                      <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload('logo', e.target.files[0])} />
+                    </label>
+                  )}
                 </div>
               </div>
               
+              {/* Favicon Upload */}
               <div>
                 <label className="text-light-gray/70 text-xs uppercase mb-2 block">Favicon</label>
-                <div className="flex flex-col gap-3">
-                  <div className="w-16 h-16 rounded-lg bg-onyx border border-border flex items-center justify-center overflow-hidden">
-                    <img src={settings.site_identity.favicon_url} alt="Favicon" className="w-8 h-8 object-contain" />
-                  </div>
-                  <label className="flex items-center gap-2 px-3 py-2 rounded-lg bg-onyx text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors border border-border">
-                    <Upload className="w-4 h-4" />
-                    <span>Upload Favicon</span>
-                    <input type="file" className="hidden" accept="image/*" />
-                  </label>
+                <div 
+                  className={`relative border-2 border-dashed rounded-xl p-4 transition-all flex flex-col items-center justify-center min-h-[160px] ${
+                    dragActive.favicon ? 'border-primary bg-primary/5' : 'border-border bg-onyx/50'
+                  }`}
+                  onDragEnter={(e) => handleDragFile(e, 'favicon', true)}
+                  onDragLeave={(e) => handleDragFile(e, 'favicon', false)}
+                  onDragOver={(e) => handleDragFile(e, 'favicon', true)}
+                  onDrop={(e) => handleDropFile(e, 'favicon')}
+                >
+                  {settings.site_identity.favicon_url ? (
+                    <div className="relative group w-full h-full flex items-center justify-center">
+                      <img src={settings.site_identity.favicon_url} alt="Favicon" className="w-12 h-12 object-contain rounded-lg" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
+                        <label className="cursor-pointer p-2 bg-primary rounded-full text-white-1 hover:scale-110 transition-transform">
+                          <Upload className="w-4 h-4" />
+                          <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload('favicon', e.target.files[0])} />
+                        </label>
+                      </div>
+                    </div>
+                  ) : (
+                    <label className="cursor-pointer flex flex-col items-center gap-2 text-center">
+                      <Upload className="w-8 h-8 text-muted-foreground" />
+                      <div className="text-xs text-muted-foreground">
+                        <span className="text-primary font-medium">Click to upload</span> or drag and drop
+                      </div>
+                      <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload('favicon', e.target.files[0])} />
+                    </label>
+                  )}
                 </div>
               </div>
             </div>
@@ -166,27 +265,34 @@ const SettingsManager = () => {
             <h3 className="h3 text-white-2">Layout Control (Section Ordering)</h3>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {settings.layout_control.resume_order.map((section) => (
-              <div key={section.id} className="p-4 rounded-xl bg-onyx border border-border flex items-center justify-between">
-                <span className="font-medium text-white-2">{section.label}</span>
+          <div className="flex flex-wrap gap-4">
+            {settings.layout_control.resume_order.map((section, index) => (
+              <div 
+                key={section.id} 
+                draggable
+                onDragStart={(e) => onDragStart(e, index)}
+                onDragOver={(e) => onDragOver(e, index)}
+                onDragEnd={onDragEnd}
+                className={`flex-1 min-w-[200px] p-4 rounded-xl bg-onyx border transition-all cursor-move flex items-center justify-between group ${
+                  draggedItemIndex === index ? 'opacity-50 border-primary border-dashed' : 'border-border hover:border-primary/50'
+                }`}
+              >
                 <div className="flex items-center gap-3">
-                  <label className="text-xs text-muted-foreground uppercase">Order:</label>
-                  <input
-                    type="number"
-                    value={section.order}
-                    onChange={(e) => handleOrderChange(section.id, e.target.value)}
-                    className="w-16 bg-background border border-border rounded-lg px-2 py-1 text-center text-primary focus:border-primary outline-none"
-                    min="1"
-                    max="10"
-                  />
+                  <GripHorizontal className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <span className="font-medium text-white-2">{section.label}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Order:</span>
+                  <span className="text-sm font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md min-w-[24px] text-center">
+                    {section.order}
+                  </span>
                 </div>
               </div>
             ))}
           </div>
-          <p className="text-xs text-muted-foreground italic">Sections will be displayed in the portfolio based on these order values.</p>
+          <p className="text-xs text-muted-foreground italic">Drag and drop sections horizontally to reorder them. The order will be updated automatically.</p>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

@@ -24,7 +24,9 @@ const BlogsManager = () => {
     try {
       setLoading(true);
       const response = await apiGet('/blog');
-      setBlogs(response.data);
+      // Handle both { posts: [] } and [] formats
+      const data = response.data.posts || response.data;
+      setBlogs(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching blogs:', error);
     } finally {

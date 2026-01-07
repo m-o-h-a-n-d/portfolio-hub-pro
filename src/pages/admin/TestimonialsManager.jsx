@@ -23,7 +23,9 @@ const TestimonialsManager = () => {
     try {
       setLoading(true);
       const response = await apiGet('/testimonials');
-      setTestimonials(response.data);
+      // Handle both { testimonials: [] } and [] formats
+      const data = response.data.testimonials || response.data;
+      setTestimonials(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching testimonials:', error);
     } finally {

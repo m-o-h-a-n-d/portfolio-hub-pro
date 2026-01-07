@@ -161,13 +161,6 @@ const ResumeManager = () => {
           <h1 className="h2 text-white-2">Resume Manager</h1>
           <p className="text-muted-foreground text-sm mt-1">Manage your education and experience</p>
         </div>
-        <button
-          onClick={openAddModal}
-          className="form-btn !w-auto !px-6"
-        >
-          <Plus className="w-5 h-5" />
-          <span>Add New</span>
-        </button>
       </div>
 
       {/* Tabs */}
@@ -278,10 +271,19 @@ const ResumeManager = () => {
                 {(!currentData || currentData.length === 0) && (
                   <tr>
                     <td colSpan="4" className="text-center py-8 text-muted-foreground">
-                      No {activeTab} entries found. Click "Add New" to create one.
+                      No {activeTab} entries found.
                     </td>
                   </tr>
                 )}
+                {/* Add New Row at the bottom */}
+                <tr className="bg-primary/5 hover:bg-primary/10 transition-colors cursor-pointer" onClick={openAddModal}>
+                  <td colSpan="4" className="py-4 text-center">
+                    <div className="flex items-center justify-center gap-2 text-primary font-medium">
+                      <Plus className="w-5 h-5" />
+                      <span>Add New {activeTab === 'education' ? 'Education' : 'Experience'}</span>
+                    </div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>

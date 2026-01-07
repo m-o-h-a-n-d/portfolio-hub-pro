@@ -22,7 +22,9 @@ const ClientsManager = () => {
     try {
       setLoading(true);
       const response = await apiGet('/clients');
-      setClients(response.data);
+      // Handle both { clients: [] } and [] formats
+      const data = response.data.clients || response.data;
+      setClients(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching clients:', error);
     } finally {

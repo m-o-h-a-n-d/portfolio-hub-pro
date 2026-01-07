@@ -92,6 +92,10 @@ export const apiFetch = async (endpoint, method = 'GET', body = null, isFile = f
 
     // Handle GET requests
     if (method === 'GET') {
+      // Special case for skills which is nested in resume mock
+      if (endpoint.includes('/resume/skills')) {
+        return { success: true, data: resumeData.skills };
+      }
       // Find matching mock data
       for (const [path, data] of Object.entries(mockDataMap)) {
         if (endpoint.includes(path)) {

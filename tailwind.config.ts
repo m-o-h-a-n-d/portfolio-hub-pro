@@ -11,10 +11,11 @@ export default {
       screens: {
         "2xl": "1400px",
       },
+
     },
     extend: {
-      fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
+     fontFamily: {
+        sans: ['Poppins', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

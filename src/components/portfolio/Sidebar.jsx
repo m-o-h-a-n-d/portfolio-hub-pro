@@ -3,6 +3,7 @@ import { useProfile } from '../../context/DataContext';
 import { Mail, Phone, Calendar, MapPin, Facebook, Twitter, Instagram, Linkedin, Github, ChevronDown } from 'lucide-react';
 
 const Sidebar = () => {
+  // حالة التحكم في الفتح والإغلاق
   const [isExpanded, setIsExpanded] = useState(false);
   const profile = useProfile();
 
@@ -23,122 +24,136 @@ const Sidebar = () => {
 
   return (
     <aside 
-      className={`bg-card border border-border rounded-[20px] p-4 md:p-[30px] shadow-portfolio-1 z-10 transition-all duration-500 ease-in-out overflow-hidden ${
-        isExpanded ? 'max-h-[600px]' : 'max-h-[112px] md:max-h-[180px]'
-      }`}
+      className={`
+        bg-card border border-border rounded-[20px] shadow-portfolio-1 z-10 
+        p-[15px] md:p-[30px] lg:p-[40px]
+        overflow-hidden transition-all duration-500 ease-in-out relative
+        lg:sticky lg:top-[60px]
+        /* التحكم في الارتفاع:
+           - في الموبايل: مغلق (112px) أو مفتوح (max-h كبير)
+           - في الديسك توب (lg): دائماً مفتوح (h-auto)
+        */
+        ${isExpanded ? 'max-h-[800px]' : 'max-h-[112px] md:max-h-[180px]'} 
+        lg:max-h-max lg:h-auto
+      `}
     >
-      {/* Top Section - Avatar & Basic Info */}
-      <div className="relative flex items-center gap-4 md:gap-[25px]">
-        {/* Avatar */}
-        <figure 
-          className="rounded-[20px] md:rounded-[30px] overflow-hidden flex-shrink-0"
-          style={{ background: 'var(--bg-gradient-onyx)' }}
-        >
-          <img 
-            src={profile.avatar} 
-            alt={profile.name} 
-            className="w-20 md:w-[120px]"
-          />
-        </figure>
+      
+      {/* Top Section */}
+      <div className="flex flex-col items-start lg:items-center gap-4 md:gap-[15px] relative z-10">
+        
+        {/* Header Layout (Avatar + Name) */}
+        <div className="flex items-center gap-4 lg:flex-col lg:gap-6 w-full">
+            {/* Avatar */}
+            <figure className="bg-gradient-onyx rounded-[20px] lg:rounded-[30px] overflow-hidden flex-shrink-0">
+            <img 
+                src={profile.avatar} 
+                alt={profile.name} 
+                className="w-[80px] lg:w-[150px] object-cover" 
+            />
+            </figure>
 
-        {/* Name & Title */}
-        <div className="flex-1">
-          <h1 className="text-white-2 text-[17px] md:text-[26px] font-medium tracking-tight mb-2 md:mb-[15px]">
-            {profile.name}
-          </h1>
-          <p 
-            className="bg-onyx text-white-1 text-[11px] md:text-xs font-light px-3 py-1 md:px-[18px] md:py-[5px] rounded-lg w-max"
-          >
-            {profile.title}
-          </p>
+            {/* Name & Title */}
+            <div className="text-left lg:text-center">
+            <h1 className="text-white-2 text-[20px] md:text-[26px] font-medium tracking-tight mb-2 whitespace-nowrap">
+                {profile.name}
+            </h1>
+            <p className="bg-onyx text-white-1 text-xs font-light px-[12px] py-[4px] md:px-[18px] md:py-[5px] rounded-lg inline-block">
+                {profile.title}
+            </p>
+            </div>
         </div>
 
-        {/* Toggle Button */}
+        {/* Toggle Button (Hidden on Large Screens) */}
         <button 
           onClick={() => setIsExpanded(!isExpanded)}
-          className="absolute -top-4 -right-4 md:-top-[30px] md:-right-[30px] rounded-br-[15px] md:rounded-br-[20px] text-primary px-[10px] md:px-[15px] py-[10px] shadow-portfolio-2 z-10 transition-all duration-300 hover:bg-opacity-80"
-          style={{ background: 'var(--border-gradient-onyx)' }}
+          className={`
+            absolute -top-[15px] -right-[15px] md:-top-[30px] md:-right-[30px]
+            bg-border-gradient-onyx text-primary shadow-portfolio-2
+            rounded-bl-[20px] cursor-pointer z-20
+            flex items-center justify-center gap-2
+            transition-all duration-300 hover:bg-onyx
+            p-3 md:px-6 md:py-4
+            lg:hidden
+          `}
         >
-          <span className="hidden md:block text-xs">
-            {isExpanded ? 'Hide Contacts' : 'Show Contacts'}
+          <span className="hidden md:block text-[13px] font-medium text-primary">
+             {isExpanded ? 'Hide Contacts' : 'Show Contacts'}
           </span>
           <ChevronDown 
-            className={`md:hidden w-4 h-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} 
+            className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 text-primary ${isExpanded ? 'rotate-180' : ''}`} 
           />
         </button>
+
       </div>
 
-      {/* Expandable Section */}
-      <div className={`transition-all duration-500 ${isExpanded ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-        {/* Separator */}
-        <div className="separator my-4 md:my-8" />
+      {/* Info Section (Collapsible Content) */}
+      <div className={`
+         mt-6 lg:mt-8 transition-opacity duration-500
+         ${isExpanded ? 'opacity-100' : 'opacity-0 lg:opacity-100'}
+      `}>
+        
+        <div className="separator my-6 bg-border h-[1px]" />
 
         {/* Contact List */}
-        <ul className="grid grid-cols-1 gap-4 md:gap-5">
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+          
           {/* Email */}
-          <li className="flex items-center gap-4">
-            <div className="icon-box">
-              <Mail className="w-4 h-4" />
+          <li className="flex items-center gap-4 min-w-0">
+            <div className="icon-box w-[48px] h-[48px] rounded-xl bg-border-gradient-onyx flex items-center justify-center text-primary shadow-portfolio-1 z-10 relative flex-shrink-0">
+               <Mail className="w-5 h-5" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-light-gray/70 text-[11px] uppercase mb-[2px]">Email</p>
-              <a 
-                href={`mailto:${profile.email}`} 
-                className="text-white-2 text-[13px] truncate block hover:text-primary transition-colors"
-              >
+            <div className="flex-1 truncate text-left">
+              <p className="text-light-gray/70 text-xs uppercase mb-1">Email</p>
+              <a href={`mailto:${profile.email}`} className="text-white-2 text-sm hover:text-primary transition-colors block truncate" title={profile.email}>
                 {profile.email}
               </a>
             </div>
           </li>
 
           {/* Phone */}
-          <li className="flex items-center gap-4">
-            <div className="icon-box">
-              <Phone className="w-4 h-4" />
+          <li className="flex items-center gap-4 min-w-0">
+            <div className="icon-box w-[48px] h-[48px] rounded-xl bg-border-gradient-onyx flex items-center justify-center text-primary shadow-portfolio-1 z-10 relative flex-shrink-0">
+              <Phone className="w-5 h-5" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-light-gray/70 text-[11px] uppercase mb-[2px]">Phone</p>
-              <a 
-                href={`tel:${profile.phone}`} 
-                className="text-white-2 text-[13px] hover:text-primary transition-colors"
-              >
+            <div className="flex-1 truncate text-left">
+              <p className="text-light-gray/70 text-xs uppercase mb-1">Phone</p>
+              <a href={`tel:${profile.phone}`} className="text-white-2 text-sm hover:text-primary transition-colors block truncate">
                 {profile.phone}
               </a>
             </div>
           </li>
 
           {/* Birthday */}
-          <li className="flex items-center gap-4">
-            <div className="icon-box">
-              <Calendar className="w-4 h-4" />
+          <li className="flex items-center gap-4 min-w-0">
+            <div className="icon-box w-[48px] h-[48px] rounded-xl bg-border-gradient-onyx flex items-center justify-center text-primary shadow-portfolio-1 z-10 relative flex-shrink-0">
+              <Calendar className="w-5 h-5" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-light-gray/70 text-[11px] uppercase mb-[2px]">Birthday</p>
-              <time className="text-white-2 text-[13px]">
+            <div className="flex-1 truncate text-left">
+              <p className="text-light-gray/70 text-xs uppercase mb-1">Birthday</p>
+              <time className="text-white-2 text-sm block truncate">
                 {formatDate(profile.birthday)}
               </time>
             </div>
           </li>
 
           {/* Location */}
-          <li className="flex items-center gap-4">
-            <div className="icon-box">
-              <MapPin className="w-4 h-4" />
+          <li className="flex items-center gap-4 min-w-0">
+            <div className="icon-box w-[48px] h-[48px] rounded-xl bg-border-gradient-onyx flex items-center justify-center text-primary shadow-portfolio-1 z-10 relative flex-shrink-0">
+              <MapPin className="w-5 h-5" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-light-gray/70 text-[11px] uppercase mb-[2px]">Location</p>
-              <address className="text-white-2 text-[13px] not-italic">
+            <div className="flex-1 truncate text-left">
+              <p className="text-light-gray/70 text-xs uppercase mb-1">Location</p>
+              <address className="text-white-2 text-sm not-italic block truncate">
                 {profile.location}
               </address>
             </div>
           </li>
         </ul>
 
-        {/* Separator */}
-        <div className="separator my-4 md:my-8" />
+        <div className="separator my-6 bg-border h-[1px]" />
 
         {/* Social Links */}
-        <ul className="flex items-center gap-[15px] pl-[7px] pb-1">
+        <ul className="flex items-center justify-center gap-4">
           {profile.social?.map((item, index) => {
             const Icon = socialIcons[item.platform] || Facebook;
             return (
@@ -147,9 +162,9 @@ const Sidebar = () => {
                   href={item.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-light-gray/70 text-lg hover:text-light-gray transition-colors block"
+                  className="text-light-gray/70 hover:text-light-gray transition-colors"
                 >
-                  <Icon className="w-[18px] h-[18px]" />
+                  <Icon className="w-5 h-5" />
                 </a>
               </li>
             );

@@ -3,20 +3,32 @@ const Navbar = ({ activePage, onPageChange }) => {
 
   return (
     <nav 
-      className="fixed bottom-0 left-0 w-full md:relative md:mb-4 backdrop-blur-[10px] border border-border rounded-xl md:rounded-[20px] shadow-portfolio-2 z-50"
-      style={{ background: 'hsla(240, 1%, 17%, 0.75)' }}
+      className={`
+        /* Mobile Styles (Fixed Bottom) */
+        fixed bottom-0 left-0 w-full z-50
+        bg-onyx/75 backdrop-blur-md border-t border-border rounded-t-[12px] shadow-portfolio-2
+        
+        /* Desktop Styles (Top Right Corner inside Card) */
+        md:absolute md:bottom-auto md:top-0 md:left-auto md:right-0 
+        md:w-max md:rounded-none md:rounded-bl-[20px] md:rounded-tr-[20px]
+        md:border-b md:border-l md:border-t-0 md:border-r-0 md:bg-onyx/75
+        md:px-5 md:shadow-none
+      `}
     >
-      <ul className="flex flex-wrap justify-center items-center px-[10px] md:px-4">
+      <ul className="flex flex-wrap justify-center items-center px-5 md:gap-9 md:px-0">
         {pages.map((page) => (
           <li key={page}>
             <button
               onClick={() => onPageChange(page.toLowerCase())}
-              className={`px-[7px] md:px-4 py-5 text-[11px] md:text-sm transition-colors ${
-                activePage === page.toLowerCase()
-                  ? 'text-primary'
-                  : 'text-light-gray hover:text-light-gray/70'
-              }`}
-            >
+              className={`
+                px-2 py-4 md:py-5 text-[12px] md:text-[16px] font-medium transition-colors
+                ${
+                  activePage === page.toLowerCase()
+                    ? 'text-primary'
+                    : 'text-light-gray hover:text-light-gray/70'
+                }
+                `}
+              >
               {page}
             </button>
           </li>

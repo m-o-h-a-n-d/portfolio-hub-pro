@@ -4,8 +4,7 @@ import { Plus, Edit2, Trash2, X, BookOpen, Briefcase, Award, Save, GripVertical 
 import SkillsManager from '../../components/admin/SkillsManager';
 
 const ResumeManager = () => {
-  const [resume, setResume] = useState(null);
-  const [settings, setSettings] = useState(null);
+  const [resume, setResume] = useState([]);
   const [loading, setLoading] = useState(true);
   const [reordering, setReordering] = useState(false);
   const [activeTab, setActiveTab] = useState('education');
@@ -29,18 +28,13 @@ const ResumeManager = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [resumeRes, settingsRes] = await Promise.all([
-        apiGet('/resume'),
-        apiGet('/settings')
-      ]);
-      setResume(resumeRes.data);
+      const response = await apiGet('/resume');
+      setResume(response.data || []);
       
-      // Sort tabs by order
-      const settingsData = settingsRes.data;
-      if (settingsData.layout_control?.resume_order) {
-        settingsData.layout_control.resume_order.sort((a, b) => a.order - b.order);
+      // Set first tab as active if available
+      if (response.data && response.data.length > 0) {
+        setActiveTab(response.data[0].type);
       }
-      setSettings(settingsData);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -48,7 +42,7 @@ const ResumeManager = () => {
     }
   };
 
-  // Drag and Drop for Tabs
+  // Drag and Drop for Tabs (Spatial Ordering)
   const onDragStart = (e, index) => {
     setDraggedTabIndex(index);
     e.dataTransfer.effectAllowed = 'move';
@@ -58,37 +52,25 @@ const ResumeManager = () => {
     e.preventDefault();
     if (draggedTabIndex === null || draggedTabIndex === index) return;
 
-    const newOrder = [...settings.layout_control.resume_order];
-    const draggedItem = newOrder[draggedTabIndex];
+    const newResume = [...resume];
+    const draggedItem = newResume[draggedTabIndex];
     
-    newOrder.splice(draggedTabIndex, 1);
-    newOrder.splice(index, 0, draggedItem);
-
-    const updatedOrder = newOrder.map((item, idx) => ({
-      ...item,
-      order: idx + 1
-    }));
+    newResume.splice(draggedTabIndex, 1);
+    newResume.splice(index, 0, draggedItem);
 
     setDraggedTabIndex(index);
-    setSettings(prev => ({
-      ...prev,
-      layout_control: {
-        ...prev.layout_control,
-        resume_order: updatedOrder
-      }
-    }));
+    setResume(newResume);
   };
 
   const onDragEnd = async () => {
     setDraggedTabIndex(null);
     try {
       setReordering(true);
-      await apiPost('/settings/update', settings);
+      await apiPost('/resume/update', resume);
     } catch (error) {
       console.error('Error updating order:', error);
       alert('Failed to save new order');
     } finally {
-      // Small delay to show loading state as requested
       setTimeout(() => setReordering(false), 500);
     }
   };
@@ -142,31 +124,30 @@ const ResumeManager = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const endpoint = activeTab === 'education' ? '/resume/education' : '/resume/experince';
       const period = `${formData.startYear} — ${formData.isPresent ? 'Present' : formData.endYear}`;
       const submissionData = {
         title: formData.title,
         period,
         description: formData.description,
-        id: editingItem?.id || Date.now()
+        id: editingItem?.id || Date.now().toString()
       };
 
-      await apiPost(endpoint, submissionData);
+      const updatedResume = resume.map(section => {
+        if (section.type === activeTab) {
+          if (modalMode === 'add') {
+            return { ...section, data: [...(section.data || []), submissionData] };
+          } else {
+            return { 
+              ...section, 
+              data: section.data.map(item => item.id === editingItem.id ? submissionData : item) 
+            };
+          }
+        }
+        return section;
+      });
 
-      if (modalMode === 'add') {
-        setResume(prev => ({
-          ...prev,
-          [activeTab]: [...(prev[activeTab] || []), submissionData]
-        }));
-      } else {
-        setResume(prev => ({
-          ...prev,
-          [activeTab]: prev[activeTab].map(item => 
-            item.id === editingItem.id ? submissionData : item
-          )
-        }));
-      }
-
+      await apiPost('/resume/update', updatedResume);
+      setResume(updatedResume);
       closeModal();
     } catch (error) {
       console.error('Error saving:', error);
@@ -177,17 +158,21 @@ const ResumeManager = () => {
   const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this item?')) return;
     try {
-      setResume(prev => ({
-        ...prev,
-        [activeTab]: prev[activeTab].filter(item => item.id !== id)
-      }));
+      const updatedResume = resume.map(section => {
+        if (section.type === activeTab) {
+          return { ...section, data: section.data.filter(item => item.id !== id) };
+        }
+        return section;
+      });
+      await apiPost('/resume/update', updatedResume);
+      setResume(updatedResume);
     } catch (error) {
       console.error('Error deleting:', error);
     }
   };
 
-  const getIcon = (id) => {
-    switch(id) {
+  const getIcon = (type) => {
+    switch(type) {
       case 'education': return BookOpen;
       case 'experince': return Briefcase;
       case 'skills': return Award;
@@ -195,7 +180,8 @@ const ResumeManager = () => {
     }
   };
 
-  const currentData = activeTab === 'education' ? resume?.education : resume?.experince;
+  const currentSection = resume.find(s => s.type === activeTab);
+  const currentData = currentSection?.data || [];
 
   if (loading) {
     return (
@@ -207,7 +193,6 @@ const ResumeManager = () => {
 
   return (
     <div className="space-y-6 relative">
-      {/* Loading Overlay for Reordering */}
       {reordering && (
         <div className="absolute inset-0 bg-background/20 backdrop-blur-[1px] z-50 flex items-center justify-center rounded-2xl">
           <div className="bg-onyx border border-border px-4 py-2 rounded-full shadow-xl flex items-center gap-3">
@@ -217,30 +202,28 @@ const ResumeManager = () => {
         </div>
       )}
 
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="h2 text-white-2">Resume Manager</h1>
-          <p className="text-muted-foreground text-sm mt-1">Manage your education and experience</p>
+          <p className="text-muted-foreground text-sm mt-1">Manage your education, experience and skills in the order they appear</p>
         </div>
       </div>
 
-      {/* Draggable Tabs */}
       <div className="bg-card border border-border rounded-[20px] p-2" style={{ background: 'var(--bg-gradient-jet)' }}>
         <div className="flex gap-2">
-          {settings?.layout_control?.resume_order.map((section, index) => {
-            const Icon = getIcon(section.id);
-            const isActive = activeTab === section.id;
+          {resume.map((section, index) => {
+            const Icon = getIcon(section.type);
+            const isActive = activeTab === section.type;
             const isDragged = draggedTabIndex === index;
 
             return (
               <div
-                key={section.id}
+                key={section.type}
                 draggable
                 onDragStart={(e) => onDragStart(e, index)}
                 onDragOver={(e) => onDragOver(e, index)}
                 onDragEnd={onDragEnd}
-                onClick={() => setActiveTab(section.id)}
+                onClick={() => setActiveTab(section.type)}
                 className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl transition-all cursor-pointer group relative ${
                   isActive 
                     ? 'bg-primary/10 text-primary' 
@@ -249,16 +232,22 @@ const ResumeManager = () => {
               >
                 <GripVertical className="w-4 h-4 opacity-0 group-hover:opacity-40 absolute left-2 cursor-grab active:cursor-grabbing" />
                 <Icon className="w-5 h-5" />
-                <span className="font-medium">{section.label}</span>
+                <span className="font-medium capitalize">{section.type === 'experince' ? 'Experience' : section.type}</span>
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* Content */}
       {activeTab === 'skills' ? (
-        <SkillsManager />
+        <SkillsManager 
+          skills={currentData} 
+          onUpdate={async (newSkills) => {
+            const updatedResume = resume.map(s => s.type === 'skills' ? { ...s, data: newSkills } : s);
+            await apiPost('/resume/update', updatedResume);
+            setResume(updatedResume);
+          }} 
+        />
       ) : (
         <div className="bg-card border border-border rounded-[20px] overflow-hidden" style={{ background: 'var(--bg-gradient-jet)' }}>
           <div className="overflow-x-auto">
@@ -272,7 +261,7 @@ const ResumeManager = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentData?.map((item) => (
+                {currentData.map((item) => (
                   <tr key={item.id}>
                     <td className="font-medium text-foreground">{item.title}</td>
                     <td><span className="text-vegas-gold">{item.period}</span></td>
@@ -289,7 +278,7 @@ const ResumeManager = () => {
                     </td>
                   </tr>
                 ))}
-                {(!currentData || currentData.length === 0) && (
+                {currentData.length === 0 && (
                   <tr><td colSpan="4" className="text-center py-8 text-muted-foreground">No {activeTab} entries found.</td></tr>
                 )}
                 <tr className="bg-primary/5 hover:bg-primary/10 transition-colors cursor-pointer" onClick={openAddModal}>
@@ -306,7 +295,6 @@ const ResumeManager = () => {
         </div>
       )}
 
-      {/* Modal */}
       {modalOpen && (
         <div className="admin-modal-overlay active" onClick={closeModal}>
           <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
@@ -316,40 +304,32 @@ const ResumeManager = () => {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <form onSubmit={handleSubmit}>
-              <div className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="form-label">Title</label>
+                <input type="text" name="title" value={formData.title} onChange={handleInputChange} className="form-input" required />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-light-gray/70 text-xs uppercase mb-2 block">Title</label>
-                  <input type="text" name="title" value={formData.title} onChange={handleInputChange} className="form-input" required />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-light-gray/70 text-xs uppercase mb-2 block">Start Year</label>
-                    <select name="startYear" value={formData.startYear} onChange={handleInputChange} className="form-input bg-onyx" required>
-                      {Array.from({ length: 31 }, (_, i) => 2010 + i).map(year => <option key={year} value={year}>{year}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-light-gray/70 text-xs uppercase mb-2 block">End Year</label>
-                    <div className="flex flex-col gap-2">
-                      <select name="endYear" value={formData.endYear} onChange={handleInputChange} className="form-input bg-onyx disabled:opacity-50" disabled={formData.isPresent} required={!formData.isPresent}>
-                        {Array.from({ length: 31 }, (_, i) => 2010 + i).map(year => <option key={year} value={year}>{year}</option>)}
-                      </select>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" name="isPresent" checked={formData.isPresent} onChange={handleInputChange} className="w-4 h-4 rounded border-jet bg-onyx text-primary" />
-                        <span className="text-xs text-muted-foreground uppercase">Currently Working Here</span>
-                      </label>
-                    </div>
-                  </div>
+                  <label className="form-label">Start Year</label>
+                  <input type="text" name="startYear" value={formData.startYear} onChange={handleInputChange} className="form-input" required />
                 </div>
                 <div>
-                  <label className="text-light-gray/70 text-xs uppercase mb-2 block">Description</label>
-                  <textarea name="description" value={formData.description} onChange={handleInputChange} className="form-input min-h-[100px] resize-y" required />
+                  <label className="form-label">End Year</label>
+                  <input type="text" name="endYear" value={formData.endYear} onChange={handleInputChange} className="form-input" disabled={formData.isPresent} required={!formData.isPresent} />
                 </div>
               </div>
-              <div className="flex gap-4 mt-6">
-                <button type="button" onClick={closeModal} className="flex-1 px-4 py-3 rounded-xl bg-onyx text-muted-foreground">Cancel</button>
-                <button type="submit" className="form-btn !w-auto flex-1"><Save className="w-5 h-5" /><span>{modalMode === 'add' ? 'Add' : 'Save'}</span></button>
+              <div className="flex items-center gap-2">
+                <input type="checkbox" name="isPresent" checked={formData.isPresent} onChange={handleInputChange} className="w-4 h-4 rounded border-jet bg-onyx text-primary" />
+                <label className="text-sm text-light-gray">I am currently working/studying here</label>
+              </div>
+              <div>
+                <label className="form-label">Description</label>
+                <textarea name="description" value={formData.description} onChange={handleInputChange} className="form-input min-h-[100px]" required />
+              </div>
+              <div className="flex justify-end gap-3 mt-6">
+                <button type="button" onClick={closeModal} className="form-btn !bg-onyx !w-auto !px-6">Cancel</button>
+                <button type="submit" className="form-btn !w-auto !px-6">Save Changes</button>
               </div>
             </form>
           </div>

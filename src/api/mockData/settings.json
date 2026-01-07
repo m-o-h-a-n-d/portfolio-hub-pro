@@ -11,10 +11,5 @@
     "linkedin": "https://linkedin.com"
   },
   "layout_control": {
-    "resume_order": [
-      { "id": "education", "label": "Education", "order": 1 },
-      { "id": "experince", "label": "Experience", "order": 2 },
-      { "id": "skills", "label": "Skills", "order": 3 }
-    ]
   }
 }

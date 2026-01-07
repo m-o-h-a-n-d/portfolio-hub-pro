@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
-import { Save, Globe, Share2, Layout, Upload, GripHorizontal } from 'lucide-react';
+import { Save, Globe, Share2, Upload } from 'lucide-react';
 
 const SettingsManager = () => {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [dragActive, setDragActive] = useState({ logo: false, favicon: false });
-  const [draggedItemIndex, setDraggedItemIndex] = useState(null);
 
   useEffect(() => {
     fetchSettings();
@@ -17,12 +16,7 @@ const SettingsManager = () => {
     try {
       setLoading(true);
       const response = await apiGet('/settings');
-      // Ensure items are sorted by order initially
-      const data = response.data;
-      if (data.layout_control?.resume_order) {
-        data.layout_control.resume_order.sort((a, b) => a.order - b.order);
-      }
-      setSettings(data);
+      setSettings(response.data);
     } catch (error) {
       console.error('Error fetching settings:', error);
     } finally {
@@ -38,44 +32,6 @@ const SettingsManager = () => {
         [field]: value
       }
     }));
-  };
-
-  // Drag and Drop for Sections
-  const onDragStart = (e, index) => {
-    setDraggedItemIndex(index);
-    e.dataTransfer.effectAllowed = 'move';
-    // Add a ghost image or styling if needed
-  };
-
-  const onDragOver = (e, index) => {
-    e.preventDefault();
-    if (draggedItemIndex === null || draggedItemIndex === index) return;
-
-    const newOrder = [...settings.layout_control.resume_order];
-    const draggedItem = newOrder[draggedItemIndex];
-    
-    // Remove dragged item and insert at new position
-    newOrder.splice(draggedItemIndex, 1);
-    newOrder.splice(index, 0, draggedItem);
-
-    // Update order values based on new positions
-    const updatedOrder = newOrder.map((item, idx) => ({
-      ...item,
-      order: idx + 1
-    }));
-
-    setDraggedItemIndex(index);
-    setSettings(prev => ({
-      ...prev,
-      layout_control: {
-        ...prev.layout_control,
-        resume_order: updatedOrder
-      }
-    }));
-  };
-
-  const onDragEnd = () => {
-    setDraggedItemIndex(null);
   };
 
   // File Upload Logic
@@ -131,7 +87,7 @@ const SettingsManager = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="h2 text-white-2">Global Settings</h1>
-          <p className="text-muted-foreground text-sm mt-1">Manage site identity, social links, and layout</p>
+          <p className="text-muted-foreground text-sm mt-1">Manage site identity and social links</p>
         </div>
         <button
           onClick={handleSubmit}
@@ -256,41 +212,6 @@ const SettingsManager = () => {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Layout Control */}
-        <div className="bg-card border border-border rounded-[20px] p-6 space-y-6 lg:col-span-2" style={{ background: 'var(--bg-gradient-jet)' }}>
-          <div className="flex items-center gap-2 mb-2">
-            <Layout className="w-5 h-5 text-primary" />
-            <h3 className="h3 text-white-2">Layout Control (Section Ordering)</h3>
-          </div>
-          
-          <div className="flex flex-wrap gap-4">
-            {settings.layout_control.resume_order.map((section, index) => (
-              <div 
-                key={section.id} 
-                draggable
-                onDragStart={(e) => onDragStart(e, index)}
-                onDragOver={(e) => onDragOver(e, index)}
-                onDragEnd={onDragEnd}
-                className={`flex-1 min-w-[200px] p-4 rounded-xl bg-onyx border transition-all cursor-move flex items-center justify-between group ${
-                  draggedItemIndex === index ? 'opacity-50 border-primary border-dashed' : 'border-border hover:border-primary/50'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <GripHorizontal className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                  <span className="font-medium text-white-2">{section.label}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Order:</span>
-                  <span className="text-sm font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md min-w-[24px] text-center">
-                    {section.order}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground italic">Drag and drop sections horizontally to reorder them. The order will be updated automatically.</p>
         </div>
       </div>
     </div>

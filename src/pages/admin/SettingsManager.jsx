@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
+import { API_SETTINGS_GET, API_SETTINGS_UPDATE } from '../../api/endpoints';
 import { Save, Globe, Share2, Upload } from 'lucide-react';
 
 const SettingsManager = () => {
@@ -15,7 +16,7 @@ const SettingsManager = () => {
   const fetchSettings = async () => {
     try {
       setLoading(true);
-      const response = await apiGet('/settings');
+      const response = await apiGet(API_SETTINGS_GET);
       setSettings(response.data);
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -64,7 +65,7 @@ const SettingsManager = () => {
     if (e) e.preventDefault();
     try {
       setSaving(true);
-      await apiPost('/settings/update', settings);
+      await apiPost(API_SETTINGS_UPDATE, settings);
       alert('Settings updated successfully!');
     } catch (error) {
       console.error('Error updating settings:', error);

@@ -13,7 +13,7 @@ export const API_LOGIN = `${BASE_URL}/auth/login`;
 // ==========================================
 // [GET] Fetch site settings (Logo, Favicon, Social Links)
 export const API_SETTINGS_GET = `${BASE_URL}/settings`;
-// [POST] Update site settings (Handle FormData for Logo/Favicon)
+// [POST] Update site settings
 export const API_SETTINGS_UPDATE = `${BASE_URL}/settings/update`;
 
 // ==========================================
@@ -25,43 +25,15 @@ export const API_PROFILE_GET = `${BASE_URL}/profile`;
 export const API_PROFILE_UPDATE = `${BASE_URL}/profile/update`;
 
 // ==========================================
-// 4. Resume Section - Skills
+// 4. Resume Section (Unified Array Structure)
 // ==========================================
-// [GET] List all skills
-export const API_SKILLS_LIST = `${BASE_URL}/resume/skills`;
-// [POST] Create a new skill
-export const API_SKILLS_CREATE = `${BASE_URL}/resume/skills`;
-// [PUT] Update an existing skill (Append /{id} in the request logic)
-export const API_SKILLS_UPDATE = `${BASE_URL}/resume/skills`; 
-// [DELETE] Remove a skill (Append /{id} in the request logic)
-export const API_SKILLS_DELETE = `${BASE_URL}/resume/skills`;
+// [GET] Get full resume array (Skills, Education, Experience in order)
+export const API_RESUME_GET = `${BASE_URL}/resume`;
+// [POST] Update full resume array (Handles ordering and all data changes)
+export const API_RESUME_UPDATE = `${BASE_URL}/resume/update`;
 
 // ==========================================
-// 5. Resume Section - Experience
-// ==========================================
-// [GET] List all experience items
-export const API_EXPERIENCE_LIST = `${BASE_URL}/resume/experince`;
-// [POST] Add new experience
-export const API_EXPERIENCE_CREATE = `${BASE_URL}/resume/experince`;
-// [PUT] Update experience item
-export const API_EXPERIENCE_UPDATE = `${BASE_URL}/resume/experince`;
-// [DELETE] Delete experience item
-export const API_EXPERIENCE_DELETE = `${BASE_URL}/resume/experince`;
-
-// ==========================================
-// 6. Resume Section - Education
-// ==========================================
-// [GET] List all education items
-export const API_EDUCATION_LIST = `${BASE_URL}/resume/education`;
-// [POST] Add new education
-export const API_EDUCATION_CREATE = `${BASE_URL}/resume/education`;
-// [PUT] Update education item
-export const API_EDUCATION_UPDATE = `${BASE_URL}/resume/education`;
-// [DELETE] Delete education item
-export const API_EDUCATION_DELETE = `${BASE_URL}/resume/education`;
-
-// ==========================================
-// 7. Portfolio Section
+// 5. Portfolio Section
 // ==========================================
 // [GET] List all projects
 export const API_PORTFOLIO_LIST = `${BASE_URL}/portfolio`;
@@ -73,7 +45,7 @@ export const API_PORTFOLIO_UPDATE = `${BASE_URL}/portfolio`;
 export const API_PORTFOLIO_DELETE = `${BASE_URL}/portfolio`;
 
 // ==========================================
-// 8. Blog Section
+// 6. Blog Section
 // ==========================================
 // [GET] List all blog posts
 export const API_BLOG_LIST = `${BASE_URL}/blog`;
@@ -85,7 +57,7 @@ export const API_BLOG_UPDATE = `${BASE_URL}/blog`;
 export const API_BLOG_DELETE = `${BASE_URL}/blog`;
 
 // ==========================================
-// 9. Testimonials & Clients
+// 7. Testimonials & Clients
 // ==========================================
 // [GET] List testimonials
 export const API_TESTIMONIALS_LIST = `${BASE_URL}/testimonials`;
@@ -102,7 +74,7 @@ export const API_CLIENTS_CREATE = `${BASE_URL}/clients`;
 export const API_CLIENTS_DELETE = `${BASE_URL}/clients`;
 
 // ==========================================
-// 10. Communication (Real-Time Source)
+// 8. Communication
 // ==========================================
 // [GET] List all contact messages
 export const API_MESSAGES_LIST = `${BASE_URL}/messages`;

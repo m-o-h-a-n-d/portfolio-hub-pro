@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
-import { Plus, Edit2, Trash2, X, BookOpen, Briefcase, Award, Save, GripVertical } from 'lucide-react';
+import { API_RESUME_GET, API_RESUME_UPDATE } from '../../api/endpoints';
+import { Plus, Edit2, Trash2, X, BookOpen, Briefcase, Award, GripVertical } from 'lucide-react';
 import SkillsManager from '../../components/admin/SkillsManager';
 
 const ResumeManager = () => {
@@ -28,7 +29,7 @@ const ResumeManager = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await apiGet('/resume');
+      const response = await apiGet(API_RESUME_GET);
       setResume(response.data || []);
       
       // Set first tab as active if available
@@ -66,7 +67,7 @@ const ResumeManager = () => {
     setDraggedTabIndex(null);
     try {
       setReordering(true);
-      await apiPost('/resume/update', resume);
+      await apiPost(API_RESUME_UPDATE, resume);
     } catch (error) {
       console.error('Error updating order:', error);
       alert('Failed to save new order');
@@ -146,7 +147,7 @@ const ResumeManager = () => {
         return section;
       });
 
-      await apiPost('/resume/update', updatedResume);
+      await apiPost(API_RESUME_UPDATE, updatedResume);
       setResume(updatedResume);
       closeModal();
     } catch (error) {
@@ -164,7 +165,7 @@ const ResumeManager = () => {
         }
         return section;
       });
-      await apiPost('/resume/update', updatedResume);
+      await apiPost(API_RESUME_UPDATE, updatedResume);
       setResume(updatedResume);
     } catch (error) {
       console.error('Error deleting:', error);
@@ -244,7 +245,7 @@ const ResumeManager = () => {
           skills={currentData} 
           onUpdate={async (newSkills) => {
             const updatedResume = resume.map(s => s.type === 'skills' ? { ...s, data: newSkills } : s);
-            await apiPost('/resume/update', updatedResume);
+            await apiPost(API_RESUME_UPDATE, updatedResume);
             setResume(updatedResume);
           }} 
         />
@@ -304,7 +305,7 @@ const ResumeManager = () => {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 py-4">
               <div>
                 <label className="form-label">Title</label>
                 <input type="text" name="title" value={formData.title} onChange={handleInputChange} className="form-input" required />

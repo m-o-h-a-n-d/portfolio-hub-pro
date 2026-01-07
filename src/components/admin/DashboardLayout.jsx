@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useNotifications } from '../../context/NotificationContext';
 import { 
   LayoutDashboard, 
   User, 
@@ -21,9 +22,9 @@ import {
 
 const DashboardLayout = () => {
   const { user, logout } = useAuth();
+  const { unreadCount } = useNotifications();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [notifications, setNotifications] = useState(2); // Mock notification count
 
   const navItems = [
     { path: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
@@ -42,21 +43,7 @@ const DashboardLayout = () => {
     return location.pathname.startsWith(path);
   };
 
-  // Simulate real-time notification (Laravel Echo placeholder)
-  useEffect(() => {
-    // In production, this would be Laravel Echo
-    // const channel = Echo.private('admin-notifications');
-    // channel.listen('NewContactMessage', (e) => {
-    //   setNotifications(prev => prev + 1);
-    //   showToast('New message received!');
-    // });
-    
-    console.log('[Echo] Would connect to: private-admin-notifications');
-    
-    return () => {
-      // channel.stopListening('NewContactMessage');
-    };
-  }, []);
+  // Real-time notifications are handled in NotificationContext
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -110,9 +97,9 @@ const DashboardLayout = () => {
                   >
                     <Icon className="w-5 h-5" />
                     <span className="font-medium text-sm">{item.label}</span>
-                    {item.label === 'Messages' && notifications > 0 && (
+                    {item.label === 'Messages' && unreadCount > 0 && (
                       <span className="ml-auto bg-destructive text-white-1 text-xs font-bold px-2 py-0.5 rounded-full">
-                        {notifications}
+                        {unreadCount}
                       </span>
                     )}
                   </Link>
@@ -173,8 +160,10 @@ const DashboardLayout = () => {
             {/* Notifications */}
             <button className="relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-onyx transition-colors">
               <Bell className="w-5 h-5" />
-              {notifications > 0 && (
-                <span className="notification-badge">{notifications}</span>
+              {unreadCount > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 bg-destructive text-white-1 text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-card">
+                  {unreadCount}
+                </span>
               )}
             </button>
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
 import { Plus, Edit2, Trash2, X, BookOpen, Briefcase, Award, Save, GripVertical } from 'lucide-react';
+import SkillsManager from '../../components/admin/SkillsManager';
 
 const ResumeManager = () => {
   const [resume, setResume] = useState(null);
@@ -257,18 +258,7 @@ const ResumeManager = () => {
 
       {/* Content */}
       {activeTab === 'skills' ? (
-        <div className="bg-card border border-border rounded-[20px] p-6" style={{ background: 'var(--bg-gradient-jet)' }}>
-          <h3 className="h3 text-white-2 mb-4">Skills</h3>
-          <div className="space-y-4">
-            {resume?.skills?.map((skill) => (
-              <div key={skill.id} className="flex items-center gap-4">
-                <input type="text" value={skill.name} className="form-input flex-1" readOnly />
-                <input type="number" value={skill.percentage} className="form-input w-24 text-center" readOnly />
-                <span className="text-muted-foreground">%</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <SkillsManager />
       ) : (
         <div className="bg-card border border-border rounded-[20px] overflow-hidden" style={{ background: 'var(--bg-gradient-jet)' }}>
           <div className="overflow-x-auto">

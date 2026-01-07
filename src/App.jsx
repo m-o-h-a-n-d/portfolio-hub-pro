@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./context/AuthContext";
+import { NotificationProvider } from "./context/NotificationContext";
 import PrivateRoute from "./components/admin/PrivateRoute";
 import DashboardLayout from "./components/admin/DashboardLayout";
 import LoginPage from "./pages/admin/LoginPage";
@@ -28,7 +29,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <Routes>
+          <NotificationProvider>
+            <Routes>
             {/* Public Portfolio */}
             <Route path="/" element={<Index />} />
             
@@ -54,7 +56,8 @@ const App = () => (
             
             {/* 404 */}
             <Route path="*" element={<NotFound />} />
-          </Routes>
+            </Routes>
+          </NotificationProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

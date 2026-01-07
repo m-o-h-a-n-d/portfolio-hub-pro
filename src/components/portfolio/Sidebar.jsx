@@ -154,12 +154,13 @@ const Sidebar = () => {
 
         {/* Social Links */}
         <ul className="flex items-center justify-center gap-4">
-          {profile.social?.map((item, index) => {
-            const Icon = socialIcons[item.platform] || Facebook;
+          {profile.social_links && Object.entries(profile.social_links).map(([platform, url], index) => {
+            const Icon = socialIcons[platform] || Facebook;
+            if (!url) return null;
             return (
               <li key={index}>
                 <a 
-                  href={item.url} 
+                  href={url} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-light-gray/70 hover:text-light-gray transition-colors"

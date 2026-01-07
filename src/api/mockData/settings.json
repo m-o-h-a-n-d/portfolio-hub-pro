@@ -2,13 +2,8 @@
   "site_identity": {
     "admin_username": "Richard Hanrick",
     "logo_url": "/placeholder.svg",
-    "favicon_url": "/favicon.ico"
-  },
-  "social_links": {
-    "facebook": "https://facebook.com",
-    "instagram": "https://instagram.com",
-    "github": "https://github.com",
-    "linkedin": "https://linkedin.com"
+    "favicon_url": "/favicon.ico",
+    "cv_url": "/cv/richard-hanrick-cv.pdf"
   },
   "layout_control": {
   }

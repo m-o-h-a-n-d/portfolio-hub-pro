@@ -29,13 +29,13 @@ const DashboardLayout = () => {
   const navItems = [
     { path: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
     { path: '/admin/profile', icon: User, label: 'Profile' },
-    { path: '/admin/resume', icon: FileText, label: 'Resume' },
+    { path: '/admin/resume', icon: FileText, label: 'Resume Content' },
     { path: '/admin/portfolio', icon: Briefcase, label: 'Portfolio' },
     { path: '/admin/blogs', icon: Newspaper, label: 'Blogs' },
     { path: '/admin/clients', icon: Users, label: 'Clients' },
     { path: '/admin/testimonials', icon: Quote, label: 'Testimonials' },
     { path: '/admin/messages', icon: MessageSquare, label: 'Messages' },
-    { path: '/admin/settings', icon: Settings, label: 'Settings' },
+    { path: '/admin/settings', icon: Settings, label: 'Settings & CV' },
   ];
 
   const isActive = (path, exact = false) => {

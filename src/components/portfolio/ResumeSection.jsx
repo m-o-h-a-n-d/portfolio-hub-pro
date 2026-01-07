@@ -1,9 +1,10 @@
-import { useResume, useProfile } from '../../context/DataContext';
+import { useResume, useProfile, useSettings } from '../../context/DataContext';
 import { BookOpen, Briefcase, Download } from 'lucide-react';
 
 const ResumeSection = () => {
   const resume = useResume();
   const profile = useProfile();
+  const settings = useSettings();
 
   if (!resume || !Array.isArray(resume)) return null;
 
@@ -90,6 +91,8 @@ const ResumeSection = () => {
     </section>
   );
 
+  const cvUrl = settings?.site_identity?.cv_url || profile?.cv_url;
+
   return (
     <article className="animate-fade-in">
       {/* Title */}
@@ -108,7 +111,7 @@ const ResumeSection = () => {
       {/* Download CV Button */}
       <section className="text-center">
         <a 
-          href={profile?.cv_url || '#'} 
+          href={cvUrl || '#'} 
           download
           className="download-cv-btn inline-flex"
         >

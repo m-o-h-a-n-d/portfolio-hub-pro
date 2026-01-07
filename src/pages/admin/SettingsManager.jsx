@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
 import { API_SETTINGS_GET, API_SETTINGS_UPDATE } from '../../api/endpoints';
-import { Save, Globe, Share2, Upload } from 'lucide-react';
+import { Save, Globe, Upload, FileText } from 'lucide-react';
 
 const SettingsManager = () => {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [dragActive, setDragActive] = useState({ logo: false, favicon: false });
+  const [cvFile, setCvFile] = useState(null);
 
   useEffect(() => {
     fetchSettings();
@@ -35,7 +36,19 @@ const SettingsManager = () => {
     }));
   };
 
-  // File Upload Logic
+  const handleCvUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type === 'application/pdf') {
+      setCvFile(file);
+      // In a real app, you'd upload this to a server
+      // For now, we'll just simulate it by setting a path
+      handleInputChange('site_identity', 'cv_url', `/cv/${file.name}`);
+    } else {
+      alert('Please upload a PDF file');
+    }
+  };
+
+  // File Upload Logic for images
   const handleFileUpload = (type, file) => {
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
@@ -88,7 +101,7 @@ const SettingsManager = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="h2 text-white-2">Global Settings</h1>
-          <p className="text-muted-foreground text-sm mt-1">Manage site identity and social links</p>
+          <p className="text-muted-foreground text-sm mt-1">Manage site identity and CV</p>
         </div>
         <button
           onClick={handleSubmit}
@@ -192,26 +205,26 @@ const SettingsManager = () => {
           </div>
         </div>
 
-        {/* Social Media Links */}
+        {/* CV Section */}
         <div className="bg-card border border-border rounded-[20px] p-6 space-y-6" style={{ background: 'var(--bg-gradient-jet)' }}>
           <div className="flex items-center gap-2 mb-2">
-            <Share2 className="w-5 h-5 text-primary" />
-            <h3 className="h3 text-white-2">Social Media Links</h3>
+            <FileText className="w-5 h-5 text-primary" />
+            <h3 className="h3 text-white-2">CV / Resume File</h3>
           </div>
           
           <div className="space-y-4">
-            {Object.entries(settings.social_links).map(([platform, url]) => (
-              <div key={platform}>
-                <label className="text-light-gray/70 text-xs uppercase mb-2 block capitalize">{platform}</label>
-                <input
-                  type="url"
-                  value={url}
-                  onChange={(e) => handleInputChange('social_links', platform, e.target.value)}
-                  className="form-input"
-                  placeholder={`https://${platform}.com/yourprofile`}
-                />
-              </div>
-            ))}
+            <div className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl p-8 bg-onyx/50">
+              <FileText className="w-12 h-12 text-muted-foreground mb-4" />
+              <p className="text-sm text-muted-foreground mb-4 text-center">
+                {cvFile ? `Selected: ${cvFile.name}` : settings.site_identity.cv_url ? `Current: ${settings.site_identity.cv_url.split('/').pop()}` : 'No CV uploaded yet'}
+              </p>
+              <label className="form-btn !w-auto cursor-pointer">
+                <Upload className="w-4 h-4" />
+                <span>{settings.site_identity.cv_url ? 'Replace CV' : 'Upload CV'}</span>
+                <input type="file" className="hidden" accept=".pdf" onChange={handleCvUpload} />
+              </label>
+              <p className="text-[10px] text-muted-foreground mt-4 uppercase tracking-wider">PDF format only</p>
+            </div>
           </div>
         </div>
       </div>

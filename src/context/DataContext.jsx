@@ -9,6 +9,7 @@ const BlogContext = createContext(null);
 const ServicesContext = createContext(null);
 const TestimonialsContext = createContext(null);
 const ClientsContext = createContext(null);
+const SettingsContext = createContext(null);
 
 // Custom hooks for accessing data
 export const useProfile = () => useContext(ProfileContext);
@@ -18,6 +19,7 @@ export const useBlog = () => useContext(BlogContext);
 export const useServices = () => useContext(ServicesContext);
 export const useTestimonials = () => useContext(TestimonialsContext);
 export const useClients = () => useContext(ClientsContext);
+export const useSettings = () => useContext(SettingsContext);
 
 // Data Provider Component
 export const DataProvider = ({ children }) => {
@@ -28,6 +30,7 @@ export const DataProvider = ({ children }) => {
   const [services, setServices] = useState(null);
   const [testimonials, setTestimonials] = useState(null);
   const [clients, setClients] = useState(null);
+  const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -43,7 +46,8 @@ export const DataProvider = ({ children }) => {
           blogRes,
           servicesRes,
           testimonialsRes,
-          clientsRes
+          clientsRes,
+          settingsRes
         ] = await Promise.all([
           apiGet('/profile'),
           apiGet('/resume'),
@@ -51,7 +55,8 @@ export const DataProvider = ({ children }) => {
           apiGet('/blog'),
           apiGet('/services'),
           apiGet('/testimonials'),
-          apiGet('/clients')
+          apiGet('/clients'),
+          apiGet('/settings')
         ]);
 
         setProfile(profileRes.data);
@@ -61,6 +66,7 @@ export const DataProvider = ({ children }) => {
         setServices(servicesRes.data);
         setTestimonials(testimonialsRes.data);
         setClients(clientsRes.data);
+        setSettings(settingsRes.data);
       } catch (err) {
         console.error('Error fetching data:', err);
         setError(err.message);
@@ -94,20 +100,22 @@ export const DataProvider = ({ children }) => {
   }
 
   return (
-    <ProfileContext.Provider value={profile}>
-      <ResumeContext.Provider value={resume}>
-        <PortfolioContext.Provider value={portfolio}>
-          <BlogContext.Provider value={blog}>
-            <ServicesContext.Provider value={services}>
-              <TestimonialsContext.Provider value={testimonials}>
-                <ClientsContext.Provider value={clients}>
-                  {children}
-                </ClientsContext.Provider>
-              </TestimonialsContext.Provider>
-            </ServicesContext.Provider>
-          </BlogContext.Provider>
-        </PortfolioContext.Provider>
-      </ResumeContext.Provider>
-    </ProfileContext.Provider>
+    <SettingsContext.Provider value={settings}>
+      <ProfileContext.Provider value={profile}>
+        <ResumeContext.Provider value={resume}>
+          <PortfolioContext.Provider value={portfolio}>
+            <BlogContext.Provider value={blog}>
+              <ServicesContext.Provider value={services}>
+                <TestimonialsContext.Provider value={testimonials}>
+                  <ClientsContext.Provider value={clients}>
+                    {children}
+                  </ClientsContext.Provider>
+                </TestimonialsContext.Provider>
+              </ServicesContext.Provider>
+            </BlogContext.Provider>
+          </PortfolioContext.Provider>
+        </ResumeContext.Provider>
+      </ProfileContext.Provider>
+    </SettingsContext.Provider>
   );
 };

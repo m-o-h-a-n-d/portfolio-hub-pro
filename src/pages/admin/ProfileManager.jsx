@@ -39,14 +39,6 @@ const ProfileManager = () => {
     }));
   };
 
-  const handleAboutChange = (index, value) => {
-    setProfile(prev => {
-      const newAbout = [...prev.about];
-      newAbout[index] = value;
-      return { ...prev, about: newAbout };
-    });
-  };
-
   const handleAvatarUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -61,7 +53,7 @@ const ProfileManager = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setSaving(true);
 
     try {
@@ -84,7 +76,7 @@ const ProfileManager = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -101,8 +93,65 @@ const ProfileManager = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Column: Photo + Social (4 cols) */}
+        <div className="lg:col-span-4 space-y-6">
+          {/* Avatar Section */}
+          <div className="bg-card border border-border rounded-[20px] p-6" style={{ background: 'var(--bg-gradient-jet)' }}>
+            <h3 className="h3 text-white-2 mb-4">Profile Photo</h3>
+            <div className="flex flex-col items-center gap-4">
+              <div className="relative">
+                {profile?.avatar ? (
+                  <img 
+                    src={profile.avatar} 
+                    alt="Avatar" 
+                    className="w-48 h-48 rounded-[20px] object-cover border-2 border-border"
+                  />
+                ) : (
+                  <div className="w-48 h-48 rounded-[20px] bg-onyx flex items-center justify-center border-2 border-border">
+                    <User className="w-16 h-16 text-muted-foreground" />
+                  </div>
+                )}
+              </div>
+              <label className="form-btn !w-full cursor-pointer inline-flex">
+                <Upload className="w-4 h-4" />
+                <span>Upload Photo</span>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  className="hidden" 
+                  onChange={handleAvatarUpload}
+                />
+              </label>
+            </div>
+          </div>
+
+          {/* Social Media Links */}
+          <div className="bg-card border border-border rounded-[20px] p-6 space-y-4" style={{ background: 'var(--bg-gradient-jet)' }}>
+            <div className="flex items-center gap-2 mb-2">
+              <Share2 className="w-5 h-5 text-primary" />
+              <h3 className="h3 text-white-2">Social Media</h3>
+            </div>
+            
+            <div className="space-y-4">
+              {profile.social_links && Object.entries(profile.social_links).map(([platform, url]) => (
+                <div key={platform}>
+                  <label className="text-light-gray/70 text-[10px] uppercase mb-1 block capitalize">{platform}</label>
+                  <input
+                    type="url"
+                    value={url}
+                    onChange={(e) => handleSocialChange(platform, e.target.value)}
+                    className="form-input text-sm py-2"
+                    placeholder={`https://${platform}.com/yourprofile`}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Basic Info + About (8 cols) */}
+        <div className="lg:col-span-8 space-y-6">
           {/* Basic Info */}
           <div className="bg-card border border-border rounded-[20px] p-6" style={{ background: 'var(--bg-gradient-jet)' }}>
             <h3 className="h3 text-white-2 mb-4">Basic Information</h3>
@@ -176,70 +225,15 @@ const ProfileManager = () => {
           {/* About */}
           <div className="bg-card border border-border rounded-[20px] p-6" style={{ background: 'var(--bg-gradient-jet)' }}>
             <h3 className="h3 text-white-2 mb-4">About Me</h3>
-            {profile?.about?.map((paragraph, index) => (
-              <div key={index} className="mb-4">
-                <label className="text-light-gray/70 text-xs uppercase mb-2 block">Paragraph {index + 1}</label>
-                <textarea
-                  value={paragraph}
-                  onChange={(e) => handleAboutChange(index, e.target.value)}
-                  className="form-input min-h-[100px] resize-y"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          {/* Avatar Section */}
-          <div className="bg-card border border-border rounded-[20px] p-6" style={{ background: 'var(--bg-gradient-jet)' }}>
-            <h3 className="h3 text-white-2 mb-4">Profile Photo</h3>
-            <div className="flex flex-col items-center gap-4">
-              <div className="relative">
-                {profile?.avatar ? (
-                  <img 
-                    src={profile.avatar} 
-                    alt="Avatar" 
-                    className="w-32 h-32 rounded-[20px] object-cover border-2 border-border"
-                  />
-                ) : (
-                  <div className="w-32 h-32 rounded-[20px] bg-onyx flex items-center justify-center border-2 border-border">
-                    <User className="w-12 h-12 text-muted-foreground" />
-                  </div>
-                )}
-              </div>
-              <label className="form-btn !w-full cursor-pointer inline-flex">
-                <Upload className="w-4 h-4" />
-                <span>Upload Photo</span>
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  className="hidden" 
-                  onChange={handleAvatarUpload}
-                />
-              </label>
-            </div>
-          </div>
-
-          {/* Social Media Links */}
-          <div className="bg-card border border-border rounded-[20px] p-6 space-y-4" style={{ background: 'var(--bg-gradient-jet)' }}>
-            <div className="flex items-center gap-2 mb-2">
-              <Share2 className="w-5 h-5 text-primary" />
-              <h3 className="h3 text-white-2">Social Media</h3>
-            </div>
-            
-            <div className="space-y-4">
-              {profile.social_links && Object.entries(profile.social_links).map(([platform, url]) => (
-                <div key={platform}>
-                  <label className="text-light-gray/70 text-[10px] uppercase mb-1 block capitalize">{platform}</label>
-                  <input
-                    type="url"
-                    value={url}
-                    onChange={(e) => handleSocialChange(platform, e.target.value)}
-                    className="form-input text-sm py-2"
-                    placeholder={`https://${platform}.com/yourprofile`}
-                  />
-                </div>
-              ))}
+            <div>
+              <label className="text-light-gray/70 text-xs uppercase mb-2 block">Biography</label>
+              <textarea
+                name="about"
+                value={profile?.about || ''}
+                onChange={handleInputChange}
+                className="form-input min-h-[250px] resize-y"
+                placeholder="Write your biography here..."
+              />
             </div>
           </div>
         </div>

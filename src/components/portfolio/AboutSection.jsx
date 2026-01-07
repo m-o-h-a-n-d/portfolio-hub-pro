@@ -28,9 +28,13 @@ const AboutSection = () => {
       </header>
 
       <section className="text-light-gray text-[18px] font-light leading-relaxed mb-9 text-left ">
-        {profile.about?.map((paragraph, index) => (
-          <p key={index} className="mb-4 text-left ">{paragraph}</p>
-        ))}
+        {typeof profile.about === 'string' ? (
+          <p className="mb-4 text-left ">{profile.about}</p>
+        ) : Array.isArray(profile.about) ? (
+          profile.about.map((paragraph, index) => (
+            <p key={index} className="mb-4 text-left ">{paragraph}</p>
+          ))
+        ) : null}
       </section>
 
       {/* Services */}
@@ -80,15 +84,11 @@ const AboutSection = () => {
                   </figure>
                   
                   {/* Text Content */}
-                  {/* الحل هنا: أزلنا المارجن من الـ div الأب */}
                   <div className="min-w-0 text-left ">
-                     
-                     {/* وأضفنا المارجن للاسم فقط ليبتعد عن الصورة */}
                      <h3 className="h3 mb-3 text-white-2 truncate text-left md:ml-[95px] ml-[80px]">
                         {testimonial.name}
                      </h3>
                      
-                     {/* النص الآن بدون مارجن وسيبدأ من بداية السطر تحت الصورة */}
                      <div className="text-light-gray text-[15px] font-light leading-relaxed line-clamp-4">
                        <p className="break-words text-left">
                          {(testimonial.text && testimonial.text.length > 5) ? testimonial.text : defaultText}
@@ -102,9 +102,7 @@ const AboutSection = () => {
         </div>
       </section>
 
-      {/* ==========================================================
-          MODAL
-          ========================================================== */}
+      {/* MODAL */}
       {selectedTestimonial && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           

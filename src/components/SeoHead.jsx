@@ -5,22 +5,18 @@ const SeoHead = ({ name, jobTitle, websiteUrl, imageUrl }) => {
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
-    fetch('/api/mockData/profile.json') // لازم الملف يبقى في public/api/mockData
+    fetch('/api/mockData/profile.json')
       .then((res) => res.json())
       .then((data) => setProfileData(data))
       .catch((err) => console.error('Error fetching profile data:', err));
   }, []);
 
-  const finalName = name || profileData?.name || 'Your Name Here';
-  const finalJobTitle =
-    jobTitle || profileData?.title || 'Full Stack Web Developer';
-  const finalDescription =
-    profileData?.about || 'Professional portfolio website';
+  const finalName = name || profileData?.name || 'Mohanad Ahmed Shehata';
+  const finalJobTitle = jobTitle || profileData?.title || 'Full Stack Web Developer';
+  const finalDescription = profileData?.about || 'Professional portfolio of Mohanad Ahmed Shehata, a Full Stack Web Developer specializing in React, Laravel, and modern web technologies.';
 
-  const finalWebsiteUrl =
-    websiteUrl || 'https://mohanadportfolio.vercel.app/';
-  const finalImageUrl =
-    imageUrl || 'https://mohanadportfolio.vercel.app/image.png';
+  const finalWebsiteUrl = websiteUrl || 'https://mohanadportfolio.vercel.app/';
+  const finalImageUrl = imageUrl || 'https://mohanadportfolio.vercel.app/image.png';
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -46,10 +42,12 @@ const SeoHead = ({ name, jobTitle, websiteUrl, imageUrl }) => {
       <meta name="author" content={finalName} />
       <meta name="robots" content="index, follow" />
 
-      {/* Open Graph */}
+      {/* Open Graph / Facebook / WhatsApp */}
       <meta property="og:title" content={`${finalName} - ${finalJobTitle}`} />
       <meta property="og:description" content={finalDescription} />
       <meta property="og:image" content={finalImageUrl} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       <meta property="og:url" content={finalWebsiteUrl} />
       <meta property="og:type" content="website" />
 
@@ -61,6 +59,7 @@ const SeoHead = ({ name, jobTitle, websiteUrl, imageUrl }) => {
 
       {/* Favicon */}
       <link rel="icon" href="/favicon.ico" />
+      <link rel="apple-touch-icon" href="/favicon.ico" />
 
       {/* JSON-LD */}
       <script

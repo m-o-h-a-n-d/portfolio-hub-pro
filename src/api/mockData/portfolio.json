@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Parking System",
       "category": "Backend Development",
-      "image": "/images/parkingmo.png",
+      "image": "/images/parkingmo.webp",
       "description": "Backend system to manage parking lots efficiently with real-time monitoring and automated ticketing.",
       "link": "https://parkingmo.up.railway.app/"
     },
@@ -12,7 +12,7 @@
       "id": 2,
       "title": "NewMO",
       "category": "Backend Development",
-      "image": "/images/newmo.png",
+      "image": "/images/newmo.webp",
       "description": "Modern SaaS platform for team collaboration and project management with robust backend APIs.",
       "link": "https://newmo.wuaze.com/"
     },
@@ -20,7 +20,7 @@
       "id": 3,
       "title": "Egycare",
       "category": "Frontend Development",
-      "image": "/images/egycare.png",
+      "image": "/images/egycare.webp",
       "description": "Healthcare platform with intuitive UI, patient management features, and responsive design.",
       "link": "https://egycarepro.netlify.app/"
     },
@@ -28,7 +28,7 @@
       "id": 4,
       "title": "SystemMO",
       "category": "Frontend Development",
-      "image": "/images/systemmo.png",
+      "image": "/images/systemmo.webp",
       "description": "Interactive frontend dashboard for monitoring data and system metrics in real-time.",
       "link": "https://systemmo.netlify.app/"
     },
@@ -36,7 +36,7 @@
       "id": 5,
       "title": "Parking System",
       "category": "IOT",
-      "image": "/images/iot.png",
+      "image": "/images/iot.webp",
       "description": "IoT-enabled parking system with smart sensors and automated parking management.",
       "link": "https://www.linkedin.com/posts/mohannad-ahmed11_smartparking-iot-laravel-activity-7409986207083810816-7AI-?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAERsl-MBWw7UeYsYyH1p62UEEGwJPivaE7M"
     },
@@ -44,7 +44,7 @@
       "id": 6,
       "title": "Meterika",
       "category": "Backend Development",
-      "image": "/images/meterika.png",
+      "image": "/images/meterika.webp",
       "description": "Analytics platform with backend support for data processing, reporting, and visualization.",
       "link": "http://meterika.com/"
     },
@@ -52,7 +52,7 @@
       "id": 7,
       "title": "Education Platform",
       "category": "Frontend Development",
-      "image": "/images/education.png",
+      "image": "/images/education.webp",
       "description": "Interactive learning platform with responsive design and rich educational content.",
       "link": "https://mahmoudelnegm.vercel.app/"
     },
@@ -60,7 +60,7 @@
       "id": 8,
       "title": "Education Platform",
       "category": "Frontend Development",
-      "image": "/images/education2.png",
+      "image": "/images/education2.webp",
       "description": "Interactive learning platform with responsive design and rich educational content.",
       "link": "https://communicationproject.vercel.app/"
     }

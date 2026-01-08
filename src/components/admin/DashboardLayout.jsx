@@ -42,6 +42,7 @@ const DashboardLayout = () => {
     { path: '/admin/profile', icon: User, label: 'Profile' },
     { path: '/admin/resume', icon: FileText, label: 'Resume Content' },
     { path: '/admin/portfolio', icon: Briefcase, label: 'Portfolio' },
+    { path: '/admin/services', icon: Layout, label: 'Services' },
     { path: '/admin/blogs', icon: Newspaper, label: 'Blogs' },
     { path: '/admin/clients', icon: Users, label: 'Clients' },
     { path: '/admin/testimonials', icon: Quote, label: 'Testimonials' },

@@ -10,6 +10,7 @@ import {
   API_BLOG_LIST,
   API_TESTIMONIALS_LIST,
   API_CLIENTS_LIST,
+  API_SERVICES_LIST,
   API_SETTINGS_GET
 } from '../api/endpoints';
 
@@ -61,6 +62,7 @@ export const DataProvider = ({ children }) => {
           blogRes,
           testimonialsRes,
           clientsRes,
+          servicesRes,
           settingsRes
         ] = await Promise.all([
           apiGet(API_PROFILE_GET),
@@ -72,6 +74,7 @@ export const DataProvider = ({ children }) => {
           apiGet(API_BLOG_LIST),
           apiGet(API_TESTIMONIALS_LIST),
           apiGet(API_CLIENTS_LIST),
+          apiGet(API_SERVICES_LIST),
           apiGet(API_SETTINGS_GET)
         ]);
 
@@ -90,9 +93,8 @@ export const DataProvider = ({ children }) => {
         setBlog(blogRes.data);
         setTestimonials(testimonialsRes.data);
         setClients(clientsRes.data);
+        setServices(servicesRes.data);
         setSettings(settingsRes.data);
-        
-        setServices(null); 
 
       } catch (err) {
         console.error('Error fetching data:', err);

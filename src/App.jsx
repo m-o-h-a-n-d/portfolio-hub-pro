@@ -22,6 +22,7 @@ import SettingsManager from "./pages/admin/SettingsManager";
 import BlogsManager from "./pages/admin/BlogsManager";
 import ClientsManager from "./pages/admin/ClientsManager";
 import TestimonialsManager from "./pages/admin/TestimonialsManager";
+import ServicesManager from "./pages/admin/ServicesManager";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => (
               <Route path="blogs" element={<BlogsManager />} />
               <Route path="clients" element={<ClientsManager />} />
               <Route path="testimonials" element={<TestimonialsManager />} />
+              <Route path="services" element={<ServicesManager />} />
             </Route>
             
             {/* 404 */}

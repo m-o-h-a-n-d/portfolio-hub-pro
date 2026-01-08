@@ -84,6 +84,18 @@ export const API_TESTIMONIALS_CREATE = `${BASE_URL}/testimonials`;
 // [DELETE] Delete testimonial
 export const API_TESTIMONIALS_DELETE = `${BASE_URL}/testimonials`;
 
+// ==========================================
+// 7.5 Services Section
+// ==========================================
+// [GET] List services
+export const API_SERVICES_LIST = `${BASE_URL}/services`;
+// [POST] Add service
+export const API_SERVICES_CREATE = `${BASE_URL}/services`;
+// [PUT] Update service
+export const API_SERVICES_UPDATE = `${BASE_URL}/services`;
+// [DELETE] Delete service
+export const API_SERVICES_DELETE = `${BASE_URL}/services`;
+
 // [GET] List clients
 export const API_CLIENTS_LIST = `${BASE_URL}/clients`;
 // [POST] Add client

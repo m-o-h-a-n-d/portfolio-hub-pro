@@ -7,14 +7,24 @@ import {
   Wifi, 
   Layout, 
   X, 
-  Quote 
+  Quote,
+  Code,
+  Smartphone,
+  Database,
+  Globe,
+  Cpu
 } from 'lucide-react';
 
 const serviceIcons = {
-  frontend: Monitor,   // Front-end Development
-  backend: Server,    // Backend Development
-  iot: Wifi,          // IoT Solutions
-  uiux: Layout        // UI & UX Design
+  frontend: Monitor,
+  backend: Server,
+  iot: Wifi,
+  uiux: Layout,
+  code: Code,
+  mobile: Smartphone,
+  database: Database,
+  web: Globe,
+  hardware: Cpu
 };
 
 

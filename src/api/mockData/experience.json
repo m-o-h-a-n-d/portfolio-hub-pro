@@ -1,0 +1,20 @@
+[
+  {
+    "id": "exp_001",
+    "title": "Full Stack Developer (Freelance)",
+    "period": "2023 — Present",
+    "description": "Developing dynamic web applications with modern front-end frameworks, backend APIs, and IoT integration for smart applications."
+  },
+  {
+    "id": "exp_002",
+    "title": "Fault Removal Technician – WE",
+    "period": "2021 — 2022",
+    "description": "Gained hands-on experience troubleshooting real-world network systems and problem-solving under pressure."
+  },
+  {
+    "id": "exp_003",
+    "title": "Intern – Web & App Projects",
+    "period": "2020 — 2021",
+    "description": "Worked on web development and application projects, collaborating in team-based environments and learning full project lifecycle."
+  }
+]

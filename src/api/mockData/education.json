@@ -1,0 +1,20 @@
+[
+  {
+    "id": "edu_001",
+    "title": "Bachelor in Communications & Electronics Engineering",
+    "period": "2022 — Present",
+    "description": "Studying Communications and Electronics Engineering with a focus on software development, IoT systems, and embedded electronics."
+  },
+  {
+    "id": "edu_002",
+    "title": "Diploma in Full Stack Web Development",
+    "period": "2021 — 2022",
+    "description": "Completed a full stack web development program covering HTML, CSS, JavaScript, React.js, PHP, Laravel, MySQL, and API integration."
+  },
+  {
+    "id": "edu_003",
+    "title": "Diploma in DEPI React.js",
+    "period": "2025 — 2025",
+    "description": "Completed a professional diploma in DEPI React.js, covering modern front-end development techniques, component-based architecture, and responsive UI design."
+  }
+]

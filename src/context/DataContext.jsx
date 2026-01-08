@@ -53,7 +53,7 @@ export const DataProvider = ({ children }) => {
         
         const [
           profileRes,
-          resumeStructureRes,
+          resumeOrderRes,
           eduRes,
           expRes,
           skillsRes,
@@ -75,13 +75,13 @@ export const DataProvider = ({ children }) => {
           apiGet(API_SETTINGS_GET)
         ]);
 
-        // Reconstruct the resume object based on structure and individual data
-        const structure = resumeStructureRes.data || [];
-        const reconstructedResume = structure.map(section => {
-          if (section.type === 'education') return { ...section, data: eduRes.data || [] };
-          if (section.type === 'experience') return { ...section, data: expRes.data || [] };
-          if (section.type === 'skills') return { ...section, data: skillsRes.data || [] };
-          return section;
+        // Reconstruct the resume object based on the order array and individual data
+        const order = resumeOrderRes.data || ["education", "experience", "skills"];
+        const reconstructedResume = order.map(type => {
+          if (type === 'education') return { type: 'education', data: eduRes.data || [] };
+          if (type === 'experience') return { type: 'experience', data: expRes.data || [] };
+          if (type === 'skills') return { type: 'skills', data: skillsRes.data || [] };
+          return { type, data: [] };
         });
 
         setProfile(profileRes.data);
@@ -92,8 +92,6 @@ export const DataProvider = ({ children }) => {
         setClients(clientsRes.data);
         setSettings(settingsRes.data);
         
-        // Services might be part of settings or profile in some versions, 
-        // but here we'll set it if it exists in any response or keep it null
         setServices(null); 
 
       } catch (err) {

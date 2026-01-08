@@ -17,7 +17,7 @@ import { Plus, Edit2, Trash2, X, BookOpen, Briefcase, Award, GripVertical } from
 import SkillsManager from '../../components/admin/SkillsManager';
 
 const ResumeManager = () => {
-  const [resumeStructure, setResumeStructure] = useState([]); // Holds the order and types
+  const [resumeOrder, setResumeOrder] = useState([]); // Holds the order of types: ["education", "experience", "skills"]
   const [sectionsData, setSectionsData] = useState({
     education: [],
     experience: [],
@@ -46,13 +46,13 @@ const ResumeManager = () => {
   const fetchInitialData = async () => {
     try {
       setLoading(true);
-      // 1. Fetch the structure/order
-      const structureResponse = await apiGet(API_RESUME_GET);
-      const structure = structureResponse.data || [];
-      setResumeStructure(structure);
+      // 1. Fetch the order (returns array of strings)
+      const orderResponse = await apiGet(API_RESUME_GET);
+      const order = orderResponse.data || ["education", "experience", "skills"];
+      setResumeOrder(order);
       
-      if (structure.length > 0) {
-        setActiveTab(structure[0].type);
+      if (order.length > 0) {
+        setActiveTab(order[0]);
       }
 
       // 2. Fetch all sections individually
@@ -85,23 +85,22 @@ const ResumeManager = () => {
     e.preventDefault();
     if (draggedTabIndex === null || draggedTabIndex === index) return;
 
-    const newStructure = [...resumeStructure];
-    const draggedItem = newStructure[draggedTabIndex];
+    const newOrder = [...resumeOrder];
+    const draggedItem = newOrder[draggedTabIndex];
     
-    newStructure.splice(draggedTabIndex, 1);
-    newStructure.splice(index, 0, draggedItem);
+    newOrder.splice(draggedTabIndex, 1);
+    newOrder.splice(index, 0, draggedItem);
 
     setDraggedTabIndex(index);
-    setResumeStructure(newStructure);
+    setResumeOrder(newOrder);
   };
 
   const onDragEnd = async () => {
     setDraggedTabIndex(null);
     try {
       setReordering(true);
-      // Send only the types in an array as requested
-      const orderArray = resumeStructure.map(section => section.type);
-      await apiPost(API_RESUME_REORDER, orderArray);
+      // Send the array of strings as requested
+      await apiPost(API_RESUME_REORDER, resumeOrder);
     } catch (error) {
       console.error('Error updating order:', error);
       alert('Failed to save new order');
@@ -257,19 +256,19 @@ const ResumeManager = () => {
 
       <div className="bg-card border border-border rounded-[20px] p-2" style={{ background: 'var(--bg-gradient-jet)' }}>
         <div className="flex gap-2">
-          {resumeStructure.map((section, index) => {
-            const Icon = getIcon(section.type);
-            const isActive = activeTab === section.type;
+          {resumeOrder.map((type, index) => {
+            const Icon = getIcon(type);
+            const isActive = activeTab === type;
             const isDragged = draggedTabIndex === index;
 
             return (
               <div
-                key={section.type}
+                key={type}
                 draggable
                 onDragStart={(e) => onDragStart(e, index)}
                 onDragOver={(e) => onDragOver(e, index)}
                 onDragEnd={onDragEnd}
-                onClick={() => setActiveTab(section.type)}
+                onClick={() => setActiveTab(type)}
                 className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl transition-all cursor-pointer group relative ${
                   isActive 
                     ? 'bg-primary/10 text-primary' 
@@ -278,7 +277,7 @@ const ResumeManager = () => {
               >
                 <GripVertical className="w-4 h-4 opacity-0 group-hover:opacity-40 absolute left-2 cursor-grab active:cursor-grabbing" />
                 <Icon className="w-5 h-5" />
-                <span className="font-medium capitalize">{section.type}</span>
+                <span className="font-medium capitalize">{type}</span>
               </div>
             );
           })}

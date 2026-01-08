@@ -4,7 +4,10 @@ export const MOCK_MODE = true;
 
 // Import mock data
 import profileData from './mockData/profile.json';
-import resumeData from './mockData/resume.json';
+import resumeOrderData from './mockData/resume.json';
+import educationData from './mockData/education.json';
+import experienceData from './mockData/experience.json';
+import skillsData from './mockData/skills.json';
 import portfolioData from './mockData/portfolio.json';
 import blogData from './mockData/blog.json';
 import messagesData from './mockData/messages.json';
@@ -16,7 +19,10 @@ import settingsData from './mockData/settings.json';
 // Mock data mapping
 const mockDataMap = {
   '/profile': profileData,
-  '/resume': resumeData,
+  '/resume/education': educationData,
+  '/resume/experience': experienceData,
+  '/resume/skills': skillsData,
+  '/resume': resumeOrderData,
   '/portfolio': portfolioData,
   '/blog': blogData,
   '/messages': messagesData,
@@ -92,20 +98,19 @@ export const apiFetch = async (endpoint, method = 'GET', body = null, isFile = f
 
     // Handle GET requests
     if (method === 'GET') {
-      // Special case for skills which is nested in resume mock
-      if (endpoint.includes('/resume/skills')) {
-        return { success: true, data: resumeData.skills };
-      }
-      if (endpoint.includes('/resume/experience')) {
-        return { success: true, data: resumeData.experience };
-      }
       // Find matching mock data
       for (const [path, data] of Object.entries(mockDataMap)) {
-        if (endpoint.includes(path)) {
+        if (endpoint.endsWith(path)) {
           return { success: true, data };
         }
       }
-      throw new Error('Endpoint not found');
+      
+      // Fallback for endpoints with IDs
+      if (endpoint.includes('/resume/education/')) return { success: true, data: educationData[0] };
+      if (endpoint.includes('/resume/experience/')) return { success: true, data: experienceData[0] };
+      if (endpoint.includes('/resume/skills/')) return { success: true, data: skillsData[0] };
+
+      throw new Error('Endpoint not found: ' + endpoint);
     }
 
     // Handle POST/PUT requests (Create/Update)

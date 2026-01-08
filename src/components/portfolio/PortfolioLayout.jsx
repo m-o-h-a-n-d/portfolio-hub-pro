@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DataProvider } from '../../context/DataContext';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
@@ -7,11 +7,30 @@ import ResumeSection from './ResumeSection';
 import PortfolioSection from './PortfolioSection';
 import BlogSection from './BlogSection';
 import ContactSection from './ContactSection';
+import Loader from './Loader';
 
 const PortfolioLayout = () => {
   const [activePage, setActivePage] = useState('about');
+  const [isPageLoading, setIsPageLoading] = useState(false);
+
+  const handlePageChange = (page) => {
+    if (page === activePage) return;
+    setIsPageLoading(true);
+    setActivePage(page);
+  };
+
+  useEffect(() => {
+    if (isPageLoading) {
+      const timer = setTimeout(() => {
+        setIsPageLoading(false);
+      }, 500); // Simulate loading time like in Dashboard
+      return () => clearTimeout(timer);
+    }
+  }, [isPageLoading]);
 
   const renderPage = () => {
+    if (isPageLoading) return <Loader />;
+    
     switch (activePage) {
       case 'about':
         return <AboutSection />;
@@ -45,7 +64,7 @@ const PortfolioLayout = () => {
           <div className="flex-1 min-w-0 bg-card border border-border rounded-[20px] p-[15px] md:p-[30px] shadow-portfolio-1 relative">
             
             {/* Navbar أصبح الآن داخل الكارد ليكون فوقه مباشرة */}
-            <Navbar activePage={activePage} onPageChange={setActivePage} />
+            <Navbar activePage={activePage} onPageChange={handlePageChange} />
 
             {/* Content Pages */}
             <div className="mt-4 md:mt-0">

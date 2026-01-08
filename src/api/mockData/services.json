@@ -2,27 +2,27 @@
   "services": [
     {
       "id": 1,
-      "title": "Web Design",
-      "description": "The most modern and high-quality design made at a professional level.",
-      "icon": "design"
+      "title": "Front-end Development",
+      "description": "Creating modern and responsive web interfaces using HTML, CSS, JavaScript, and frameworks like React.",
+      "icon": "frontend"
     },
     {
       "id": 2,
-      "title": "Web Development",
-      "description": "High-quality development of sites at the professional level.",
-      "icon": "dev"
+      "title": "Backend Development",
+      "description": "Building robust server-side applications, APIs, and databases for professional web projects.",
+      "icon": "backend"
     },
     {
       "id": 3,
-      "title": "Mobile Apps",
-      "description": "Professional development of applications for iOS and Android.",
-      "icon": "app"
+      "title": "IoT Solutions",
+      "description": "Integrating IoT devices with software systems to create smart and connected applications.",
+      "icon": "iot"
     },
     {
       "id": 4,
-      "title": "Photography",
-      "description": "I make high-quality photos of any category at a professional level.",
-      "icon": "photo"
+      "title": "UI & UX Design",
+      "description": "Designing intuitive and engaging user interfaces with seamless user experiences for web and mobile applications.",
+      "icon": "uiux"
     }
   ]
 }

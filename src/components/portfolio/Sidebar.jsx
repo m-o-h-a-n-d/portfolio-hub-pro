@@ -17,6 +17,12 @@ const Sidebar = () => {
     github: Github,
   };
 
+function limitWords(text, limit = 2) {
+  return text?.trim().split(/\s+/).slice(0, limit).join(" ");
+}
+
+
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -55,7 +61,7 @@ const Sidebar = () => {
             {/* Name & Title */}
             <div className="text-left lg:text-center">
             <h1 className="text-white-2 text-[20px] md:text-[26px] font-medium tracking-tight mb-2 whitespace-nowrap">
-                {profile.name}
+                {limitWords(profile.name, 2)}
             </h1>
             <p className="bg-onyx text-white-1 text-xs font-light px-[12px] py-[4px] md:px-[18px] md:py-[5px] rounded-lg inline-block">
                 {profile.title}

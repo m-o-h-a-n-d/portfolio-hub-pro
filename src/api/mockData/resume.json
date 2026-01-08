@@ -1,25 +1,24 @@
 [
- 
   {
     "type": "education",
     "data": [
       {
         "id": "edu_001",
-        "title": "University School of the Arts",
-        "period": "2007 — 2008",
-        "description": "مثال على الوصف هنا"
+        "title": "Bachelor in Communications & Electronics Engineering",
+        "period": "2022 — Present",
+        "description": "Studying Communications and Electronics Engineering with a focus on software development, IoT systems, and embedded electronics."
       },
       {
         "id": "edu_002",
-        "title": "New York Academy of Art",
-        "period": "2006 — 2007",
-        "description": "مثال على وصف ثاني"
+        "title": "Diploma in Full Stack Web Development",
+        "period": "2021 — 2022",
+        "description": "Completed a full stack web development program covering HTML, CSS, JavaScript, React.js, PHP, Laravel, MySQL, and API integration."
       },
       {
         "id": "edu_003",
-        "title": "High School of Art and Design",
-        "period": "2002 — 2004",
-        "description": "مثال على وصف ثالث"
+        "title": "Diploma in DEPI React.js",
+        "period": "2025 — 2025",
+        "description": "Completed a professional diploma in DEPI React.js, covering modern front-end development techniques, component-based architecture, and responsive UI design."
       }
     ]
   },
@@ -28,46 +27,56 @@
     "data": [
       {
         "id": "exp_001",
-        "title": "Creative Director",
-        "period": "2015 — Present",
-        "description": "مثال على الخبرة"
+        "title": "Full Stack Developer (Freelance)",
+        "period": "2023 — Present",
+        "description": "Developing dynamic web applications with modern front-end frameworks, backend APIs, and IoT integration for smart applications."
       },
       {
         "id": "exp_002",
-        "title": "Art Director",
-        "period": "2013 — 2015",
-        "description": "مثال على الخبرة"
+        "title": "Fault Removal Technician – WE",
+        "period": "2021 — 2022",
+        "description": "Gained hands-on experience troubleshooting real-world network systems and problem-solving under pressure."
       },
       {
         "id": "exp_003",
-        "title": "Web Designer",
-        "period": "2010 — 2013",
-        "description": "مثال على الخبرة"
+        "title": "Intern – Web & App Projects",
+        "period": "2020 — 2021",
+        "description": "Worked on web development and application projects, collaborating in team-based environments and learning full project lifecycle."
       }
     ]
   },
-   {
+  {
     "type": "skills",
     "data": [
       {
         "id": "skill_001",
-        "name": "Web Design",
+        "name": "Front-end Development",
         "percentage": 80
       },
       {
         "id": "skill_002",
-        "name": "Graphic Design",
-        "percentage": 70
-      },
-      {
-        "id": "skill_003",
-        "name": "Branding",
+        "name": "Backend Development",
         "percentage": 90
       },
       {
+        "id": "skill_003",
+        "name": "IoT Integration",
+        "percentage": 75
+      },
+      {
         "id": "skill_004",
-        "name": "WordPress",
-        "percentage": 50
+        "name": "UI & UX Design",
+        "percentage": 70
+      },
+      {
+        "id": "skill_005",
+        "name": "React.js / Laravel",
+        "percentage": 95
+      },
+      {
+        "id": "skill_006",
+        "name": "Database & MySQL",
+        "percentage": 90
       }
     ]
   }

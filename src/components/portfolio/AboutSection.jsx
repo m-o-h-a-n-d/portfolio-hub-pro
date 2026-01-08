@@ -1,14 +1,22 @@
 import { useProfile, useServices, useTestimonials, useClients } from '../../context/DataContext';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Palette, Code, Smartphone, Camera, X, Quote } from 'lucide-react';
+import { 
+  Monitor, 
+  Server, 
+  Wifi, 
+  Layout, 
+  X, 
+  Quote 
+} from 'lucide-react';
 
 const serviceIcons = {
-  design: Palette,
-  dev: Code,
-  app: Smartphone,
-  photo: Camera,
+  frontend: Monitor,   // Front-end Development
+  backend: Server,    // Backend Development
+  iot: Wifi,          // IoT Solutions
+  uiux: Layout        // UI & UX Design
 };
+
 
 const AboutSection = () => {
   const profile = useProfile();

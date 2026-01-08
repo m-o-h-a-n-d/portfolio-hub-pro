@@ -9,11 +9,14 @@ const PortfolioSection = () => {
 
   if (!portfolio) return null;
 
-  const categories = portfolio.categories || ['all', 'web design', 'applications', 'web development'];
+  const categories = portfolio.categories || ['all', 'Frontend Development', 'Backend Development', 'IOT'];
   
-  const filteredProjects = activeFilter === 'all' 
-    ? portfolio.projects 
-    : portfolio.projects?.filter(p => p.category.toLowerCase() === activeFilter);
+ const filteredProjects = activeFilter === 'all' 
+  ? portfolio.projects 
+  : portfolio.projects?.filter(
+      p => p.category.toLowerCase() === activeFilter.toLowerCase()
+    );
+
 
   const handleFilterChange = (category) => {
     setActiveFilter(category);

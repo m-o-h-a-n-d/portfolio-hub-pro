@@ -2,76 +2,68 @@
   "projects": [
     {
       "id": 1,
-      "title": "Finance",
-      "category": "web development",
-      "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop",
-      "description": "A comprehensive financial management platform with real-time analytics.",
-      "link": "#"
+      "title": "Parking System",
+      "category": "Backend Development",
+      "image": "/images/parkingmo.png",
+      "description": "Backend system to manage parking lots efficiently with real-time monitoring and automated ticketing.",
+      "link": "https://parkingmo.up.railway.app/"
     },
     {
       "id": 2,
-      "title": "Orizon",
-      "category": "web development",
-      "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop",
-      "description": "Modern SaaS platform for team collaboration and project management.",
-      "link": "#"
+      "title": "NewMO",
+      "category": "Backend Development",
+      "image": "/images/newmo.png",
+      "description": "Modern SaaS platform for team collaboration and project management with robust backend APIs.",
+      "link": "https://newmo.wuaze.com/"
     },
     {
       "id": 3,
-      "title": "Fundo",
-      "category": "web design",
-      "image": "https://images.unsplash.com/photo-1559028012-481c04fa702d?w=400&h=300&fit=crop",
-      "description": "Creative funding platform with beautiful UI/UX design.",
-      "link": "#"
+      "title": "Egycare",
+      "category": "Frontend Development",
+      "image": "/images/egycare.png",
+      "description": "Healthcare platform with intuitive UI, patient management features, and responsive design.",
+      "link": "https://egycarepro.netlify.app/"
     },
     {
       "id": 4,
-      "title": "Brawlhalla",
-      "category": "applications",
-      "image": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=300&fit=crop",
-      "description": "Mobile gaming application with multiplayer features.",
-      "link": "#"
+      "title": "SystemMO",
+      "category": "Frontend Development",
+      "image": "/images/systemmo.png",
+      "description": "Interactive frontend dashboard for monitoring data and system metrics in real-time.",
+      "link": "https://systemmo.netlify.app/"
     },
     {
       "id": 5,
-      "title": "DSM.",
-      "category": "web design",
-      "image": "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=400&h=300&fit=crop",
-      "description": "Design system management tool for enterprise teams.",
-      "link": "#"
+      "title": "ParkingMO",
+      "category": "IOT",
+      "image": "https://media.licdn.com/dms/image/v2/D4D22AQEP3GfB_N9ZIg/feedshare-shrink_1280/B4DZtWO4FuH8Aw-/0/1766678379732?e=1769644800&v=beta&t=h1p5Z3-RUcLnrQWujmM-3pJPpL8xTHHBwVYS6iZsQBU",
+      "description": "IoT-enabled parking system with smart sensors and automated parking management.",
+      "link": "https://www.linkedin.com/posts/mohannad-ahmed11_smartparking-iot-laravel-activity-7409986207083810816-7AI-?utm_source=share&utm_medium=member_desktop&rcm=ACoAAERsl-MBWw7UeYsYyH1p62UEEGwJPivaE7M/"
     },
     {
       "id": 6,
-      "title": "MetaSpark",
-      "category": "web design",
-      "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
-      "description": "Analytics dashboard with interactive data visualizations.",
-      "link": "#"
+      "title": "Meterika",
+      "category": "Backend Development",
+      "image": "/images/meterika.png",
+      "description": "Analytics platform with backend support for data processing, reporting, and visualization.",
+      "link": "http://meterika.com/"
     },
     {
       "id": 7,
-      "title": "Summary",
-      "category": "web development",
-      "image": "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop",
-      "description": "Document summarization tool powered by AI.",
-      "link": "#"
+      "title": "Education Platform",
+      "category": "Frontend Development",
+      "image": "/images/education.png",
+      "description": "Interactive learning platform with responsive design and rich educational content.",
+      "link": "https://mahmoudelnegm.vercel.app/"
     },
     {
       "id": 8,
-      "title": "Task Manager",
-      "category": "applications",
-      "image": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=400&h=300&fit=crop",
-      "description": "Productivity application for task and project management.",
-      "link": "#"
-    },
-    {
-      "id": 9,
-      "title": "Arrival",
-      "category": "web development",
-      "image": "https://images.unsplash.com/photo-1517292987719-0369a794ec0f?w=400&h=300&fit=crop",
-      "description": "Travel booking platform with seamless user experience.",
-      "link": "#"
+      "title": "Education Platform",
+      "category": "Frontend Development",
+      "image": "/images/education2.png",
+      "description": "Interactive learning platform with responsive design and rich educational content.",
+      "link": "https://communicationproject.vercel.app/"
     }
   ],
-  "categories": ["all", "web design", "applications", "web development"]
+  "categories": ["all", "Backend Development", "Frontend Development", "IOT"]
 }

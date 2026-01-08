@@ -24,6 +24,7 @@ const AboutSection = () => {
   const testimonials = useTestimonials();
   const clients = useClients();
   const [selectedTestimonial, setSelectedTestimonial] = useState(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const defaultText = "Richard was hired to create a corporate identity. We were very pleased with the work done. She has a lot of experience and is very concerned about the needs of client.";
 
@@ -35,14 +36,27 @@ const AboutSection = () => {
         <h2 className="h2 article-title">About me</h2>
       </header>
 
-      <section className="text-light-gray text-[18px] font-light leading-relaxed mb-9 text-left ">
-        {typeof profile.about === 'string' ? (
-          <p className="mb-4 text-left ">{profile.about}</p>
-        ) : Array.isArray(profile.about) ? (
-          profile.about.map((paragraph, index) => (
-            <p key={index} className="mb-4 text-left ">{paragraph}</p>
-          ))
-        ) : null}
+      <section className="text-light-gray text-[18px] font-light leading-relaxed mb-9 text-left relative">
+        <div className={`transition-all duration-500 overflow-hidden ${!isExpanded ? 'max-h-[150px]' : 'max-h-[2000px]'}`}>
+          {typeof profile.about === 'string' ? (
+            <p className="mb-4 text-left ">{profile.about}</p>
+          ) : Array.isArray(profile.about) ? (
+            profile.about.map((paragraph, index) => (
+              <p key={index} className="mb-4 text-left ">{paragraph}</p>
+            ))
+          ) : null}
+        </div>
+        
+        {!isExpanded && (
+          <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-bg-gradient-jet to-transparent pointer-events-none" />
+        )}
+
+        <button 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="mt-4 text-primary font-medium hover:underline transition-all duration-300 flex items-center gap-1"
+        >
+          {isExpanded ? 'Read Less' : 'Read More'}
+        </button>
       </section>
 
       {/* Services */}

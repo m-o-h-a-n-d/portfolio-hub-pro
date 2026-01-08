@@ -3,13 +3,20 @@ import { Helmet } from 'react-helmet-async';
 
 const SeoHead = ({ name, jobTitle, websiteUrl, imageUrl, description }) => {
   const [profileData, setProfileData] = useState(null);
+  const [settingsData, setSettingsData] = useState(null);
 
   useEffect(() => {
-    // Fetch profile data to get the 'about' section dynamically
+    // Fetch profile data
     fetch('/api/mockData/profile.json')
       .then((res) => res.json())
       .then((data) => setProfileData(data))
       .catch((err) => console.error('Error fetching profile data:', err));
+
+    // Fetch settings data for dynamic favicon and logo
+    fetch('/api/mockData/settings.json')
+      .then((res) => res.json())
+      .then((data) => setSettingsData(data))
+      .catch((err) => console.error('Error fetching settings data:', err));
   }, []);
 
   const finalName = name || profileData?.name || 'Mohanad Ahmed Shehata';
@@ -19,7 +26,12 @@ const SeoHead = ({ name, jobTitle, websiteUrl, imageUrl, description }) => {
   const finalDescription = description || profileData?.about || 'Professional portfolio of Mohanad Ahmed Shehata, a Full Stack Web Developer specializing in React, Laravel, and modern web technologies.';
 
   const finalWebsiteUrl = websiteUrl || 'https://mohanadportfolio.vercel.app/';
-  const finalImageUrl = imageUrl || 'https://mohanadportfolio.vercel.app/image.png';
+  
+  // Dynamic Favicon from settings
+  const finalFavicon = settingsData?.site_identity?.favicon_url || '/favicon.ico';
+  
+  // Dynamic Preview Image (can also be linked to settings if needed)
+  const finalImageUrl = imageUrl || settingsData?.site_identity?.logo_url || 'https://mohanadportfolio.vercel.app/image.png';
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -60,9 +72,9 @@ const SeoHead = ({ name, jobTitle, websiteUrl, imageUrl, description }) => {
       <meta name="twitter:description" content={finalDescription} />
       <meta name="twitter:image" content={finalImageUrl} />
 
-      {/* Favicon */}
-      <link rel="icon" href="/favicon.ico" />
-      <link rel="apple-touch-icon" href="/favicon.ico" />
+      {/* Dynamic Favicon */}
+      <link rel="icon" href={finalFavicon} />
+      <link rel="apple-touch-icon" href={finalFavicon} />
 
       {/* JSON-LD */}
       <script

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
-const SeoHead = ({ name, jobTitle, websiteUrl, imageUrl }) => {
+const SeoHead = ({ name, jobTitle, websiteUrl, imageUrl, description }) => {
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
+    // Fetch profile data to get the 'about' section dynamically
     fetch('/api/mockData/profile.json')
       .then((res) => res.json())
       .then((data) => setProfileData(data))
@@ -13,7 +14,9 @@ const SeoHead = ({ name, jobTitle, websiteUrl, imageUrl }) => {
 
   const finalName = name || profileData?.name || 'Mohanad Ahmed Shehata';
   const finalJobTitle = jobTitle || profileData?.title || 'Full Stack Web Developer';
-  const finalDescription = profileData?.about || 'Professional portfolio of Mohanad Ahmed Shehata, a Full Stack Web Developer specializing in React, Laravel, and modern web technologies.';
+  
+  // Priority: Prop description > Profile 'about' data > Default fallback
+  const finalDescription = description || profileData?.about || 'Professional portfolio of Mohanad Ahmed Shehata, a Full Stack Web Developer specializing in React, Laravel, and modern web technologies.';
 
   const finalWebsiteUrl = websiteUrl || 'https://mohanadportfolio.vercel.app/';
   const finalImageUrl = imageUrl || 'https://mohanadportfolio.vercel.app/image.png';

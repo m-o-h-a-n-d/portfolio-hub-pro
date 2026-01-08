@@ -1,7 +1,19 @@
 import PortfolioLayout from '../components/portfolio/PortfolioLayout';
+import SeoHead from '../components/SeoHead';
 
 const Index = () => {
-  return <PortfolioLayout />;
+  // You can pass dynamic props here if needed, e.g., from a context or API call
+  return (
+    <>
+      <SeoHead
+        name="Mohanad Ahmed Shehata"
+        jobTitle="Full Stack Web Developer"
+        websiteUrl="https://myportfolio.com" // Replace with your actual deployed domain
+        imageUrl="https://myportfolio.com/preview.jpg" // Replace with your actual preview image URL
+      />
+      <PortfolioLayout />
+    </>
+  );
 };
 
 export default Index;

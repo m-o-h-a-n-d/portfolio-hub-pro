@@ -8,8 +8,8 @@ const Index = () => {
       <SeoHead
         name="Mohanad Ahmed Shehata"
         jobTitle="Full Stack Web Developer"
-        websiteUrl="https://myportfolio.com" // Replace with your actual deployed domain
-        imageUrl="https://myportfolio.com/preview.jpg" // Replace with your actual preview image URL
+        websiteUrl="https://mohanadportfolio.vercel.app/" // Replace with your actual deployed domain
+        imageUrl="https://mohanadportfolio.vercel.app/image.png" // Replace with your actual preview image URL
       />
       <PortfolioLayout />
     </>

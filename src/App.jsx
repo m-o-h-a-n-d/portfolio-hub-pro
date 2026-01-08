@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
+import { DataProvider } from "./context/DataContext";
 import PrivateRoute from "./components/admin/PrivateRoute";
 import DashboardLayout from "./components/admin/DashboardLayout";
 import LoginPage from "./pages/admin/LoginPage";
@@ -30,8 +31,9 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AuthProvider>
-          <NotificationProvider>
+        <DataProvider>
+          <AuthProvider>
+            <NotificationProvider>
             <Routes>
             {/* Public Portfolio */}
             <Route path="/" element={<Index />} />
@@ -58,9 +60,10 @@ const App = () => (
             
             {/* 404 */}
             <Route path="*" element={<NotFound />} />
-            </Routes>
-          </NotificationProvider>
-        </AuthProvider>
+              </Routes>
+            </NotificationProvider>
+          </AuthProvider>
+        </DataProvider>
       </BrowserRouter>
     </TooltipProvider>
     </HelmetProvider>

@@ -175,7 +175,7 @@ const ResumeManager = () => {
   const getIcon = (type) => {
     switch(type) {
       case 'education': return BookOpen;
-      case 'experince': return Briefcase;
+      case 'experience': return Briefcase;
       case 'skills': return Award;
       default: return BookOpen;
     }
@@ -233,7 +233,7 @@ const ResumeManager = () => {
               >
                 <GripVertical className="w-4 h-4 opacity-0 group-hover:opacity-40 absolute left-2 cursor-grab active:cursor-grabbing" />
                 <Icon className="w-5 h-5" />
-                <span className="font-medium capitalize">{section.type === 'experince' ? 'Experience' : section.type}</span>
+                <span className="font-medium capitalize">{section.type}</span>
               </div>
             );
           })}

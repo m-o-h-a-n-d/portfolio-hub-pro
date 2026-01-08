@@ -1,27 +1,20 @@
 import { useState, useEffect } from 'react';
-import { apiGet } from '../../api/request';
+import { useNotifications } from '../../context/NotificationContext';
 import { Mail, Clock, Check, Trash2, Eye } from 'lucide-react';
 
 const MessagesInbox = () => {
-  const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { 
+    notifications: messages, 
+    loading, 
+    markAsRead, 
+    deleteNotification,
+    fetchNotifications 
+  } = useNotifications();
   const [selectedMessage, setSelectedMessage] = useState(null);
 
   useEffect(() => {
-    fetchMessages();
+    fetchNotifications();
   }, []);
-
-  const fetchMessages = async () => {
-    try {
-      setLoading(true);
-      const response = await apiGet('/messages');
-      setMessages(response.data.messages || []);
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -34,15 +27,9 @@ const MessagesInbox = () => {
     });
   };
 
-  const handleMarkAsRead = (id) => {
-    setMessages(prev => prev.map(m => 
-      m.id === id ? { ...m, read: true } : m
-    ));
-  };
-
   const handleDelete = (id) => {
     if (!confirm('Are you sure you want to delete this message?')) return;
-    setMessages(prev => prev.filter(m => m.id !== id));
+    deleteNotification(id);
     if (selectedMessage?.id === id) {
       setSelectedMessage(null);
     }
@@ -51,7 +38,7 @@ const MessagesInbox = () => {
   const openMessage = (message) => {
     setSelectedMessage(message);
     if (!message.read) {
-      handleMarkAsRead(message.id);
+      markAsRead(message.id);
     }
   };
 

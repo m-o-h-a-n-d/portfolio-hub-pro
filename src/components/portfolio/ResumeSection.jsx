@@ -37,7 +37,7 @@ const ResumeSection = () => {
   );
 
   const renderExperience = (data) => (
-    <section className="mb-8" key="experince">
+    <section className="mb-8" key="experience">
       <div className="flex items-center gap-4 mb-6">
         <div className="icon-box">
           <Briefcase className="w-5 h-5" />
@@ -103,7 +103,7 @@ const ResumeSection = () => {
       {/* Dynamic Sections based on Array Order in resume.json */}
       {resume.map(section => {
         if (section.type === 'education') return renderEducation(section.data);
-        if (section.type === 'experince') return renderExperience(section.data);
+        if (section.type === 'experience') return renderExperience(section.data);
         if (section.type === 'skills') return renderSkills(section.data);
         return null;
       })}

@@ -17,14 +17,25 @@ import {
   Settings,
   Newspaper,
   Users,
-  Quote
+  Quote,
+  Trash2,
+  CheckCircle2,
+  Clock,
+  Mail
 } from 'lucide-react';
 
 const DashboardLayout = () => {
   const { user, logout } = useAuth();
-  const { unreadCount } = useNotifications();
+  const { 
+    notifications, 
+    unreadCount, 
+    markAsRead, 
+    deleteNotification, 
+    markAllAsRead 
+  } = useNotifications();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
 
   const navItems = [
     { path: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
@@ -158,14 +169,110 @@ const DashboardLayout = () => {
           {/* Right Section */}
           <div className="flex items-center gap-4">
             {/* Notifications */}
-            <button className="relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-onyx transition-colors">
-              <Bell className="w-5 h-5" />
-              {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 bg-destructive text-white-1 text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-card">
-                  {unreadCount}
-                </span>
+            <div className="relative">
+              <button 
+                onClick={() => setNotifOpen(!notifOpen)}
+                className={`relative p-2 rounded-lg transition-colors ${
+                  notifOpen ? 'bg-onyx text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-onyx'
+                }`}
+              >
+                <Bell className="w-5 h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute top-1 right-1 w-4 h-4 bg-destructive text-white-1 text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-card">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Notification Dropdown */}
+              {notifOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setNotifOpen(false)} />
+                  <div 
+                    className="absolute right-0 mt-2 w-80 md:w-96 bg-card border border-border rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in duration-200 origin-top-right"
+                    style={{ background: 'var(--bg-gradient-jet)' }}
+                  >
+                    <div className="p-4 border-b border-border flex items-center justify-between">
+                      <h4 className="font-semibold text-white-2">Notifications</h4>
+                      <div className="flex gap-2">
+                        <button 
+                          onClick={markAllAsRead}
+                          className="text-xs text-primary hover:underline flex items-center gap-1"
+                        >
+                          <CheckCircle2 className="w-3 h-3" />
+                          Mark all read
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
+                      {notifications.length === 0 ? (
+                        <div className="p-8 text-center">
+                          <Bell className="w-8 h-8 mx-auto text-muted-foreground mb-2 opacity-20" />
+                          <p className="text-muted-foreground text-sm">No notifications yet</p>
+                        </div>
+                      ) : (
+                        notifications.map((notif) => (
+                          <div 
+                            key={notif.id}
+                            className={`p-4 border-b border-border/50 flex gap-3 group transition-colors ${
+                              notif.read ? 'opacity-70 hover:bg-onyx/30' : 'bg-primary/5 hover:bg-primary/10'
+                            }`}
+                          >
+                            <div className={`w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center ${
+                              notif.read ? 'bg-onyx text-muted-foreground' : 'bg-primary/20 text-primary'
+                            }`}>
+                              <Mail className="w-5 h-5" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start justify-between gap-2">
+                                <p className={`text-sm truncate ${notif.read ? 'text-foreground' : 'text-white-2 font-semibold'}`}>
+                                  {notif.name}
+                                </p>
+                                <button 
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteNotification(notif.id);
+                                  }}
+                                  className="opacity-0 group-hover:opacity-100 p-1 text-destructive hover:bg-destructive/10 rounded transition-all"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                              <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
+                                {notif.message}
+                              </p>
+                              <div className="flex items-center gap-2 mt-2">
+                                <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                                  <Clock className="w-3 h-3" />
+                                  {new Date(notif.date).toLocaleDateString()}
+                                </span>
+                                {!notif.read && (
+                                  <button 
+                                    onClick={() => markAsRead(notif.id)}
+                                    className="text-[10px] text-primary font-medium hover:underline"
+                                  >
+                                    Mark as read
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    <Link 
+                      to="/admin/messages" 
+                      onClick={() => setNotifOpen(false)}
+                      className="block p-3 text-center text-sm text-muted-foreground hover:text-primary hover:bg-onyx transition-colors border-t border-border"
+                    >
+                      View All Messages
+                    </Link>
+                  </div>
+                </>
               )}
-            </button>
+            </div>
 
             {/* User */}
             <div className="flex items-center gap-3">

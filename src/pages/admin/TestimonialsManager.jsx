@@ -12,7 +12,8 @@ const TestimonialsManager = () => {
     name: '',
     avatar: '',
     text: '',
-    rating: 5
+    rating: 5,
+    date: new Date().toISOString().split('T')[0]
   });
 
   useEffect(() => {
@@ -36,7 +37,13 @@ const TestimonialsManager = () => {
   const openAddModal = () => {
     setModalMode('add');
     setEditingItem(null);
-    setFormData({ name: '', avatar: '', text: '', rating: 5 });
+    setFormData({ 
+      name: '', 
+      avatar: '', 
+      text: '', 
+      rating: 5,
+      date: new Date().toISOString().split('T')[0]
+    });
     setModalOpen(true);
   };
 
@@ -47,7 +54,8 @@ const TestimonialsManager = () => {
       name: testimonial.name,
       avatar: testimonial.avatar,
       text: testimonial.text,
-      rating: testimonial.rating || 5
+      rating: testimonial.rating || 5,
+      date: testimonial.date || new Date().toISOString().split('T')[0]
     });
     setModalOpen(true);
   };
@@ -193,13 +201,19 @@ const TestimonialsManager = () => {
                     <label className="text-light-gray/70 text-xs uppercase mb-2 block">Client Name</label>
                     <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="form-input" required />
                   </div>
-                  <div>
-                    <label className="text-light-gray/70 text-xs uppercase mb-2 block">Rating</label>
-                    <select name="rating" value={formData.rating} onChange={handleInputChange} className="form-input">
-                      {[5, 4, 3, 2, 1].map(num => (
-                        <option key={num} value={num}>{num} Stars</option>
-                      ))}
-                    </select>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-light-gray/70 text-xs uppercase mb-2 block">Rating</label>
+                      <select name="rating" value={formData.rating} onChange={handleInputChange} className="form-input">
+                        {[5, 4, 3, 2, 1].map(num => (
+                          <option key={num} value={num}>{num} Stars</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-light-gray/70 text-xs uppercase mb-2 block">Date</label>
+                      <input type="date" name="date" value={formData.date} onChange={handleInputChange} className="form-input" required />
+                    </div>
                   </div>
                 </div>
               </div>

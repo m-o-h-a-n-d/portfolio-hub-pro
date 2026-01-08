@@ -22,7 +22,7 @@ const BlogSection = () => {
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {blog.posts?.map((post) => (
             <li key={post.id}>
-              <a href="#" className="blog-card block">
+              <a href={post.link || "#"} target="_blank" rel="noopener noreferrer" className="blog-card block">
                 {/* Banner */}
                 <figure className="blog-banner w-full h-[200px] md:h-auto rounded-xl overflow-hidden">
                   <img 

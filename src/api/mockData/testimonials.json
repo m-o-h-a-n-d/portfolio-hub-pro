@@ -5,6 +5,7 @@
       "name": "Daniel Lewis",
       "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",
       "text": "r",
+      "rating": 5,
       "date": "2021-06-14"
     },
     {
@@ -12,6 +13,7 @@
       "name": "Jessica Miller",
       "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face",
       "text": "r",
+      "rating": 5,
       "date": "2021-05-20"
     },
     {
@@ -19,6 +21,7 @@
       "name": "Emily Evans",
       "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face",
       "text": "r",
+      "rating": 5,
       "date": "2021-04-10"
     },
     {
@@ -26,6 +29,7 @@
       "name": "Henry William",
       "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face",
       "text": "r",
+      "rating": 5,
       "date": "2021-03-25"
     }
   ]

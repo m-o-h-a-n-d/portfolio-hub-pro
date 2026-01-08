@@ -13,6 +13,7 @@ const BlogsManager = () => {
     category: '',
     content: '',
     image: '',
+    link: '',
     date: new Date().toISOString().split('T')[0]
   });
 
@@ -42,6 +43,7 @@ const BlogsManager = () => {
       category: '',
       content: '',
       image: '',
+      link: '',
       date: new Date().toISOString().split('T')[0]
     });
     setModalOpen(true);
@@ -55,6 +57,7 @@ const BlogsManager = () => {
       category: blog.category,
       content: blog.content,
       image: blog.image,
+      link: blog.link || '',
       date: blog.date
     });
     setModalOpen(true);
@@ -197,6 +200,10 @@ const BlogsManager = () => {
                   <div>
                     <label className="text-light-gray/70 text-xs uppercase mb-2 block">Date</label>
                     <input type="date" name="date" value={formData.date} onChange={handleInputChange} className="form-input" required />
+                  </div>
+                  <div>
+                    <label className="text-light-gray/70 text-xs uppercase mb-2 block">External Link</label>
+                    <input type="url" name="link" value={formData.link} onChange={handleInputChange} className="form-input" placeholder="https://..." />
                   </div>
                 </div>
                 <div>

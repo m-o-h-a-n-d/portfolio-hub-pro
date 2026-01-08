@@ -96,8 +96,8 @@ export const apiFetch = async (endpoint, method = 'GET', body = null, isFile = f
       if (endpoint.includes('/resume/skills')) {
         return { success: true, data: resumeData.skills };
       }
-      if (endpoint.includes('/resume/experince')) {
-        return { success: true, data: resumeData.experince };
+      if (endpoint.includes('/resume/experience')) {
+        return { success: true, data: resumeData.experience };
       }
       // Find matching mock data
       for (const [path, data] of Object.entries(mockDataMap)) {

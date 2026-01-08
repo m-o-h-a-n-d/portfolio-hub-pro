@@ -12,7 +12,6 @@ const TestimonialsManager = () => {
     name: '',
     avatar: '',
     text: '',
-    rating: 5,
     date: new Date().toISOString().split('T')[0]
   });
 
@@ -41,7 +40,6 @@ const TestimonialsManager = () => {
       name: '', 
       avatar: '', 
       text: '', 
-      rating: 5,
       date: new Date().toISOString().split('T')[0]
     });
     setModalOpen(true);
@@ -54,7 +52,6 @@ const TestimonialsManager = () => {
       name: testimonial.name,
       avatar: testimonial.avatar,
       text: testimonial.text,
-      rating: testimonial.rating || 5,
       date: testimonial.date || new Date().toISOString().split('T')[0]
     });
     setModalOpen(true);
@@ -127,7 +124,7 @@ const TestimonialsManager = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="h2 text-white-2">Testimonials Manager</h1>
-          <p className="text-muted-foreground text-sm mt-1">Manage client feedback and ratings</p>
+          <p className="text-muted-foreground text-sm mt-1">Manage client feedback</p>
         </div>
         <button onClick={openAddModal} className="form-btn !w-auto !px-6">
           <Plus className="w-5 h-5" />
@@ -152,11 +149,7 @@ const TestimonialsManager = () => {
               </div>
               <div>
                 <h3 className="text-foreground font-medium">{testimonial.name}</h3>
-                <div className="flex gap-0.5 mt-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className={`w-3 h-3 ${i < (testimonial.rating || 5) ? 'text-primary fill-primary' : 'text-muted-foreground'}`} />
-                  ))}
-                </div>
+
               </div>
             </div>
             <p className="text-muted-foreground text-sm italic">"{testimonial.text}"</p>
@@ -201,15 +194,7 @@ const TestimonialsManager = () => {
                     <label className="text-light-gray/70 text-xs uppercase mb-2 block">Client Name</label>
                     <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="form-input" required />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-light-gray/70 text-xs uppercase mb-2 block">Rating</label>
-                      <select name="rating" value={formData.rating} onChange={handleInputChange} className="form-input">
-                        {[5, 4, 3, 2, 1].map(num => (
-                          <option key={num} value={num}>{num} Stars</option>
-                        ))}
-                      </select>
-                    </div>
+                  <div className="grid grid-cols-1 gap-4">
                     <div>
                       <label className="text-light-gray/70 text-xs uppercase mb-2 block">Date</label>
                       <input type="date" name="date" value={formData.date} onChange={handleInputChange} className="form-input" required />

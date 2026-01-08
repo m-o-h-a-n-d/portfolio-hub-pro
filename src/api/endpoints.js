@@ -33,17 +33,22 @@ export const API_RESUME_GET = `${BASE_URL}/resume`;
 export const API_RESUME_REORDER = `${BASE_URL}/resume/reorder`;
 
 // Education Endpoints
+export const API_EDUCATION_GET = `${BASE_URL}/resume/education`;
 export const API_EDUCATION_CREATE = `${BASE_URL}/resume/education`;
 export const API_EDUCATION_UPDATE = `${BASE_URL}/resume/education`;
 export const API_EDUCATION_DELETE = `${BASE_URL}/resume/education`;
 
 // Experience Endpoints
+export const API_EXPERIENCE_GET = `${BASE_URL}/resume/experience`;
 export const API_EXPERIENCE_CREATE = `${BASE_URL}/resume/experience`;
 export const API_EXPERIENCE_UPDATE = `${BASE_URL}/resume/experience`;
 export const API_EXPERIENCE_DELETE = `${BASE_URL}/resume/experience`;
 
 // Skills Endpoints
+export const API_SKILLS_GET = `${BASE_URL}/resume/skills`;
+export const API_SKILLS_CREATE = `${BASE_URL}/resume/skills`;
 export const API_SKILLS_UPDATE = `${BASE_URL}/resume/skills`;
+export const API_SKILLS_DELETE = `${BASE_URL}/resume/skills`;
 
 // ==========================================
 // 5. Portfolio Section

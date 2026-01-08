@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { Button } from "../ui/button";
+import { apiPost, apiPut, apiDelete } from '../../api/request';
+import { API_SKILLS_CREATE, API_SKILLS_UPDATE, API_SKILLS_DELETE } from '../../api/endpoints';
 import {
   Dialog,
   DialogContent,
@@ -44,26 +46,37 @@ const SkillsManager = ({ skills = [], onUpdate }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    let updatedSkills;
-    if (modalMode === 'add') {
-      const newSkill = {
-        ...formData,
-        id: `skill_${Date.now()}`
-      };
-      updatedSkills = [...skills, newSkill];
-    } else {
-      updatedSkills = skills.map(s => s.id === editingSkill.id ? { ...s, ...formData } : s);
+    try {
+      let updatedSkills;
+      if (modalMode === 'add') {
+        const response = await apiPost(API_SKILLS_CREATE, formData);
+        const newSkill = response.data || { ...formData, id: `skill_${Date.now()}` };
+        updatedSkills = [...skills, newSkill];
+      } else {
+        const response = await apiPut(`${API_SKILLS_UPDATE}/${editingSkill.id}`, formData);
+        const updatedSkill = response.data || { ...editingSkill, ...formData };
+        updatedSkills = skills.map(s => s.id === editingSkill.id ? updatedSkill : s);
+      }
+      onUpdate(updatedSkills);
+      closeModal();
+    } catch (error) {
+      console.error('Error saving skill:', error);
+      alert('Failed to save skill');
     }
-    onUpdate(updatedSkills);
-    closeModal();
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this skill?')) return;
-    const updatedSkills = skills.filter(s => s.id !== id);
-    onUpdate(updatedSkills);
+    try {
+      await apiDelete(`${API_SKILLS_DELETE}/${id}`);
+      const updatedSkills = skills.filter(s => s.id !== id);
+      onUpdate(updatedSkills);
+    } catch (error) {
+      console.error('Error deleting skill:', error);
+      alert('Failed to delete skill');
+    }
   };
 
   return (

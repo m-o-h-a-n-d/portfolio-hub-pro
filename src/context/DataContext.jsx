@@ -1,5 +1,17 @@
 import { useState, useEffect, createContext, useContext } from 'react';
 import { apiGet } from '../api/request';
+import { 
+  API_PROFILE_GET, 
+  API_RESUME_GET, 
+  API_EDUCATION_GET, 
+  API_EXPERIENCE_GET, 
+  API_SKILLS_GET,
+  API_PORTFOLIO_LIST,
+  API_BLOG_LIST,
+  API_TESTIMONIALS_LIST,
+  API_CLIENTS_LIST,
+  API_SETTINGS_GET
+} from '../api/endpoints';
 
 // Create contexts for data
 const ProfileContext = createContext(null);
@@ -41,32 +53,49 @@ export const DataProvider = ({ children }) => {
         
         const [
           profileRes,
-          resumeRes,
+          resumeStructureRes,
+          eduRes,
+          expRes,
+          skillsRes,
           portfolioRes,
           blogRes,
-          servicesRes,
           testimonialsRes,
           clientsRes,
           settingsRes
         ] = await Promise.all([
-          apiGet('/profile'),
-          apiGet('/resume'),
-          apiGet('/portfolio'),
-          apiGet('/blog'),
-          apiGet('/services'),
-          apiGet('/testimonials'),
-          apiGet('/clients'),
-          apiGet('/settings')
+          apiGet(API_PROFILE_GET),
+          apiGet(API_RESUME_GET),
+          apiGet(API_EDUCATION_GET),
+          apiGet(API_EXPERIENCE_GET),
+          apiGet(API_SKILLS_GET),
+          apiGet(API_PORTFOLIO_LIST),
+          apiGet(API_BLOG_LIST),
+          apiGet(API_TESTIMONIALS_LIST),
+          apiGet(API_CLIENTS_LIST),
+          apiGet(API_SETTINGS_GET)
         ]);
 
+        // Reconstruct the resume object based on structure and individual data
+        const structure = resumeStructureRes.data || [];
+        const reconstructedResume = structure.map(section => {
+          if (section.type === 'education') return { ...section, data: eduRes.data || [] };
+          if (section.type === 'experience') return { ...section, data: expRes.data || [] };
+          if (section.type === 'skills') return { ...section, data: skillsRes.data || [] };
+          return section;
+        });
+
         setProfile(profileRes.data);
-        setResume(resumeRes.data);
+        setResume(reconstructedResume);
         setPortfolio(portfolioRes.data);
         setBlog(blogRes.data);
-        setServices(servicesRes.data);
         setTestimonials(testimonialsRes.data);
         setClients(clientsRes.data);
         setSettings(settingsRes.data);
+        
+        // Services might be part of settings or profile in some versions, 
+        // but here we'll set it if it exists in any response or keep it null
+        setServices(null); 
+
       } catch (err) {
         console.error('Error fetching data:', err);
         setError(err.message);

@@ -3,19 +3,26 @@ import { apiGet, apiPost, apiPut, apiDelete } from '../../api/request';
 import { 
   API_RESUME_GET, 
   API_RESUME_REORDER,
+  API_EDUCATION_GET,
   API_EDUCATION_CREATE,
   API_EDUCATION_UPDATE,
   API_EDUCATION_DELETE,
+  API_EXPERIENCE_GET,
   API_EXPERIENCE_CREATE,
   API_EXPERIENCE_UPDATE,
   API_EXPERIENCE_DELETE,
-  API_SKILLS_UPDATE
+  API_SKILLS_GET
 } from '../../api/endpoints';
 import { Plus, Edit2, Trash2, X, BookOpen, Briefcase, Award, GripVertical } from 'lucide-react';
 import SkillsManager from '../../components/admin/SkillsManager';
 
 const ResumeManager = () => {
-  const [resume, setResume] = useState([]);
+  const [resumeStructure, setResumeStructure] = useState([]); // Holds the order and types
+  const [sectionsData, setSectionsData] = useState({
+    education: [],
+    experience: [],
+    skills: []
+  });
   const [loading, setLoading] = useState(true);
   const [reordering, setReordering] = useState(false);
   const [activeTab, setActiveTab] = useState('education');
@@ -33,19 +40,34 @@ const ResumeManager = () => {
   });
 
   useEffect(() => {
-    fetchData();
+    fetchInitialData();
   }, []);
 
-  const fetchData = async () => {
+  const fetchInitialData = async () => {
     try {
       setLoading(true);
-      const response = await apiGet(API_RESUME_GET);
-      setResume(response.data || []);
+      // 1. Fetch the structure/order
+      const structureResponse = await apiGet(API_RESUME_GET);
+      const structure = structureResponse.data || [];
+      setResumeStructure(structure);
       
-      // Set first tab as active if available
-      if (response.data && response.data.length > 0) {
-        setActiveTab(response.data[0].type);
+      if (structure.length > 0) {
+        setActiveTab(structure[0].type);
       }
+
+      // 2. Fetch all sections individually
+      const [eduRes, expRes, skillsRes] = await Promise.all([
+        apiGet(API_EDUCATION_GET),
+        apiGet(API_EXPERIENCE_GET),
+        apiGet(API_SKILLS_GET)
+      ]);
+
+      setSectionsData({
+        education: eduRes.data || [],
+        experience: expRes.data || [],
+        skills: skillsRes.data || []
+      });
+
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -63,14 +85,14 @@ const ResumeManager = () => {
     e.preventDefault();
     if (draggedTabIndex === null || draggedTabIndex === index) return;
 
-    const newResume = [...resume];
-    const draggedItem = newResume[draggedTabIndex];
+    const newStructure = [...resumeStructure];
+    const draggedItem = newStructure[draggedTabIndex];
     
-    newResume.splice(draggedTabIndex, 1);
-    newResume.splice(index, 0, draggedItem);
+    newStructure.splice(draggedTabIndex, 1);
+    newStructure.splice(index, 0, draggedItem);
 
     setDraggedTabIndex(index);
-    setResume(newResume);
+    setResumeStructure(newStructure);
   };
 
   const onDragEnd = async () => {
@@ -78,7 +100,7 @@ const ResumeManager = () => {
     try {
       setReordering(true);
       // Send only the types in an array as requested
-      const orderArray = resume.map(section => section.type);
+      const orderArray = resumeStructure.map(section => section.type);
       await apiPost(API_RESUME_REORDER, orderArray);
     } catch (error) {
       console.error('Error updating order:', error);
@@ -146,6 +168,8 @@ const ResumeManager = () => {
       };
 
       let response;
+      let sectionKey = activeTab;
+
       if (activeTab === 'education') {
         if (modalMode === 'add') {
           response = await apiPost(API_EDUCATION_CREATE, submissionData);
@@ -160,23 +184,15 @@ const ResumeManager = () => {
         }
       }
 
-      // Update local state
       const updatedItem = response.data || { ...submissionData, id: submissionData.id || Date.now().toString() };
-      const updatedResume = resume.map(section => {
-        if (section.type === activeTab) {
-          if (modalMode === 'add') {
-            return { ...section, data: [...(section.data || []), updatedItem] };
-          } else {
-            return { 
-              ...section, 
-              data: section.data.map(item => item.id === editingItem.id ? updatedItem : item) 
-            };
-          }
-        }
-        return section;
-      });
+      
+      setSectionsData(prev => ({
+        ...prev,
+        [sectionKey]: modalMode === 'add' 
+          ? [...prev[sectionKey], updatedItem]
+          : prev[sectionKey].map(item => item.id === editingItem.id ? updatedItem : item)
+      }));
 
-      setResume(updatedResume);
       closeModal();
     } catch (error) {
       console.error('Error saving:', error);
@@ -193,13 +209,10 @@ const ResumeManager = () => {
         await apiDelete(`${API_EXPERIENCE_DELETE}/${id}`);
       }
 
-      const updatedResume = resume.map(section => {
-        if (section.type === activeTab) {
-          return { ...section, data: section.data.filter(item => item.id !== id) };
-        }
-        return section;
-      });
-      setResume(updatedResume);
+      setSectionsData(prev => ({
+        ...prev,
+        [activeTab]: prev[activeTab].filter(item => item.id !== id)
+      }));
     } catch (error) {
       console.error('Error deleting:', error);
     }
@@ -214,8 +227,7 @@ const ResumeManager = () => {
     }
   };
 
-  const currentSection = resume.find(s => s.type === activeTab);
-  const currentData = currentSection?.data || [];
+  const currentData = sectionsData[activeTab] || [];
 
   if (loading) {
     return (
@@ -245,7 +257,7 @@ const ResumeManager = () => {
 
       <div className="bg-card border border-border rounded-[20px] p-2" style={{ background: 'var(--bg-gradient-jet)' }}>
         <div className="flex gap-2">
-          {resume.map((section, index) => {
+          {resumeStructure.map((section, index) => {
             const Icon = getIcon(section.type);
             const isActive = activeTab === section.type;
             const isDragged = draggedTabIndex === index;
@@ -276,10 +288,8 @@ const ResumeManager = () => {
       {activeTab === 'skills' ? (
         <SkillsManager 
           skills={currentData} 
-          onUpdate={async (newSkills) => {
-            await apiPost(API_SKILLS_UPDATE, newSkills);
-            const updatedResume = resume.map(s => s.type === 'skills' ? { ...s, data: newSkills } : s);
-            setResume(updatedResume);
+          onUpdate={(newSkills) => {
+            setSectionsData(prev => ({ ...prev, skills: newSkills }));
           }} 
         />
       ) : (

@@ -18,6 +18,14 @@ import {
   Search
 } from 'lucide-react';
 
+function limiter(name, limit = 10) {
+  if (!name) return "";
+  return name.length > limit ? name.slice(0, limit) + "..." : name;
+}
+
+
+
+
 const iconList = [
   { name: 'Monitor', icon: Monitor, class: 'frontend' },
   { name: 'Server', icon: Server, class: 'backend' },
@@ -173,7 +181,7 @@ const ServicesManager = () => {
               </div>
               <div className="flex-1">
                 <h3 className="text-white-2 font-bold text-lg mb-2">{service.title}</h3>
-                <p className="text-light-gray text-sm leading-relaxed">{service.description}</p>
+                <p className="text-light-gray text-sm leading-relaxed">{limiter(service.description , 100 )}</p>
               </div>
               
               <div className="absolute top-4 right-4 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

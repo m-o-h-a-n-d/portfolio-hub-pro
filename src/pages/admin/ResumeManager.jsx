@@ -1,6 +1,16 @@
 import { useState, useEffect } from 'react';
-import { apiGet, apiPost } from '../../api/request';
-import { API_RESUME_GET, API_RESUME_UPDATE } from '../../api/endpoints';
+import { apiGet, apiPost, apiPut, apiDelete } from '../../api/request';
+import { 
+  API_RESUME_GET, 
+  API_RESUME_REORDER,
+  API_EDUCATION_CREATE,
+  API_EDUCATION_UPDATE,
+  API_EDUCATION_DELETE,
+  API_EXPERIENCE_CREATE,
+  API_EXPERIENCE_UPDATE,
+  API_EXPERIENCE_DELETE,
+  API_SKILLS_UPDATE
+} from '../../api/endpoints';
 import { Plus, Edit2, Trash2, X, BookOpen, Briefcase, Award, GripVertical } from 'lucide-react';
 import SkillsManager from '../../components/admin/SkillsManager';
 
@@ -67,7 +77,9 @@ const ResumeManager = () => {
     setDraggedTabIndex(null);
     try {
       setReordering(true);
-      await apiPost(API_RESUME_UPDATE, resume);
+      // Send only the types in an array as requested
+      const orderArray = resume.map(section => section.type);
+      await apiPost(API_RESUME_REORDER, orderArray);
     } catch (error) {
       console.error('Error updating order:', error);
       alert('Failed to save new order');
@@ -130,24 +142,40 @@ const ResumeManager = () => {
         title: formData.title,
         period,
         description: formData.description,
-        id: editingItem?.id || Date.now().toString()
+        id: editingItem?.id
       };
 
+      let response;
+      if (activeTab === 'education') {
+        if (modalMode === 'add') {
+          response = await apiPost(API_EDUCATION_CREATE, submissionData);
+        } else {
+          response = await apiPut(`${API_EDUCATION_UPDATE}/${editingItem.id}`, submissionData);
+        }
+      } else if (activeTab === 'experience') {
+        if (modalMode === 'add') {
+          response = await apiPost(API_EXPERIENCE_CREATE, submissionData);
+        } else {
+          response = await apiPut(`${API_EXPERIENCE_UPDATE}/${editingItem.id}`, submissionData);
+        }
+      }
+
+      // Update local state
+      const updatedItem = response.data || { ...submissionData, id: submissionData.id || Date.now().toString() };
       const updatedResume = resume.map(section => {
         if (section.type === activeTab) {
           if (modalMode === 'add') {
-            return { ...section, data: [...(section.data || []), submissionData] };
+            return { ...section, data: [...(section.data || []), updatedItem] };
           } else {
             return { 
               ...section, 
-              data: section.data.map(item => item.id === editingItem.id ? submissionData : item) 
+              data: section.data.map(item => item.id === editingItem.id ? updatedItem : item) 
             };
           }
         }
         return section;
       });
 
-      await apiPost(API_RESUME_UPDATE, updatedResume);
       setResume(updatedResume);
       closeModal();
     } catch (error) {
@@ -159,13 +187,18 @@ const ResumeManager = () => {
   const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this item?')) return;
     try {
+      if (activeTab === 'education') {
+        await apiDelete(`${API_EDUCATION_DELETE}/${id}`);
+      } else if (activeTab === 'experience') {
+        await apiDelete(`${API_EXPERIENCE_DELETE}/${id}`);
+      }
+
       const updatedResume = resume.map(section => {
         if (section.type === activeTab) {
           return { ...section, data: section.data.filter(item => item.id !== id) };
         }
         return section;
       });
-      await apiPost(API_RESUME_UPDATE, updatedResume);
       setResume(updatedResume);
     } catch (error) {
       console.error('Error deleting:', error);
@@ -244,8 +277,8 @@ const ResumeManager = () => {
         <SkillsManager 
           skills={currentData} 
           onUpdate={async (newSkills) => {
+            await apiPost(API_SKILLS_UPDATE, newSkills);
             const updatedResume = resume.map(s => s.type === 'skills' ? { ...s, data: newSkills } : s);
-            await apiPost(API_RESUME_UPDATE, updatedResume);
             setResume(updatedResume);
           }} 
         />

@@ -29,8 +29,21 @@ export const API_PROFILE_UPDATE = `${BASE_URL}/profile/update`;
 // ==========================================
 // [GET] Get full resume array (Skills, Education, Experience in order)
 export const API_RESUME_GET = `${BASE_URL}/resume`;
-// [POST] Update full resume array (Handles ordering and all data changes)
-export const API_RESUME_UPDATE = `${BASE_URL}/resume/update`;
+// [POST] Update section order (Sends array of strings: ["Skills", "Education", "Experience"])
+export const API_RESUME_REORDER = `${BASE_URL}/resume/reorder`;
+
+// Education Endpoints
+export const API_EDUCATION_CREATE = `${BASE_URL}/resume/education`;
+export const API_EDUCATION_UPDATE = `${BASE_URL}/resume/education`;
+export const API_EDUCATION_DELETE = `${BASE_URL}/resume/education`;
+
+// Experience Endpoints
+export const API_EXPERIENCE_CREATE = `${BASE_URL}/resume/experience`;
+export const API_EXPERIENCE_UPDATE = `${BASE_URL}/resume/experience`;
+export const API_EXPERIENCE_DELETE = `${BASE_URL}/resume/experience`;
+
+// Skills Endpoints
+export const API_SKILLS_UPDATE = `${BASE_URL}/resume/skills`;
 
 // ==========================================
 // 5. Portfolio Section

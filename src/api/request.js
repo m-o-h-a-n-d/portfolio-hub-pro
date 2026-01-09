@@ -64,9 +64,29 @@ export const isAuthenticated = () => {
  * @param {object|FormData} body - Request body
  * @returns {Promise} - Response data
  */
+// List of endpoints (as strings or regex) that should ALWAYS use Real API even if MOCK_MODE is true
+const REAL_API_ENDPOINTS = [
+  // '/services',
+  // '/services/store',
+  // /\/services\/\d+/, // Matches /services/{id} for PUT and DELETE
+];
+
+import { BASE_URL } from './endpoints';
+
 export const apiFetch = async (endpoint, method = 'GET', body = null, isFile = false) => {
+  // Check if this specific endpoint should use Real API
+  const shouldForceRealAPI = REAL_API_ENDPOINTS.some(pattern => {
+    if (pattern instanceof RegExp) {
+      return pattern.test(endpoint);
+    }
+    return endpoint.endsWith(pattern);
+  });
+
+  // Construct full URL for Real API
+  const fullUrl = endpoint.startsWith('http') ? endpoint : `${BASE_URL}${endpoint}`;
+
   // Mock Mode Logic
-  if (MOCK_MODE) {
+  if (MOCK_MODE && !shouldForceRealAPI) {
     await simulateDelay();
     
     // Handle authentication
@@ -158,7 +178,9 @@ export const apiFetch = async (endpoint, method = 'GET', body = null, isFile = f
   }
 
   try {
-    const response = await fetch(endpoint, config);
+    console.log(`[API Request] ${method} ${fullUrl}`, config);
+    const response = await fetch(fullUrl, config);
+    console.log(`[API Response] Status: ${response.status}`);
     
     // Handle unauthorized response
     if (response.status === 401) {
@@ -167,15 +189,26 @@ export const apiFetch = async (endpoint, method = 'GET', body = null, isFile = f
       throw new Error('Session expired. Please login again.');
     }
 
-    const data = await response.json();
+    let data;
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+      data = await response.json();
+    } else {
+      data = await response.text();
+    }
+    
+    console.log(`[API Data]`, data);
 
     if (!response.ok) {
-      throw new Error(data.message || 'Something went wrong');
+      const errorMessage = (data && typeof data === 'object' && data.message) 
+        ? data.message 
+        : (typeof data === 'string' ? data : 'Something went wrong');
+      throw new Error(errorMessage);
     }
 
     return data;
   } catch (error) {
-    console.error('API Error:', error);
+    console.error('Detailed API Error:', error);
     throw error;
   }
 };

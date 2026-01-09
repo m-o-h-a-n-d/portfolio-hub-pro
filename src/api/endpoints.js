@@ -90,11 +90,11 @@ export const API_TESTIMONIALS_DELETE = `${BASE_URL}/testimonials`;
 // [GET] List services
 export const API_SERVICES_LIST = `${BASE_URL}/services`;
 // [POST] Add service
-export const API_SERVICES_CREATE = `${BASE_URL}/services`;
-// [PUT] Update service
-export const API_SERVICES_UPDATE = `${BASE_URL}/services`;
-// [DELETE] Delete service
-export const API_SERVICES_DELETE = `${BASE_URL}/services`;
+export const API_SERVICES_CREATE = `${BASE_URL}/services/store`;
+// [PUT] Update service (Requires ID)
+export const API_SERVICES_UPDATE = (id) => `${BASE_URL}/services/${id}`;
+// [DELETE] Delete service (Requires ID)
+export const API_SERVICES_DELETE = (id) => `${BASE_URL}/services/${id}`;
 
 // [GET] List clients
 export const API_CLIENTS_LIST = `${BASE_URL}/clients`;
@@ -109,4 +109,3 @@ export const API_CLIENTS_DELETE = `${BASE_URL}/clients`;
 // [GET] List all contact messages
 export const API_MESSAGES_LIST = `${BASE_URL}/messages`;
 // [POST] Send a contact message (Public Site)
-export const API_MESSAGE_SEND = `${BASE_URL}/contact`;

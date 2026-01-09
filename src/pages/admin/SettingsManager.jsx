@@ -138,13 +138,13 @@ const SettingsManager = () => {
           
           <div className="space-y-4">
             <div>
-              <label className="text-light-gray/70 text-xs uppercase mb-2 block">Admin Username</label>
+              <label className="text-light-gray/70 text-xs uppercase mb-2 block">Company Name</label>
               <input
                 type="text"
-                value={settings.site_identity.admin_username}
-                onChange={(e) => handleInputChange('site_identity', 'admin_username', e.target.value)}
+                value={settings.site_identity.company_name}
+                onChange={(e) => handleInputChange('site_identity', 'company_name', e.target.value)}
                 className="form-input"
-                placeholder="Enter admin name"
+                placeholder="Enter company name"
               />
             </div>
             

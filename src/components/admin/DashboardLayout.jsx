@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
+import { useProfile, useSettings } from '../../context/DataContext';
 import { 
   LayoutDashboard, 
   User, 
@@ -26,6 +27,8 @@ import {
 
 const DashboardLayout = () => {
   const { user, logout } = useAuth();
+  const profile = useProfile();
+  const settings = useSettings();
   const { 
     notifications, 
     unreadCount, 
@@ -77,10 +80,22 @@ const DashboardLayout = () => {
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-border">
           <Link to="/admin" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">RH</span>
-            </div>
-            <span className="text-white-2 font-semibold">Admin Panel</span>
+            {settings?.site_identity?.logo_url ? (
+              <img 
+                src={settings.site_identity.logo_url} 
+                alt="Logo" 
+                className="w-8 h-8 rounded-lg object-contain" 
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-sm">
+                  {settings?.site_identity?.company_name?.charAt(0) || 'A'}
+                </span>
+              </div>
+            )}
+            <span className="text-white-2 font-semibold truncate max-w-[140px]">
+              {settings?.site_identity?.company_name?.split(' ')[0] || 'Admin'}
+            </span>
           </Link>
           <button 
             onClick={() => setSidebarOpen(false)}
@@ -277,13 +292,21 @@ const DashboardLayout = () => {
 
             {/* User */}
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">
-                  {user?.name?.charAt(0) || 'A'}
-                </span>
-              </div>
+              {profile?.avatar ? (
+                <img 
+                  src={profile.avatar} 
+                  alt="User" 
+                  className="w-8 h-8 rounded-full object-cover border border-border" 
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                  <span className="text-primary-foreground font-bold text-sm">
+                    {profile?.name?.charAt(0) || user?.name?.charAt(0) || 'A'}
+                  </span>
+                </div>
+              )}
               <span className="hidden md:block text-sm text-foreground font-medium">
-                {user?.name || 'Admin'}
+                {profile?.name?.split(' ')[0] || user?.name?.split(' ')[0] || 'Admin'}
               </span>
             </div>
           </div>

@@ -12,9 +12,9 @@ import Pagination from '../../components/admin/Pagination';
 
 const BlogsManager = () => {
   const [blogs, setBlogs] = useState([]);
+  const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
@@ -28,32 +28,30 @@ const BlogsManager = () => {
     date: new Date().toISOString().split('T')[0]
   });
 
+  const itemsPerPage = 5;
+
   useEffect(() => {
     fetchBlogs();
-  }, [currentPage, searchQuery]);
+  }, []);
+
+  useEffect(() => {
+    const filtered = blogs.filter(blog => 
+      blog.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      blog.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      blog.content.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredBlogs(filtered);
+    setCurrentPage(1);
+  }, [searchQuery, blogs]);
 
   const fetchBlogs = async () => {
     try {
       setLoading(true);
-      const params = new URLSearchParams({
-        page: currentPage,
-        limit: 10,
-        search: searchQuery
-      });
-      
-      const response = await apiGet(`${API_BLOG_LIST}?${params.toString()}`);
-      const data = response.data;
-      
-      if (data.posts) {
-        setBlogs(data.posts);
-        setTotalPages(data.totalPages || 1);
-      } else if (Array.isArray(data)) {
-        setBlogs(data);
-        setTotalPages(1);
-      } else {
-        setBlogs([]);
-        setTotalPages(1);
-      }
+      const response = await apiGet(API_BLOG_LIST);
+      const data = response.data.posts || response.data;
+      const blogsData = Array.isArray(data) ? data : [];
+      setBlogs(blogsData);
+      setFilteredBlogs(blogsData);
     } catch (error) {
       console.error('Error fetching blogs:', error);
     } finally {
@@ -63,7 +61,6 @@ const BlogsManager = () => {
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1);
   };
 
   const openAddModal = () => {
@@ -175,6 +172,12 @@ const BlogsManager = () => {
     }
   };
 
+  // Client-side pagination logic
+  const totalPages = Math.ceil(filteredBlogs.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredBlogs.slice(indexOfFirstItem, indexOfLastItem);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -221,7 +224,7 @@ const BlogsManager = () => {
               </tr>
             </thead>
             <tbody>
-              {blogs.map((blog) => (
+              {currentItems.map((blog) => (
                 <tr key={blog.id}>
                   <td>
                     <img src={blog.image} alt={blog.title} className="w-12 h-12 rounded-lg object-cover" />
@@ -241,6 +244,13 @@ const BlogsManager = () => {
                   </td>
                 </tr>
               ))}
+              {currentItems.length === 0 && (
+                <tr>
+                  <td colSpan="5" className="text-center py-8 text-muted-foreground">
+                    No blogs found matching your search.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

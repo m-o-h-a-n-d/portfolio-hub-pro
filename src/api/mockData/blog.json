@@ -59,6 +59,56 @@
       "excerpt": "Optio cumque nihil impedit uo minus quod maxime placeat, velit esse cillum.",
       "content": "Full blog post content here...",
       "link": "https://example.com/blog/6"
+    },
+    {
+      "id": 7,
+      "title": "Design digest #79",
+      "category": "Design",
+      "date": "2022-02-23",
+      "image": "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400&h=250&fit=crop",
+      "excerpt": "Optio cumque nihil impedit uo minus quod maxime placeat, velit esse cillum.",
+      "content": "Full blog post content here...",
+      "link": "https://example.com/blog/6"
+    },
+    {
+      "id": 8,
+      "title": "Design digest #79",
+      "category": "Design",
+      "date": "2022-02-23",
+      "image": "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400&h=250&fit=crop",
+      "excerpt": "Optio cumque nihil impedit uo minus quod maxime placeat, velit esse cillum.",
+      "content": "Full blog post content here...",
+      "link": "https://example.com/blog/6"
+    },
+    {
+      "id": 9,
+      "title": "Design digest #79",
+      "category": "Design",
+      "date": "2022-02-23",
+      "image": "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400&h=250&fit=crop",
+      "excerpt": "Optio cumque nihil impedit uo minus quod maxime placeat, velit esse cillum.",
+      "content": "Full blog post content here...",
+      "link": "https://example.com/blog/6"
+    },
+    {
+      "id": 10,
+      "title": "Design digest #79",
+      "category": "Design",
+      "date": "2022-02-23",
+      "image": "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400&h=250&fit=crop",
+      "excerpt": "Optio cumque nihil impedit uo minus quod maxime placeat, velit esse cillum.",
+      "content": "Full blog post content here...",
+      "link": "https://example.com/blog/6"
+    },
+    {
+      "id": 11,
+      "title": "Design digest #79",
+      "category": "Design",
+      "date": "2022-02-23",
+      "image": "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400&h=250&fit=crop",
+      "excerpt": "Optio cumque nihil impedit uo minus quod maxime placeat, velit esse cillum.",
+      "content": "Full blog post content here...",
+      "link": "https://example.com/blog/6"
     }
   ]
 }

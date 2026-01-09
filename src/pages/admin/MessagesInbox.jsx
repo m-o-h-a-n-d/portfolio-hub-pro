@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNotifications } from '../../context/NotificationContext';
 import { Mail, Clock, Check, Trash2, Eye } from 'lucide-react';
+import Swal from '../../lib/swal';
 
 const MessagesInbox = () => {
   const { 
@@ -27,8 +28,18 @@ const MessagesInbox = () => {
     });
   };
 
-  const handleDelete = (id) => {
-    if (!confirm('Are you sure you want to delete this message?')) return;
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    });
+
+    if (!result.isConfirmed) return;
+    
     deleteNotification(id);
     if (selectedMessage?.id === id) {
       setSelectedMessage(null);

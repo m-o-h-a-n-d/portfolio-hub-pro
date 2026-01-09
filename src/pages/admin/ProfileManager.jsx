@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
 import { Save, Upload, User, Share2 } from 'lucide-react';
+import Swal from '../../lib/swal';
 
 const ProfileManager = () => {
   const [profile, setProfile] = useState(null);
@@ -58,10 +59,20 @@ const ProfileManager = () => {
 
     try {
       await apiPost('/profile/update', profile);
-      alert('Profile updated successfully!');
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'Profile updated successfully!',
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error('Error saving profile:', error);
-      alert('Error saving profile');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error saving profile',
+      });
     } finally {
       setSaving(false);
     }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useProfile } from '../../context/DataContext';
 import { Send } from 'lucide-react';
+import Swal from '../../lib/swal';
 
 const ContactSection = () => {
   const profile = useProfile();
@@ -39,7 +40,13 @@ const ContactSection = () => {
     setIsValid(false);
     setIsSubmitting(false);
     
-    alert('Message sent successfully!');
+    Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: 'Message sent successfully!',
+      timer: 3000,
+      timerProgressBar: true,
+    });
   };
 
   return (

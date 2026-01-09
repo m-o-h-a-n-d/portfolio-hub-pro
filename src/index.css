@@ -779,3 +779,61 @@
 .animate-scale-up {
   animation: scaleUp 0.3s ease forwards;
 }
+
+/* ===== SweetAlert2 Custom Styles ===== */
+.swal-popup-custom {
+  background: var(--bg-gradient-jet) !important;
+  border: 1px solid hsl(var(--jet)) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-3) !important;
+  padding: 2rem !important;
+}
+
+.swal-title-custom {
+  color: hsl(var(--foreground)) !important;
+  font-family: var(--ff-poppins) !important;
+  font-size: var(--fs-2) !important;
+  font-weight: var(--fw-600) !important;
+  margin-bottom: 1rem !important;
+}
+
+.swal-text-custom {
+  color: hsl(var(--muted-foreground)) !important;
+  font-family: var(--ff-poppins) !important;
+  font-size: var(--fs-5) !important;
+}
+
+.swal-confirm-button-custom {
+  background: var(--text-gradient-yellow) !important;
+  color: hsl(var(--smoky-black)) !important;
+  padding: 10px 24px !important;
+  border-radius: 12px !important;
+  font-weight: var(--fw-600) !important;
+  font-size: var(--fs-6) !important;
+  margin: 0.5rem !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: var(--transition-1) !important;
+}
+
+.swal-confirm-button-custom:hover {
+  opacity: 0.9 !important;
+  transform: translateY(-2px) !important;
+}
+
+.swal-cancel-button-custom {
+  background: hsl(var(--jet)) !important;
+  color: hsl(var(--white-2)) !important;
+  padding: 10px 24px !important;
+  border-radius: 12px !important;
+  font-weight: var(--fw-600) !important;
+  font-size: var(--fs-6) !important;
+  margin: 0.5rem !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: var(--transition-1) !important;
+}
+
+.swal-cancel-button-custom:hover {
+  background: hsl(var(--onyx)) !important;
+}

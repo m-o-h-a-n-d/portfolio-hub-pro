@@ -14,6 +14,7 @@ import {
   API_SKILLS_GET
 } from '../../api/endpoints';
 import { Plus, Edit2, Trash2, X, BookOpen, Briefcase, Award, GripVertical } from 'lucide-react';
+import Swal from '../../lib/swal';
 import SkillsManager from '../../components/admin/SkillsManager';
 
 const ResumeManager = () => {
@@ -103,7 +104,11 @@ const ResumeManager = () => {
       await apiPost(API_RESUME_REORDER, resumeOrder);
     } catch (error) {
       console.error('Error updating order:', error);
-      alert('Failed to save new order');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to save new order',
+      });
     } finally {
       setTimeout(() => setReordering(false), 500);
     }
@@ -195,12 +200,25 @@ const ResumeManager = () => {
       closeModal();
     } catch (error) {
       console.error('Error saving:', error);
-      alert('Error saving item');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error saving item',
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this item?')) return;
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    });
+
+    if (!result.isConfirmed) return;
     try {
       if (activeTab === 'education') {
         await apiDelete(`${API_EDUCATION_DELETE}/${id}`);

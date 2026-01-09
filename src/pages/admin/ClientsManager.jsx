@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
 import { Plus, Edit2, Trash2, X, Save, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
+import Swal from '../../lib/swal';
 
 const ClientsManager = () => {
   const [clients, setClients] = useState([]);
@@ -87,18 +88,43 @@ const ClientsManager = () => {
       }
 
       closeModal();
-      alert(`Client ${modalMode === 'add' ? 'added' : 'updated'} successfully!`);
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: `Client ${modalMode === 'add' ? 'added' : 'updated'} successfully!`,
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error('Error saving client:', error);
-      alert('Error saving client');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error saving client',
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this client?')) return;
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    });
+
+    if (!result.isConfirmed) return;
     try {
       setClients(prev => prev.filter(c => c.id !== id));
-      alert('Client deleted successfully!');
+      Swal.fire({
+        icon: 'success',
+        title: 'Deleted!',
+        text: 'Client deleted successfully!',
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error('Error deleting client:', error);
     }

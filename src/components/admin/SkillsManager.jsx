@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
+import Swal from '../../lib/swal';
 import { Button } from "../ui/button";
 import { apiPost, apiPut, apiDelete } from '../../api/request';
 import { API_SKILLS_CREATE, API_SKILLS_UPDATE, API_SKILLS_DELETE } from '../../api/endpoints';
@@ -63,19 +64,36 @@ const SkillsManager = ({ skills = [], onUpdate }) => {
       closeModal();
     } catch (error) {
       console.error('Error saving skill:', error);
-      alert('Failed to save skill');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to save skill',
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this skill?')) return;
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    });
+
+    if (!result.isConfirmed) return;
     try {
       await apiDelete(`${API_SKILLS_DELETE}/${id}`);
       const updatedSkills = skills.filter(s => s.id !== id);
       onUpdate(updatedSkills);
     } catch (error) {
       console.error('Error deleting skill:', error);
-      alert('Failed to delete skill');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to delete skill',
+      });
     }
   };
 

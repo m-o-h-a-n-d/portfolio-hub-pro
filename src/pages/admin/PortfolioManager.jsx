@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
 import { Plus, Edit2, Trash2, X, Save, Upload, Image } from 'lucide-react';
+import Swal from '../../lib/swal';
 
 const PortfolioManager = () => {
   const [portfolio, setPortfolio] = useState(null);
@@ -104,25 +105,54 @@ const PortfolioManager = () => {
       }
 
       closeModal();
-      alert(`Project ${modalMode === 'add' ? 'added' : 'updated'} successfully!`);
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: `Project ${modalMode === 'add' ? 'added' : 'updated'} successfully!`,
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error('Error saving project:', error);
-      alert('Error saving project');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error saving project',
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this project?')) return;
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       setPortfolio(prev => ({
         ...prev,
         projects: prev.projects.filter(p => p.id !== id)
       }));
-      alert('Project deleted successfully!');
+      Swal.fire({
+        icon: 'success',
+        title: 'Deleted!',
+        text: 'Project deleted successfully!',
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error('Error deleting project:', error);
-      alert('Error deleting project');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error deleting project',
+      });
     }
   };
 

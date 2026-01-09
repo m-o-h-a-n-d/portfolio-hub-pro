@@ -17,6 +17,7 @@ import {
   Cpu,
   Search
 } from 'lucide-react';
+import Swal from '../../lib/swal';
 
 function limiter(name, limit = 10) {
   if (!name) return "";
@@ -122,20 +123,45 @@ const ServicesManager = () => {
       }
 
       closeModal();
-      alert(`Service ${modalMode === 'add' ? 'added' : 'updated'} successfully!`);
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: `Service ${modalMode === 'add' ? 'added' : 'updated'} successfully!`,
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error('Error saving service:', error);
-      alert('Error saving service');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error saving service',
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this service?')) return;
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    });
+
+    if (!result.isConfirmed) return;
     try {
       // In a real app, you'd call apiDelete. Here we follow the project's pattern.
       // Assuming apiPost handles delete if structured that way, or just update local state for mock
       setServices(prev => prev.filter(s => s.id !== id));
-      alert('Service deleted successfully!');
+      Swal.fire({
+        icon: 'success',
+        title: 'Deleted!',
+        text: 'Service deleted successfully!',
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error('Error deleting service:', error);
     }

@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
-import { Plus, Edit2, Trash2, X, Save, User, Star } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Save, User, Star, Search } from 'lucide-react';
+import Swal from '../../lib/swal';
 
 const TestimonialsManager = () => {
   const [testimonials, setTestimonials] = useState([]);
+  const [filteredTestimonials, setFilteredTestimonials] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
@@ -25,7 +28,9 @@ const TestimonialsManager = () => {
       const response = await apiGet('/testimonials');
       // Handle both { testimonials: [] } and [] formats
       const data = response.data.testimonials || response.data;
-      setTestimonials(Array.isArray(data) ? data : []);
+      const testimonialsList = Array.isArray(data) ? data : [];
+      setTestimonials(testimonialsList);
+      setFilteredTestimonials(testimonialsList);
     } catch (error) {
       console.error('Error fetching testimonials:', error);
     } finally {
@@ -67,6 +72,16 @@ const TestimonialsManager = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    const filtered = testimonials.filter(t => 
+      t.name.toLowerCase().includes(query) || 
+      t.text.toLowerCase().includes(query)
+    );
+    setFilteredTestimonials(filtered);
+  };
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -94,20 +109,51 @@ const TestimonialsManager = () => {
       }
 
       closeModal();
-      alert(`Testimonial ${modalMode === 'add' ? 'added' : 'updated'} successfully!`);
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: `Testimonial ${modalMode === 'add' ? 'added' : 'updated'} successfully!`,
+        timer: 2000,
+        showConfirmButton: false
+      });
     } catch (error) {
       console.error('Error saving testimonial:', error);
-      alert('Error saving testimonial');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error saving testimonial'
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this testimonial?')) return;
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    });
+
+    if (!result.isConfirmed) return;
+
     try {
       setTestimonials(prev => prev.filter(t => t.id !== id));
-      alert('Testimonial deleted successfully!');
+      Swal.fire({
+        icon: 'success',
+        title: 'Deleted!',
+        text: 'Testimonial deleted successfully!',
+        timer: 2000,
+        showConfirmButton: false
+      });
     } catch (error) {
       console.error('Error deleting testimonial:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error deleting testimonial'
+      });
     }
   };
 
@@ -121,19 +167,31 @@ const TestimonialsManager = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="h2 text-white-2">Testimonials Manager</h1>
           <p className="text-muted-foreground text-sm mt-1">Manage client feedback</p>
         </div>
-        <button onClick={openAddModal} className="form-btn !w-auto !px-6">
-          <Plus className="w-5 h-5" />
-          <span>Add Testimonial</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search testimonials..."
+              value={searchQuery}
+              onChange={handleSearch}
+              className="form-input !pl-10 !py-2 !w-64"
+            />
+          </div>
+          <button onClick={openAddModal} className="form-btn !w-auto !px-6">
+            <Plus className="w-5 h-5" />
+            <span>Add Testimonial</span>
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {testimonials.map((testimonial) => (
+        {filteredTestimonials.map((testimonial) => (
           <div 
             key={testimonial.id}
             className="bg-card border border-border rounded-[20px] p-6 flex flex-col gap-4 relative group"

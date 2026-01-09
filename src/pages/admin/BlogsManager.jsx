@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
-import { Plus, Edit2, Trash2, X, Save, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Save, Image as ImageIcon, Search } from 'lucide-react';
 import Swal from '../../lib/swal';
+import Pagination from '../../components/admin/Pagination';
 
 const BlogsManager = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
   const [editingItem, setEditingItem] = useState(null);
@@ -20,20 +24,45 @@ const BlogsManager = () => {
 
   useEffect(() => {
     fetchBlogs();
-  }, []);
+  }, [currentPage, searchQuery]);
 
   const fetchBlogs = async () => {
     try {
       setLoading(true);
-      const response = await apiGet('/blog');
-      // Handle both { posts: [] } and [] formats
-      const data = response.data.posts || response.data;
-      setBlogs(Array.isArray(data) ? data : []);
+      // Construct query parameters for server-side pagination and search
+      const params = new URLSearchParams({
+        page: currentPage,
+        limit: 10,
+        search: searchQuery
+      });
+      
+      const response = await apiGet(`/blog?${params.toString()}`);
+      
+      // Handle server response structure
+      // Expected: { data: { posts: [], totalPages: 1, currentPage: 1 } }
+      const data = response.data;
+      
+      if (data.posts) {
+        setBlogs(data.posts);
+        setTotalPages(data.totalPages || 1);
+      } else if (Array.isArray(data)) {
+        // Fallback for simple array response
+        setBlogs(data);
+        setTotalPages(1);
+      } else {
+        setBlogs([]);
+        setTotalPages(1);
+      }
     } catch (error) {
       console.error('Error fetching blogs:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
   };
 
   const openAddModal = () => {
@@ -153,15 +182,27 @@ const BlogsManager = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="h2 text-white-2">Blogs Manager</h1>
           <p className="text-muted-foreground text-sm mt-1">Manage your blog posts</p>
         </div>
-        <button onClick={openAddModal} className="form-btn !w-auto !px-6">
-          <Plus className="w-5 h-5" />
-          <span>Add Blog</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search blogs..."
+              value={searchQuery}
+              onChange={handleSearch}
+              className="form-input !pl-10 !py-2 !w-64"
+            />
+          </div>
+          <button onClick={openAddModal} className="form-btn !w-auto !px-6">
+            <Plus className="w-5 h-5" />
+            <span>Add Blog</span>
+          </button>
+        </div>
       </div>
 
       <div className="bg-card border border-border rounded-[20px] overflow-hidden" style={{ background: 'var(--bg-gradient-jet)' }}>
@@ -200,6 +241,11 @@ const BlogsManager = () => {
             </tbody>
           </table>
         </div>
+        <Pagination 
+          currentPage={currentPage} 
+          totalPages={totalPages} 
+          onPageChange={setCurrentPage} 
+        />
       </div>
 
       {modalOpen && (

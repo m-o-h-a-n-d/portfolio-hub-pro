@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
-import { Plus, Edit2, Trash2, X, Save, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Save, Image as ImageIcon, Link as LinkIcon, Search } from 'lucide-react';
 import Swal from '../../lib/swal';
 
 const ClientsManager = () => {
   const [clients, setClients] = useState([]);
+  const [filteredClients, setFilteredClients] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
@@ -25,7 +27,9 @@ const ClientsManager = () => {
       const response = await apiGet('/clients');
       // Handle both { clients: [] } and [] formats
       const data = response.data.clients || response.data;
-      setClients(Array.isArray(data) ? data : []);
+      const clientsList = Array.isArray(data) ? data : [];
+      setClients(clientsList);
+      setFilteredClients(clientsList);
     } catch (error) {
       console.error('Error fetching clients:', error);
     } finally {
@@ -59,6 +63,15 @@ const ClientsManager = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    const filtered = clients.filter(client => 
+      client.name.toLowerCase().includes(query)
+    );
+    setFilteredClients(filtered);
   };
 
   const handleImageUpload = (e) => {
@@ -140,19 +153,31 @@ const ClientsManager = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="h2 text-white-2">Clients Manager</h1>
           <p className="text-muted-foreground text-sm mt-1">Manage your client logos and links</p>
         </div>
-        <button onClick={openAddModal} className="form-btn !w-auto !px-6">
-          <Plus className="w-5 h-5" />
-          <span>Add Client</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search clients..."
+              value={searchQuery}
+              onChange={handleSearch}
+              className="form-input !pl-10 !py-2 !w-64"
+            />
+          </div>
+          <button onClick={openAddModal} className="form-btn !w-auto !px-6">
+            <Plus className="w-5 h-5" />
+            <span>Add Client</span>
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {clients.map((client) => (
+        {filteredClients.map((client) => (
           <div 
             key={client.id}
             className="bg-card border border-border rounded-[20px] p-6 flex flex-col items-center gap-4 group relative"

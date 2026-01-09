@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
 import { API_SETTINGS_GET, API_SETTINGS_UPDATE } from '../../api/endpoints';
 import { Save, Globe, Upload, FileText } from 'lucide-react';
+import Swal from '../../lib/swal';
 
 const SettingsManager = () => {
   const [settings, setSettings] = useState(null);
@@ -44,7 +45,11 @@ const SettingsManager = () => {
       // For now, we'll just simulate it by setting a path
       handleInputChange('site_identity', 'cv_url', `/cv/${file.name}`);
     } else {
-      alert('Please upload a PDF file');
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid File',
+        text: 'Please upload a PDF file'
+      });
     }
   };
 
@@ -79,10 +84,20 @@ const SettingsManager = () => {
     try {
       setSaving(true);
       await apiPost(API_SETTINGS_UPDATE, settings);
-      alert('Settings updated successfully!');
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Settings updated successfully!',
+        timer: 2000,
+        showConfirmButton: false
+      });
     } catch (error) {
       console.error('Error updating settings:', error);
-      alert('Error updating settings');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error updating settings'
+      });
     } finally {
       setSaving(false);
     }

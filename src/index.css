@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,8 +8,6 @@
    PORTFOLIO DESIGN SYSTEM
    Premium Dark Theme with Gold Accents
 ============================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 @layer base {
   html {
     font-family: 'Poppins', sans-serif; /* تأكيد الخط للـ HTML */
@@ -563,6 +563,25 @@
   }
 
   /* ===== Custom Scrollbar ===== */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--eerie-black-2));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--jet));
+    border-radius: 10px;
+    border: 2px solid hsl(var(--eerie-black-2));
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary));
+  }
+
   .has-scrollbar::-webkit-scrollbar {
     width: 5px;
     height: 5px;
@@ -576,6 +595,23 @@
   .has-scrollbar::-webkit-scrollbar-thumb {
     background: hsl(var(--primary));
     border-radius: 5px;
+  }
+
+  /* ===== Custom Dropdown / Select Styles ===== */
+  select.form-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='hsl(45, 100%, 72%)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2em;
+    padding-right: 3rem;
+    cursor: pointer;
+  }
+
+  select.form-input option {
+    background-color: hsl(var(--eerie-black-2));
+    color: hsl(var(--white-2));
+    padding: 10px;
   }
 
   /* ===== Filter Buttons ===== */

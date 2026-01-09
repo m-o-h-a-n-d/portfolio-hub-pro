@@ -23,6 +23,9 @@ import BlogsManager from "./pages/admin/BlogsManager";
 import ClientsManager from "./pages/admin/ClientsManager";
 import TestimonialsManager from "./pages/admin/TestimonialsManager";
 import ServicesManager from "./pages/admin/ServicesManager";
+import ForgetPassword from "./pages/admin/ForgetPassword";
+import OTPVerification from "./pages/admin/OTPVerification";
+import ResetPassword from "./pages/admin/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -40,8 +43,11 @@ const App = () => (
             {/* Public Portfolio */}
             <Route path="/" element={<Index />} />
             
-            {/* Admin Login */}
-            <Route path="/admin/login" element={<LoginPage />} />
+	            {/* Admin Auth */}
+	            <Route path="/admin/login" element={<LoginPage />} />
+	            <Route path="/admin/forget-password" element={<ForgetPassword />} />
+	            <Route path="/admin/otp-verification" element={<OTPVerification />} />
+	            <Route path="/admin/reset-password" element={<ResetPassword />} />
             
             {/* Admin Dashboard (Protected) */}
             <Route path="/admin" element={

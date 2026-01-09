@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
-import { Plus, Edit2, Trash2, X, Save, Upload, Image } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Save, Upload, Image, Search } from 'lucide-react';
 import Swal from '../../lib/swal';
 
 const PortfolioManager = () => {
   const [portfolio, setPortfolio] = useState(null);
+  const [filteredProjects, setFilteredProjects] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
@@ -27,6 +29,7 @@ const PortfolioManager = () => {
       setLoading(true);
       const response = await apiGet('/portfolio');
       setPortfolio(response.data);
+      setFilteredProjects(response.data.projects || []);
     } catch (error) {
       console.error('Error fetching portfolio:', error);
     } finally {
@@ -66,6 +69,18 @@ const PortfolioManager = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    if (!portfolio?.projects) return;
+    const filtered = portfolio.projects.filter(p => 
+      p.title.toLowerCase().includes(query) || 
+      p.category.toLowerCase().includes(query) ||
+      p.description?.toLowerCase().includes(query)
+    );
+    setFilteredProjects(filtered);
   };
 
   const handleImageUpload = (e) => {
@@ -167,20 +182,32 @@ const PortfolioManager = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="h2 text-white-2">Portfolio Manager</h1>
           <p className="text-muted-foreground text-sm mt-1">Manage your portfolio projects</p>
         </div>
-        <button onClick={openAddModal} className="form-btn !w-auto !px-6">
-          <Plus className="w-5 h-5" />
-          <span>Add Project</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search projects..."
+              value={searchQuery}
+              onChange={handleSearch}
+              className="form-input !pl-10 !py-2 !w-64"
+            />
+          </div>
+          <button onClick={openAddModal} className="form-btn !w-auto !px-6">
+            <Plus className="w-5 h-5" />
+            <span>Add Project</span>
+          </button>
+        </div>
       </div>
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {portfolio?.projects?.map((project) => (
+        {filteredProjects.map((project) => (
           <div 
             key={project.id}
             className="bg-card border border-border rounded-[20px] overflow-hidden group"

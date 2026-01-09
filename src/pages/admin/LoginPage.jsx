@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { User, Lock, LogIn, Eye, EyeOff } from 'lucide-react';
 
@@ -105,6 +105,15 @@ const LoginPage = () => {
               <LogIn className="w-5 h-5" />
               <span>{loading ? 'Signing in...' : 'Sign In'}</span>
             </button>
+            
+            <div className="mt-4 text-right">
+              <Link 
+                to="/admin/forget-password" 
+                className="text-xs text-primary hover:underline"
+              >
+                Forgot Password?
+              </Link>
+            </div>
           </form>
 
           {/* Demo Credentials */}

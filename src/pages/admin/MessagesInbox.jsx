@@ -40,9 +40,25 @@ const MessagesInbox = () => {
 
     if (!result.isConfirmed) return;
     
-    deleteNotification(id);
-    if (selectedMessage?.id === id) {
-      setSelectedMessage(null);
+    try {
+      deleteNotification(id);
+      if (selectedMessage?.id === id) {
+        setSelectedMessage(null);
+      }
+      Swal.fire({
+        icon: 'success',
+        title: 'Deleted!',
+        text: 'Message deleted successfully!',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    } catch (error) {
+      console.error('Error deleting message:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error deleting message'
+      });
     }
   };
 

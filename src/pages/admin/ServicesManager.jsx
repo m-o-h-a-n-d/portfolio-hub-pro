@@ -41,6 +41,8 @@ const iconList = [
 
 const ServicesManager = () => {
   const [services, setServices] = useState([]);
+  const [filteredServices, setFilteredServices] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
@@ -60,7 +62,9 @@ const ServicesManager = () => {
       setLoading(true);
       const response = await apiGet('/services');
       const data = response.data.services || response.data;
-      setServices(Array.isArray(data) ? data : []);
+      const servicesList = Array.isArray(data) ? data : [];
+      setServices(servicesList);
+      setFilteredServices(servicesList);
     } catch (error) {
       console.error('Error fetching services:', error);
     } finally {
@@ -98,6 +102,16 @@ const ServicesManager = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    const filtered = services.filter(s => 
+      s.title.toLowerCase().includes(query) || 
+      s.description.toLowerCase().includes(query)
+    );
+    setFilteredServices(filtered);
   };
 
   const selectIcon = (iconClass) => {
@@ -182,19 +196,31 @@ const ServicesManager = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="h2 text-white-2">Services Manager</h1>
           <p className="text-muted-foreground text-sm mt-1">Manage "What I'm Doing" section</p>
         </div>
-        <button onClick={openAddModal} className="form-btn !w-auto !px-6">
-          <Plus className="w-5 h-5" />
-          <span>Add Service</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search services..."
+              value={searchQuery}
+              onChange={handleSearch}
+              className="form-input !pl-10 !py-2 !w-64"
+            />
+          </div>
+          <button onClick={openAddModal} className="form-btn !w-auto !px-6">
+            <Plus className="w-5 h-5" />
+            <span>Add Service</span>
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {services.map((service) => {
+        {filteredServices.map((service) => {
           const Icon = getIconComponent(service.icon);
           return (
             <div 

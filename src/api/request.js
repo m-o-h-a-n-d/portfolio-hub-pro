@@ -126,6 +126,9 @@ export const apiFetch = async (endpoint, method = 'GET', body = null, isFile = f
       }
       
       // Fallback for endpoints with IDs
+      if (endpoint.endsWith('/resume/education')) return { success: true, data: educationData };
+      if (endpoint.endsWith('/resume/experience')) return { success: true, data: experienceData };
+      if (endpoint.endsWith('/resume/skills')) return { success: true, data: skillsData };
       if (endpoint.includes('/resume/education/')) return { success: true, data: educationData[0] };
       if (endpoint.includes('/resume/experience/')) return { success: true, data: experienceData[0] };
       if (endpoint.includes('/resume/skills/')) return { success: true, data: skillsData[0] };

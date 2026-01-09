@@ -1,6 +1,19 @@
 import { useState, useEffect } from 'react';
-import { apiGet, apiPost } from '../../api/request';
-import { Plus, Edit2, Trash2, X, Save, GripVertical, Search } from 'lucide-react';
+import { apiGet, apiPost, apiDelete, apiPut } from '../../api/request';
+import { 
+  API_RESUME_GET, 
+  API_EDUCATION_GET, 
+  API_EXPERIENCE_GET, 
+  API_SKILLS_GET,
+  API_RESUME_REORDER,
+  API_EDUCATION_CREATE,
+  API_EXPERIENCE_CREATE,
+  API_EDUCATION_UPDATE,
+  API_EXPERIENCE_UPDATE,
+  API_EDUCATION_DELETE,
+  API_EXPERIENCE_DELETE
+} from '../../api/endpoints';
+import { Plus, Edit2, Trash2, X, Save, GripVertical, Search, ArrowUp, ArrowDown } from 'lucide-react';
 import Swal from '../../lib/swal';
 import SkillsManager from '../../components/admin/SkillsManager';
 import Pagination from '../../components/admin/Pagination';
@@ -11,6 +24,7 @@ const ResumeManager = () => {
     experience: [],
     skills: []
   });
+  const [sectionOrder, setSectionOrder] = useState(['education', 'experience', 'skills']);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('education');
   const [modalOpen, setModalOpen] = useState(false);
@@ -33,11 +47,18 @@ const ResumeManager = () => {
   const fetchResumeData = async () => {
     try {
       setLoading(true);
-      const response = await apiGet('/resume');
+      const [resumeRes, eduRes, expRes, skillsRes] = await Promise.all([
+        apiGet(API_RESUME_GET),
+        apiGet(API_EDUCATION_GET),
+        apiGet(API_EXPERIENCE_GET),
+        apiGet(API_SKILLS_GET)
+      ]);
+
+      setSectionOrder(resumeRes.data || ['education', 'experience', 'skills']);
       setSectionsData({
-        education: response.data.education || [],
-        experience: response.data.experience || [],
-        skills: response.data.skills || []
+        education: eduRes.data || [],
+        experience: expRes.data || [],
+        skills: skillsRes.data || []
       });
     } catch (error) {
       console.error('Error fetching resume data:', error);
@@ -93,14 +114,16 @@ const ResumeManager = () => {
         id: editingItem?.id || Date.now()
       };
 
-      await apiPost(`/resume/${activeTab}`, submissionData);
-
       if (modalMode === 'add') {
+        const endpoint = activeTab === 'education' ? API_EDUCATION_CREATE : API_EXPERIENCE_CREATE;
+        await apiPost(endpoint, submissionData);
         setSectionsData(prev => ({
           ...prev,
           [activeTab]: [...prev[activeTab], submissionData]
         }));
       } else {
+        const endpoint = activeTab === 'education' ? API_EDUCATION_UPDATE : API_EXPERIENCE_UPDATE;
+        await apiPut(`${endpoint}/${editingItem.id}`, submissionData);
         setSectionsData(prev => ({
           ...prev,
           [activeTab]: prev[activeTab].map(item => item.id === editingItem.id ? submissionData : item)
@@ -138,6 +161,9 @@ const ResumeManager = () => {
     if (!result.isConfirmed) return;
 
     try {
+      const endpoint = activeTab === 'education' ? API_EDUCATION_DELETE : API_EXPERIENCE_DELETE;
+      await apiDelete(`${endpoint}/${id}`);
+
       setSectionsData(prev => ({
         ...prev,
         [activeTab]: prev[activeTab].filter(item => item.id !== id)
@@ -152,6 +178,22 @@ const ResumeManager = () => {
       });
     } catch (error) {
       console.error('Error deleting resume item:', error);
+    }
+  };
+
+  const moveSection = async (index, direction) => {
+    const newOrder = [...sectionOrder];
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    if (newIndex < 0 || newIndex >= newOrder.length) return;
+    
+    [newOrder[index], newOrder[newIndex]] = [newOrder[newIndex], newOrder[index]];
+    setSectionOrder(newOrder);
+    
+    try {
+      await apiPost(API_RESUME_REORDER, newOrder);
+    } catch (error) {
+      console.error('Error saving section order:', error);
     }
   };
 
@@ -181,7 +223,7 @@ const ResumeManager = () => {
           <h1 className="h2 text-white-2">Resume Manager</h1>
           <p className="text-muted-foreground text-sm mt-1">Manage your education, experience and skills</p>
         </div>
-        {activeTab !== 'skills' && (
+        {activeTab !== 'skills' && activeTab !== 'order' && (
           <button onClick={openAddModal} className="form-btn !w-auto !px-6">
             <Plus className="w-5 h-5" />
             <span>Add {activeTab === 'education' ? 'Education' : 'Experience'}</span>
@@ -190,14 +232,14 @@ const ResumeManager = () => {
       </div>
 
       <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
-        <div className="bg-onyx/30 p-1 rounded-2xl border border-border flex w-full lg:w-auto">
-          {['education', 'experience', 'skills'].map((type) => {
+        <div className="bg-onyx/30 p-1 rounded-2xl border border-border flex w-full lg:w-auto overflow-x-auto">
+          {['education', 'experience', 'skills', 'order'].map((type) => {
             const isActive = activeTab === type;
             return (
               <button
                 key={type}
                 onClick={() => handleTabChange(type)}
-                className={`flex-1 lg:flex-none px-6 py-3 rounded-xl transition-all capitalize font-medium ${
+                className={`flex-1 lg:flex-none px-6 py-3 rounded-xl transition-all capitalize font-medium whitespace-nowrap ${
                   isActive 
                     ? 'bg-primary/10 text-primary' 
                     : 'text-muted-foreground hover:text-foreground hover:bg-onyx/50'
@@ -209,7 +251,7 @@ const ResumeManager = () => {
           })}
         </div>
         
-        {activeTab !== 'skills' && (
+        {activeTab !== 'skills' && activeTab !== 'order' && (
           <div className="relative w-full lg:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
@@ -230,6 +272,37 @@ const ResumeManager = () => {
             setSectionsData(prev => ({ ...prev, skills: newSkills }));
           }} 
         />
+      ) : activeTab === 'order' ? (
+        <div className="bg-card border border-border rounded-[20px] p-6" style={{ background: 'var(--bg-gradient-jet)' }}>
+          <h3 className="h3 text-white-2 mb-4">Section Display Order</h3>
+          <p className="text-muted-foreground text-sm mb-6">Arrange the order in which sections appear on your resume page.</p>
+          <div className="space-y-3">
+            {sectionOrder.map((section, index) => (
+              <div key={section} className="flex items-center justify-between p-4 bg-onyx/50 border border-border rounded-xl">
+                <div className="flex items-center gap-4">
+                  <GripVertical className="w-5 h-5 text-muted-foreground" />
+                  <span className="capitalize font-medium text-white-2">{section}</span>
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => moveSection(index, 'up')}
+                    disabled={index === 0}
+                    className="p-2 rounded-lg bg-onyx text-muted-foreground hover:text-primary disabled:opacity-30"
+                  >
+                    <ArrowUp className="w-4 h-4" />
+                  </button>
+                  <button 
+                    onClick={() => moveSection(index, 'down')}
+                    disabled={index === sectionOrder.length - 1}
+                    className="p-2 rounded-lg bg-onyx text-muted-foreground hover:text-primary disabled:opacity-30"
+                  >
+                    <ArrowDown className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       ) : (
         <div className="space-y-4">
           <div className="bg-card border border-border rounded-[20px] overflow-hidden" style={{ background: 'var(--bg-gradient-jet)' }}>

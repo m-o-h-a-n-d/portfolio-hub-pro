@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
-import { apiGet, apiPost } from '../../api/request';
+import { apiGet, apiPost, apiPut, apiDelete } from '../../api/request';
+import { 
+  API_BLOG_LIST, 
+  API_BLOG_CREATE, 
+  API_BLOG_UPDATE, 
+  API_BLOG_DELETE 
+} from '../../api/endpoints';
 import { Plus, Edit2, Trash2, X, Save, Image as ImageIcon, Search } from 'lucide-react';
 import Swal from '../../lib/swal';
 import Pagination from '../../components/admin/Pagination';
@@ -29,24 +35,19 @@ const BlogsManager = () => {
   const fetchBlogs = async () => {
     try {
       setLoading(true);
-      // Construct query parameters for server-side pagination and search
       const params = new URLSearchParams({
         page: currentPage,
         limit: 10,
         search: searchQuery
       });
       
-      const response = await apiGet(`/blog?${params.toString()}`);
-      
-      // Handle server response structure
-      // Expected: { data: { posts: [], totalPages: 1, currentPage: 1 } }
+      const response = await apiGet(`${API_BLOG_LIST}?${params.toString()}`);
       const data = response.data;
       
       if (data.posts) {
         setBlogs(data.posts);
         setTotalPages(data.totalPages || 1);
       } else if (Array.isArray(data)) {
-        // Fallback for simple array response
         setBlogs(data);
         setTotalPages(1);
       } else {
@@ -62,7 +63,7 @@ const BlogsManager = () => {
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1); // Reset to first page on search
+    setCurrentPage(1);
   };
 
   const openAddModal = () => {
@@ -121,11 +122,12 @@ const BlogsManager = () => {
         ...formData,
         id: editingItem?.id || Date.now()
       };
-      await apiPost('/blog', submissionData);
-
+      
       if (modalMode === 'add') {
+        await apiPost(API_BLOG_CREATE, submissionData);
         setBlogs(prev => [...prev, submissionData]);
       } else {
+        await apiPut(`${API_BLOG_UPDATE}/${editingItem.id}`, submissionData);
         setBlogs(prev => prev.map(b => b.id === editingItem.id ? submissionData : b));
       }
 
@@ -159,6 +161,7 @@ const BlogsManager = () => {
 
     if (!result.isConfirmed) return;
     try {
+      await apiDelete(`${API_BLOG_DELETE}/${id}`);
       setBlogs(prev => prev.filter(b => b.id !== id));
       Swal.fire({
         icon: 'success',

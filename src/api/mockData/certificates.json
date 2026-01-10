@@ -5,21 +5,24 @@
       "name": "Full Stack Web Development Certificate",
       "avatar": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
       "text": "Completed intensive training in modern web technologies including React, Node.js, and Cloud Architecture.",
-      "date": "2023-12-15"
+      "date": "2023-12-15",
+      "order": 1
     },
     {
       "id": 2,
       "name": "AWS Certified Solutions Architect",
       "avatar": "https://images.unsplash.com/photo-1523240715630-9918c1c46e6d?w=800&q=80",
       "text": "Validated expertise in designing and deploying scalable systems on Amazon Web Services.",
-      "date": "2024-05-20"
+      "date": "2024-05-20",
+      "order": 2
     },
     {
       "id": 3,
       "name": "UI/UX Design Excellence",
       "avatar": "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?w=800&q=80",
       "text": "Recognized for outstanding performance in user interface design and user experience research.",
-      "date": "2024-01-10"
+      "date": "2024-01-10",
+      "order": 3
     }
   ]
 }

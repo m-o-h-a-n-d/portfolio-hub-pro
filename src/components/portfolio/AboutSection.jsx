@@ -97,7 +97,7 @@ const AboutSection = () => {
         
         <div className="-mx-[15px] px-[15px]">
           <ul className="flex gap-[20px] overflow-x-auto has-scrollbar pb-6 scroll-smooth snap-x">
-            {certificates?.certificates?.map((certificate) => (
+            {certificates?.certificates?.sort((a, b) => (a.order || 0) - (b.order || 0)).map((certificate) => (
               <li 
                 key={certificate.id} 
                 className="min-w-[100px] md:min-w-[120px] flex-shrink-0 snap-start relative group cursor-pointer"

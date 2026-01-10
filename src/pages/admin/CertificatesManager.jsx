@@ -16,8 +16,11 @@ const CertificatesManager = () => {
     name: '',
     avatar: '',
     text: '',
-    date: new Date().toISOString().split('T')[0]
+    date: new Date().toISOString().split('T')[0],
+    order: 0
   });
+  const [draggedItemIndex, setDraggedItemIndex] = useState(null);
+  const [isReordering, setIsReordering] = useState(false);
 
   useEffect(() => {
     fetchCertificates();
@@ -30,8 +33,9 @@ const CertificatesManager = () => {
       // Handle both { certificates: [] } and [] formats
       const data = response.data.certificates || response.data;
       const certificatesList = Array.isArray(data) ? data : [];
-      setCertificates(certificatesList);
-      setFilteredCertificates(certificatesList);
+      const sortedList = [...certificatesList].sort((a, b) => (a.order || 0) - (b.order || 0));
+      setCertificates(sortedList);
+      setFilteredCertificates(sortedList);
     } catch (error) {
       console.error('Error fetching certificates:', error);
     } finally {
@@ -47,7 +51,8 @@ const CertificatesManager = () => {
       name: '', 
       avatar: '', 
       text: '', 
-      date: new Date().toISOString().split('T')[0]
+      date: new Date().toISOString().split('T')[0],
+      order: certificates.length > 0 ? Math.max(...certificates.map(c => c.order || 0)) + 1 : 1
     });
     setModalOpen(true);
   };
@@ -60,7 +65,8 @@ const CertificatesManager = () => {
       name: certificate.name,
       avatar: certificate.avatar,
       text: certificate.text,
-      date: certificate.date || new Date().toISOString().split('T')[0]
+      date: certificate.date || new Date().toISOString().split('T')[0],
+      order: certificate.order || 0
     });
     setModalOpen(true);
   };
@@ -108,9 +114,15 @@ const CertificatesManager = () => {
       await apiPost('/certificates', submissionData);
 
       if (modalMode === 'add') {
-        setCertificates(prev => [...prev, submissionData]);
+        setCertificates(prev => {
+          const newList = [...prev, submissionData];
+          return newList.sort((a, b) => (a.order || 0) - (b.order || 0));
+        });
       } else {
-        setCertificates(prev => prev.map(c => c.id === editingItem.id ? submissionData : c));
+        setCertificates(prev => {
+          const newList = prev.map(c => c.id === editingItem.id ? submissionData : c);
+          return newList.sort((a, b) => (a.order || 0) - (b.order || 0));
+        });
       }
 
       closeModal();
@@ -170,8 +182,73 @@ const CertificatesManager = () => {
     );
   }
 
+  // Drag and Drop Handlers
+  const onDragStart = (e, index) => {
+    setDraggedItemIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    // Create a ghost image or just use the default
+    e.currentTarget.style.opacity = '0.4';
+  };
+
+  const onDragOver = (e, index) => {
+    e.preventDefault();
+    if (draggedItemIndex === null || draggedItemIndex === index) return;
+
+    const newList = [...filteredCertificates];
+    const draggedItem = newList[draggedItemIndex];
+    
+    // Remove the item from its original position
+    newList.splice(draggedItemIndex, 1);
+    // Insert it at the new position
+    newList.splice(index, 0, draggedItem);
+
+    // Update orders based on new positions
+    const updatedList = newList.map((item, idx) => ({
+      ...item,
+      order: idx + 1
+    }));
+
+    setDraggedItemIndex(index);
+    setFilteredCertificates(updatedList);
+    setCertificates(updatedList);
+  };
+
+  const onDragEnd = async (e) => {
+    e.currentTarget.style.opacity = '1';
+    setDraggedItemIndex(null);
+    
+    try {
+      setIsReordering(true);
+      // In a real app, you'd send the whole new order to the backend
+      // For this mock setup, we'll simulate saving each one or a bulk update
+      await apiPost('/certificates/reorder', certificates);
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Order Updated',
+        text: 'Certificates reordered successfully!',
+        timer: 1500,
+        showConfirmButton: false,
+        toast: true,
+        position: 'top-end'
+      });
+    } catch (error) {
+      console.error('Error saving order:', error);
+    } finally {
+      setIsReordering(false);
+    }
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {isReordering && (
+        <div className="absolute inset-0 bg-background/20 backdrop-blur-[1px] z-50 flex items-center justify-center rounded-2xl">
+          <div className="bg-onyx border border-border px-4 py-2 rounded-full shadow-xl flex items-center gap-3">
+            <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <span className="text-xs font-medium text-white-2">Updating order...</span>
+          </div>
+        </div>
+      )}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="h2 text-white-2">Certificates Manager</h1>
@@ -196,10 +273,16 @@ const CertificatesManager = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCertificates.map((certificate) => (
+        {filteredCertificates.map((certificate, index) => (
           <div 
             key={certificate.id}
-            className="bg-card border border-border rounded-[20px] overflow-hidden relative group"
+            draggable={searchQuery === ''} // Disable drag while searching to avoid confusion
+            onDragStart={(e) => onDragStart(e, index)}
+            onDragOver={(e) => onDragOver(e, index)}
+            onDragEnd={onDragEnd}
+            className={`bg-card border border-border rounded-[20px] overflow-hidden relative group transition-all duration-300 ${
+              draggedItemIndex === index ? 'scale-95 opacity-50' : 'scale-100 opacity-100'
+            } ${searchQuery === '' ? 'cursor-move' : ''}`}
             style={{ background: 'var(--bg-gradient-jet)' }}
           >
             {/* Certificate Image */}

@@ -96,11 +96,11 @@ const AboutSection = () => {
         <h3 className="h3 mb-5">Certificates</h3>
         
         <div className="-mx-[15px] px-[15px]">
-          <ul className="flex gap-[30px] overflow-x-auto has-scrollbar pb-6 scroll-smooth snap-x">
+          <ul className="flex gap-[20px] overflow-x-auto has-scrollbar pb-6 scroll-smooth snap-x">
             {certificates?.certificates?.map((certificate) => (
               <li 
                 key={certificate.id} 
-                className="min-w-[120px] md:min-w-[150px] flex-shrink-0 snap-start relative group cursor-pointer"
+                className="min-w-[100px] md:min-w-[120px] flex-shrink-0 snap-start relative group cursor-pointer"
                 onClick={() => setSelectedCertificate(certificate)}
               >
                 <div className="relative bg-border-gradient-onyx rounded-[14px] shadow-portfolio-2 overflow-hidden z-10 h-full">

@@ -2,27 +2,51 @@
   "certificates": [
     {
       "id": 1,
-      "name": "Full Stack Web Development Certificate",
-      "avatar": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
-      "text": "Completed intensive training in modern web technologies including React, Node.js, and Cloud Architecture.",
-      "date": "2023-12-15",
-      "order": 1
-    },
-    {
-      "id": 2,
-      "name": "AWS Certified Solutions Architect",
-      "avatar": "https://images.unsplash.com/photo-1523240715630-9918c1c46e6d?w=800&q=80",
-      "text": "Validated expertise in designing and deploying scalable systems on Amazon Web Services.",
-      "date": "2024-05-20",
+      "name": "Digitopia Competition (Software & AI)",
+      "avatar": "/certificates/digitopia.png",
+      "text": "Achieved the 2nd Phase in Software & AI track at the Ministry of Communications and Information Technology competition (First Edition).",
+      "date": "2025-01-01",
       "order": 2
     },
     {
+      "id": 2,
+      "name": "Full Stack Web Development Diploma",
+      "avatar": "/certificates/we.jpeg",
+      "text": "Successfully completed a 200-hour intensive training course provided by WE (Telecom Egypt), covering modern web technologies.",
+      "date": "2024-11-18",
+      "order": 1
+    },
+    {
       "id": 3,
-      "name": "UI/UX Design Excellence",
-      "avatar": "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?w=800&q=80",
-      "text": "Recognized for outstanding performance in user interface design and user experience research.",
-      "date": "2024-01-10",
+      "name": "IEEE Appreciation Certificate",
+      "avatar": "/certificates/ieee.jpeg",
+      "text": "Recognized for dedication, commitment, and valuable contribution to the IEEE IAET Student Branch.",
+      "date": "2025-10-02",
       "order": 3
+    },
+    {
+      "id": 4,
+      "name": "Academic Excellence Award (1st Rank)",
+      "avatar": "/certificates/iaet.jpeg",
+      "text": "Awarded for achieving the 1st Rank in the First Year, Electronics and Communications Engineering Department at IAET.",
+      "date": "2024-06-01",
+      "order": 4
+    },
+    {
+      "id": 5,
+      "name": "Technical Committee Volunteer",
+      "avatar": "/certificates/ieee2.jpeg",
+      "text": "Volunteered in the Technical Committee at IEEE IAET, completing all tasks in the 2024 season with dedication.",
+      "date": "2024-12-01",
+      "order": 5
+    },
+    {
+      "id": 6,
+      "name": "Career Directions Program",
+      "avatar": "/certificates/efe.png",
+      "text": "Completed the Offline Career Directions Program held by EFE Egypt, focusing on soft skills and career planning.",
+      "date": "2024-09-24",
+      "order": 6
     }
   ]
 }

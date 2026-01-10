@@ -3,23 +3,9 @@
     {
       "id": 1,
       "name": "Mohamed Ahmed",
-      "track": "Full Stack Developer",
-      "logo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&q=80",
-      "url": "https://linkedin.com"
-    },
-    {
-      "id": 2,
-      "name": "Sara Ali",
-      "track": "UI/UX Designer",
-      "logo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&q=80",
-      "url": "https://linkedin.com"
-    },
-    {
-      "id": 3,
-      "name": "Ahmed Hassan",
-      "track": "Mobile Developer",
-      "logo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&q=80",
-      "url": "https://linkedin.com"
+      "track": "Backend Developer",
+      "logo": "team/mohamed.png",
+      "url": "https://www.linkedin.com/in/mohammed-t-603177250/"
     }
   ]
 }

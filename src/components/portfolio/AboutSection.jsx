@@ -107,7 +107,8 @@ const AboutSection = () => {
                   <div className="absolute inset-[1px] bg-bg-gradient-jet rounded-[14px] -z-10" />
                   
                   {/* Certificate Image */}
-                  <div className="relative w-full aspect-[4/3] overflow-hidden bg-onyx">
+                   {/* Certificate Image */}
+                  <div className="relative w-full h-[140px] md:h-[160px] overflow-hidden bg-onyx">
                     <img 
                       src={certificate.avatar} 
                       alt={certificate.name} 
@@ -169,7 +170,7 @@ const AboutSection = () => {
 
               {/* Certificate Info */}
               <div className="text-left">
-                <h3 className="text-[28px] md:text-[32px] text-white-2 font-bold mb-2 tracking-tight break-words">
+                <h3 className="text-[18px] md:text-[32px] text-white-2 font-bold mb-2 tracking-tight break-words">
                   {selectedCertificate.name}
                 </h3>
                 

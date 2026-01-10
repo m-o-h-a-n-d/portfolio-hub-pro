@@ -2,9 +2,9 @@
   "team": [
     {
       "id": 1,
-      "name": "Mohamed Ahmed",
-      "track": "Backend Developer",
-      "logo": "team/mohamed.png",
+      "name": "Mohammed Tarek",
+      "track": "Backend Developer (Laravel) ",
+      "logo": "/team/Mohamed.png",
       "url": "https://www.linkedin.com/in/mohammed-t-603177250/"
     }
   ]

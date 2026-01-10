@@ -95,19 +95,19 @@ const AboutSection = () => {
       <section className="mb-8">
         <h3 className="h3 mb-5">Certificates</h3>
         
-        <div className="-mx-[15px] md:-mx-[30px] px-[15px] md:px-[30px]">
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[15px] md:gap-[30px]">
+        <div className="-mx-[15px] px-[15px]">
+          <ul className="flex gap-[30px] overflow-x-auto has-scrollbar pb-6 scroll-smooth snap-x">
             {certificates?.certificates?.map((certificate) => (
               <li 
                 key={certificate.id} 
-                className="relative group cursor-pointer"
+                className="min-w-[150px] md:min-w-[200px] flex-shrink-0 snap-start relative group cursor-pointer"
                 onClick={() => setSelectedCertificate(certificate)}
               >
                 <div className="relative bg-border-gradient-onyx rounded-[14px] shadow-portfolio-2 overflow-hidden z-10 h-full">
                   <div className="absolute inset-[1px] bg-bg-gradient-jet rounded-[14px] -z-10" />
                   
                   {/* Certificate Image */}
-                  <div className="relative w-full aspect-[4/3] overflow-hidden bg-onyx">
+                  <div className="relative w-full aspect-square overflow-hidden bg-onyx">
                     <img 
                       src={certificate.avatar} 
                       alt={certificate.name} 
@@ -124,7 +124,7 @@ const AboutSection = () => {
                   
                   {/* Certificate Title */}
                   <div className="p-[15px] md:p-[20px]">
-                    <h4 className="h4 text-white-2 truncate text-left">{certificate.name}</h4>
+                    <h4 className="h4 text-white-2 truncate text-left text-sm">{certificate.name}</h4>
                     <time className="text-light-gray/70 text-xs font-medium block mt-2 text-left">
                       {new Date(certificate.date).toLocaleDateString('en-GB', { 
                         month: 'short', 

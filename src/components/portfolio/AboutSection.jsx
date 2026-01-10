@@ -7,12 +7,12 @@ import {
   Wifi, 
   Layout, 
   X, 
-  Quote,
   Code,
   Smartphone,
   Database,
   Globe,
-  Cpu
+  Cpu,
+  ZoomIn
 } from 'lucide-react';
 
 const serviceIcons = {
@@ -31,12 +31,10 @@ const serviceIcons = {
 const AboutSection = () => {
   const profile = useProfile();
   const services = useServices();
-  const testimonials = useTestimonials();
+  const certificates = useTestimonials();
   const clients = useClients();
-  const [selectedTestimonial, setSelectedTestimonial] = useState(null);
+  const [selectedCertificate, setSelectedCertificate] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const defaultText = "Richard was hired to create a corporate identity. We were very pleased with the work done. She has a lot of experience and is very concerned about the needs of client.";
 
   if (!profile) return null;
 
@@ -93,39 +91,46 @@ const AboutSection = () => {
         </ul>
       </section>
 
-      {/* Testimonials Section */}
+      {/* Certificates Section */}
       <section className="mb-8">
-        <h3 className="h3 mb-5">Testimonials</h3>
+        <h3 className="h3 mb-5">Certificates</h3>
         
         <div className="-mx-[15px] md:-mx-[30px] px-[15px] md:px-[30px]">
-          <ul className="flex items-stretch gap-[15px] md:gap-[30px] overflow-x-auto pt-[30px] pb-[35px] has-scrollbar scroll-smooth snap-x snap-mandatory">
-            {testimonials?.testimonials?.map((testimonial) => (
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[15px] md:gap-[30px]">
+            {certificates?.testimonials?.map((certificate) => (
               <li 
-                key={testimonial.id} 
-                className="w-full md:w-[calc(50%-15px)] flex-shrink-0 snap-center"
+                key={certificate.id} 
+                className="relative group cursor-pointer"
+                onClick={() => setSelectedCertificate(certificate)}
               >
-                <div 
-                  className="content-card relative bg-border-gradient-onyx p-[20px] pt-[45px] md:p-[30px] md:pt-[25px] rounded-[14px] shadow-portfolio-2 cursor-pointer h-full z-10 group mt-0"
-                  onClick={() => setSelectedTestimonial(testimonial)}
-                >
+                <div className="relative bg-border-gradient-onyx rounded-[14px] shadow-portfolio-2 overflow-hidden z-10 h-full">
                   <div className="absolute inset-[1px] bg-bg-gradient-jet rounded-[14px] -z-10" />
                   
-                  {/* Avatar */}
-                  <figure className="absolute top-0 left-0 bg-gradient-onyx rounded-[14px] shadow-portfolio-1 overflow-hidden -translate-y-[30px] translate-x-[20px] md:translate-x-[30px] w-[60px] h-[60px] md:w-[80px] md:h-[80px]">
-                    <img src={testimonial.avatar} alt={testimonial.name} className="w-full h-full object-cover" />
-                  </figure>
+                  {/* Certificate Image */}
+                  <div className="relative w-full aspect-[4/3] overflow-hidden bg-onyx">
+                    <img 
+                      src={certificate.avatar} 
+                      alt={certificate.name} 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    
+                    {/* Overlay on hover */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="bg-primary/90 rounded-full p-3 transform scale-0 group-hover:scale-100 transition-transform duration-300">
+                        <ZoomIn className="w-6 h-6 text-white" />
+                      </div>
+                    </div>
+                  </div>
                   
-                  {/* Text Content */}
-                  <div className="min-w-0 text-left ">
-                     <h3 className="h3 mb-3 text-white-2 truncate text-left md:ml-[95px] ml-[80px]">
-                        {testimonial.name}
-                     </h3>
-                     
-                     <div className="text-light-gray text-[15px] font-light leading-relaxed line-clamp-4">
-                       <p className="break-words text-left">
-                         {(testimonial.text && testimonial.text.length > 5) ? testimonial.text : defaultText}
-                       </p>
-                     </div>
+                  {/* Certificate Title */}
+                  <div className="p-[15px] md:p-[20px]">
+                    <h4 className="h4 text-white-2 truncate text-left">{certificate.name}</h4>
+                    <time className="text-light-gray/70 text-xs font-medium block mt-2 text-left">
+                      {new Date(certificate.date).toLocaleDateString('en-GB', { 
+                        month: 'short', 
+                        year: 'numeric' 
+                      })}
+                    </time>
                   </div>
                 </div>
               </li>
@@ -135,55 +140,54 @@ const AboutSection = () => {
       </section>
 
       {/* MODAL */}
-      {selectedTestimonial && createPortal(
+      {selectedCertificate && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           
           <div 
             className="absolute inset-0 bg-black/80 backdrop-blur-[3px] animate-fade-in"
-            onClick={() => setSelectedTestimonial(null)}
+            onClick={() => setSelectedCertificate(null)}
           ></div>
 
-          <div className="relative bg-eerie-black-2 border border-jet rounded-[24px] shadow-portfolio-5 w-full max-w-[850px] p-[40px] animate-scale-up z-10">
+          <div className="relative bg-eerie-black-2 border border-jet rounded-[24px] shadow-portfolio-5 w-full max-w-[900px] p-[40px] animate-scale-up z-10 max-h-[90vh] overflow-y-auto">
             
             <button 
-              onClick={() => setSelectedTestimonial(null)}
+              onClick={() => setSelectedCertificate(null)}
               className="absolute top-5 right-5 bg-onyx hover:bg-jet text-white-2 rounded-[12px] w-12 h-12 flex items-center justify-center transition-all duration-200 shadow-lg z-50 group border border-jet/50"
             >
               <X className="w-6 h-6 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-transform" />
             </button>
 
-            <div className="flex flex-col md:flex-row gap-8 relative z-10">
-              <div className="flex-shrink-0 flex flex-col items-center md:items-start pt-2">
-                <div className="w-[100px] h-[100px] bg-gradient-onyx rounded-[20px] p-[5px] shadow-portfolio-2 mb-5">
-                  <img 
-                    src={selectedTestimonial.avatar} 
-                    alt={selectedTestimonial.name}
-                    className="w-full h-full object-cover rounded-[14px]"
-                  />
-                </div>
-                <div className="flex justify-center w-[100px]">
-                    <Quote className="w-10 h-10 text-orange-yellow-crayola opacity-80" fill="currentColor" stroke="none" />
-                </div>
+            <div className="flex flex-col gap-6 relative z-10">
+              {/* Certificate Image */}
+              <div className="w-full bg-gradient-onyx rounded-[20px] p-[5px] shadow-portfolio-2 overflow-hidden">
+                <img 
+                  src={selectedCertificate.avatar} 
+                  alt={selectedCertificate.name}
+                  className="w-full h-auto object-contain rounded-[14px]"
+                />
               </div>
 
-              <div className="flex-1 pt-1 min-w-0 text-left">
-                <h3 className="text-[28px] md:text-[32px] text-white-2 font-bold mb-2 tracking-tight break-words text-left">
-                  {selectedTestimonial.name}
+              {/* Certificate Info */}
+              <div className="text-left">
+                <h3 className="text-[28px] md:text-[32px] text-white-2 font-bold mb-2 tracking-tight break-words">
+                  {selectedCertificate.name}
                 </h3>
                 
-                <time className="block text-[16px] text-light-gray/70 mb-6 font-medium text-left">
-                  {new Date(selectedTestimonial.date).toLocaleDateString('en-GB', { 
+                <time className="block text-[16px] text-light-gray/70 mb-4 font-medium">
+                  {new Date(selectedCertificate.date).toLocaleDateString('en-GB', { 
                     day: 'numeric', 
                     month: 'long', 
                     year: 'numeric' 
                   })}
                 </time>
 
-                <div className="text-[16px] md:text-[18px] text-light-gray font-light leading-loose max-h-[400px] overflow-y-auto pr-3 custom-scrollbar">
-                   <p className="break-words text-left">
-                      {(selectedTestimonial.text && selectedTestimonial.text.length > 5) ? selectedTestimonial.text : defaultText}
-                   </p>
-                </div>
+                {selectedCertificate.text && selectedCertificate.text.length > 5 && (
+                  <div className="text-[16px] md:text-[18px] text-light-gray font-light leading-loose max-h-[300px] overflow-y-auto pr-3 custom-scrollbar">
+                    <p className="break-words">
+                      {selectedCertificate.text}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

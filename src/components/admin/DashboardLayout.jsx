@@ -18,7 +18,7 @@ import {
   Settings,
   Newspaper,
   Users,
-  Quote,
+  Award,
   Trash2,
   CheckCircle2,
   Clock,
@@ -48,7 +48,7 @@ const DashboardLayout = () => {
     { path: '/admin/services', icon: LayoutDashboard, label: 'Services' },
     { path: '/admin/blogs', icon: Newspaper, label: 'Blogs' },
     { path: '/admin/clients', icon: Users, label: 'Clients' },
-    { path: '/admin/testimonials', icon: Quote, label: 'Testimonials' },
+    { path: '/admin/certificates', icon: Award, label: 'Certificates' },
     { path: '/admin/messages', icon: MessageSquare, label: 'Messages' },
     { path: '/admin/settings', icon: Settings, label: 'Settings & CV' },
   ];

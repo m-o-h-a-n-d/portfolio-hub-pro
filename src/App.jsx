@@ -21,7 +21,7 @@ import MessagesInbox from "./pages/admin/MessagesInbox";
 import SettingsManager from "./pages/admin/SettingsManager";
 import BlogsManager from "./pages/admin/BlogsManager";
 import ClientsManager from "./pages/admin/ClientsManager";
-import TestimonialsManager from "./pages/admin/TestimonialsManager";
+import CertificatesManager from "./pages/admin/CertificatesManager";
 import ServicesManager from "./pages/admin/ServicesManager";
 import ForgetPassword from "./pages/admin/ForgetPassword";
 import OTPVerification from "./pages/admin/OTPVerification";
@@ -63,7 +63,7 @@ const App = () => (
               <Route path="settings" element={<SettingsManager />} />
               <Route path="blogs" element={<BlogsManager />} />
               <Route path="clients" element={<ClientsManager />} />
-              <Route path="testimonials" element={<TestimonialsManager />} />
+              <Route path="certificates" element={<CertificatesManager />} />
               <Route path="services" element={<ServicesManager />} />
             </Route>
             

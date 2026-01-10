@@ -30,7 +30,6 @@ const CertificatesManager = () => {
     try {
       setLoading(true);
       const response = await apiGet('/certificates');
-      // Handle both { certificates: [] } and [] formats
       const data = response.data.certificates || response.data;
       const certificatesList = Array.isArray(data) ? data : [];
       const sortedList = [...certificatesList].sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -174,19 +173,9 @@ const CertificatesManager = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-
-  // Drag and Drop Handlers
   const onDragStart = (e, index) => {
     setDraggedItemIndex(index);
     e.dataTransfer.effectAllowed = 'move';
-    // Create a ghost image or just use the default
     e.currentTarget.style.opacity = '0.4';
   };
 
@@ -197,12 +186,9 @@ const CertificatesManager = () => {
     const newList = [...filteredCertificates];
     const draggedItem = newList[draggedItemIndex];
     
-    // Remove the item from its original position
     newList.splice(draggedItemIndex, 1);
-    // Insert it at the new position
     newList.splice(index, 0, draggedItem);
 
-    // Update orders based on new positions
     const updatedList = newList.map((item, idx) => ({
       ...item,
       order: idx + 1
@@ -219,8 +205,6 @@ const CertificatesManager = () => {
     
     try {
       setIsReordering(true);
-      // In a real app, you'd send the whole new order to the backend
-      // For this mock setup, we'll simulate saving each one or a bulk update
       await apiPost('/certificates/reorder', certificates);
       
       Swal.fire({
@@ -239,6 +223,14 @@ const CertificatesManager = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 relative">
       {isReordering && (
@@ -249,6 +241,7 @@ const CertificatesManager = () => {
           </div>
         </div>
       )}
+      
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="h2 text-white-2">Certificates Manager</h1>
@@ -272,21 +265,20 @@ const CertificatesManager = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {filteredCertificates.map((certificate, index) => (
           <div 
             key={certificate.id}
-            draggable={searchQuery === ''} // Disable drag while searching to avoid confusion
+            draggable={searchQuery === ''}
             onDragStart={(e) => onDragStart(e, index)}
             onDragOver={(e) => onDragOver(e, index)}
             onDragEnd={onDragEnd}
-            className={`bg-card border border-border rounded-[20px] overflow-hidden relative group transition-all duration-300 ${
+            className={`bg-card border border-border rounded-[16px] overflow-hidden relative group transition-all duration-300 ${
               draggedItemIndex === index ? 'scale-95 opacity-50' : 'scale-100 opacity-100'
             } ${searchQuery === '' ? 'cursor-move' : ''}`}
             style={{ background: 'var(--bg-gradient-jet)' }}
           >
-            {/* Certificate Image */}
-            <div className="relative w-full aspect-[4/3] overflow-hidden bg-onyx">
+            <div className="relative w-full aspect-[16/9] overflow-hidden bg-onyx">
               {certificate.avatar ? (
                 <img 
                   src={certificate.avatar} 
@@ -295,31 +287,29 @@ const CertificatesManager = () => {
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-onyx">
-                  <Award className="w-12 h-12 text-muted-foreground opacity-50" />
+                  <Award className="w-8 h-8 text-muted-foreground opacity-50" />
                 </div>
               )}
               
-              {/* Overlay on hover */}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
                 <button 
                   onClick={() => openEditModal(certificate)} 
-                  className="bg-primary/90 rounded-full p-2 transform scale-0 group-hover:scale-100 transition-transform duration-300 hover:bg-primary"
+                  className="bg-primary/90 rounded-full p-1.5 transform scale-0 group-hover:scale-100 transition-transform duration-300 hover:bg-primary"
                 >
-                  <Edit2 className="w-5 h-5 text-white" />
+                  <Edit2 className="w-4 h-4 text-white" />
                 </button>
                 <button 
                   onClick={() => handleDelete(certificate.id)} 
-                  className="bg-destructive/90 rounded-full p-2 transform scale-0 group-hover:scale-100 transition-transform duration-300 hover:bg-destructive"
+                  className="bg-destructive/90 rounded-full p-1.5 transform scale-0 group-hover:scale-100 transition-transform duration-300 hover:bg-destructive"
                 >
-                  <Trash2 className="w-5 h-5 text-white" />
+                  <Trash2 className="w-4 h-4 text-white" />
                 </button>
               </div>
             </div>
 
-            {/* Certificate Info */}
-            <div className="p-4">
-              <h3 className="text-foreground font-medium line-clamp-2">{certificate.name}</h3>
-              <p className="text-muted-foreground text-xs mt-2">
+            <div className="p-3">
+              <h3 className="text-foreground font-medium line-clamp-2 text-sm">{certificate.name}</h3>
+              <p className="text-muted-foreground text-xs mt-1">
                 {new Date(certificate.date).toLocaleDateString('en-GB', { 
                   month: 'short', 
                   year: 'numeric' 
@@ -348,7 +338,6 @@ const CertificatesManager = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Image Preview */}
               <div>
                 <label className="text-light-gray/70 text-xs uppercase mb-3 block">Certificate Image</label>
                 <div className="relative w-full aspect-[4/3] rounded-xl bg-onyx border border-border overflow-hidden group">
@@ -366,7 +355,6 @@ const CertificatesManager = () => {
                 </div>
               </div>
 
-              {/* Certificate Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-light-gray/70 text-xs uppercase mb-2 block">Certificate Name</label>
@@ -393,7 +381,6 @@ const CertificatesManager = () => {
                 </div>
               </div>
 
-              {/* Description (Optional) */}
               <div>
                 <label className="text-light-gray/70 text-xs uppercase mb-2 block">Description (Optional)</label>
                 <textarea 
@@ -405,7 +392,6 @@ const CertificatesManager = () => {
                 />
               </div>
 
-              {/* Actions */}
               <div className="flex gap-4 mt-6">
                 <button type="button" onClick={closeModal} className="flex-1 px-4 py-3 rounded-xl bg-onyx text-muted-foreground hover:bg-onyx/80 transition-colors">Cancel</button>
                 <button type="submit" className="form-btn !w-auto flex-1">

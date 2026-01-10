@@ -24,7 +24,8 @@ const BlogSection = () => {
             <li key={post.id}>
               <a href={post.link || "#"} target="_blank" rel="noopener noreferrer" className="blog-card block">
                 {/* Banner */}
-                <figure className="blog-banner w-full h-[200px] md:h-auto rounded-xl overflow-hidden">
+                 {/* Banner */}
+                <figure className="blog-banner w-full h-[300px] rounded-xl overflow-hidden">
                   <img 
                     src={post.image} 
                     alt={post.title}

@@ -100,14 +100,14 @@ const AboutSection = () => {
             {certificates?.certificates?.map((certificate) => (
               <li 
                 key={certificate.id} 
-                className="min-w-[150px] md:min-w-[200px] flex-shrink-0 snap-start relative group cursor-pointer"
+                className="min-w-[120px] md:min-w-[150px] flex-shrink-0 snap-start relative group cursor-pointer"
                 onClick={() => setSelectedCertificate(certificate)}
               >
                 <div className="relative bg-border-gradient-onyx rounded-[14px] shadow-portfolio-2 overflow-hidden z-10 h-full">
                   <div className="absolute inset-[1px] bg-bg-gradient-jet rounded-[14px] -z-10" />
                   
                   {/* Certificate Image */}
-                  <div className="relative w-full aspect-square overflow-hidden bg-onyx">
+                  <div className="relative w-full aspect-[4/3] overflow-hidden bg-onyx">
                     <img 
                       src={certificate.avatar} 
                       alt={certificate.name} 

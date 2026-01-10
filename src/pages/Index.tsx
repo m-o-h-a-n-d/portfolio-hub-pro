@@ -6,7 +6,7 @@ const Index = () => {
   return (
     <>
       <SeoHead
-        name="Mohanad Ahmed Shehata"
+        name="Mohanad Ahmed Shehata (مهند أحمد شحاتة)"
         jobTitle="Full Stack Web Developer"
         websiteUrl="https://mohanadportfolio.vercel.app/" // Replace with your actual deployed domain
         imageUrl="https://mohanadportfolio.vercel.app/image.png" // Replace with your actual preview image URL

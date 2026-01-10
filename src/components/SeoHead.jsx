@@ -52,7 +52,7 @@ const SeoHead = ({ name, jobTitle, websiteUrl, imageUrl, description }) => {
       <meta name="description" content={finalDescription} />
       <meta
         name="keywords"
-        content={`${finalName}, ${finalJobTitle}, portfolio, React, Laravel, Web Developer`}
+        content={`${finalName}, مهند أحمد شحاتة, ${finalJobTitle}, مطور ويب, portfolio, React, Laravel, Web Developer`}
       />
       <meta name="author" content={finalName} />
       <meta name="robots" content="index, follow" />

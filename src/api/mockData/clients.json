@@ -2,39 +2,24 @@
   "clients": [
     {
       "id": 1,
-      "name": "TechCorp",
-      "logo": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=150&h=80&fit=crop&q=80",
-      "url": "#"
+      "name": "Mohamed Ahmed",
+      "track": "Full Stack Developer",
+      "logo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&q=80",
+      "url": "https://linkedin.com"
     },
     {
       "id": 2,
-      "name": "InnovateTech",
-      "logo": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=150&h=80&fit=crop&q=80",
-      "url": "#"
+      "name": "Sara Ali",
+      "track": "UI/UX Designer",
+      "logo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&q=80",
+      "url": "https://linkedin.com"
     },
     {
       "id": 3,
-      "name": "DesignStudio",
-      "logo": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=150&h=80&fit=crop&q=80",
-      "url": "#"
-    },
-    {
-      "id": 4,
-      "name": "CreativeAgency",
-      "logo": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=150&h=80&fit=crop&q=80",
-      "url": "#"
-    },
-    {
-      "id": 5,
-      "name": "StartupHub",
-      "logo": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=150&h=80&fit=crop&q=80",
-      "url": "#"
-    },
-    {
-      "id": 6,
-      "name": "GlobalBrand",
-      "logo": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=150&h=80&fit=crop&q=80",
-      "url": "#"
+      "name": "Ahmed Hassan",
+      "track": "Mobile Developer",
+      "logo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&q=80",
+      "url": "https://linkedin.com"
     }
   ]
 }

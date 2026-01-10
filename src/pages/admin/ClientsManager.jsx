@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { apiGet, apiPost } from '../../api/request';
-import { Plus, Edit2, Trash2, X, Save, Image as ImageIcon, Link as LinkIcon, Search } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Save, Image as ImageIcon, Link as LinkIcon, Search, Briefcase } from 'lucide-react';
 import Swal from '../../lib/swal';
 
 const ClientsManager = () => {
@@ -13,6 +13,7 @@ const ClientsManager = () => {
   const [editingItem, setEditingItem] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
+    track: '',
     logo: '',
     url: '#'
   });
@@ -25,13 +26,12 @@ const ClientsManager = () => {
     try {
       setLoading(true);
       const response = await apiGet('/clients');
-      // Handle both { clients: [] } and [] formats
       const data = response.data.clients || response.data;
       const clientsList = Array.isArray(data) ? data : [];
       setClients(clientsList);
       setFilteredClients(clientsList);
     } catch (error) {
-      console.error('Error fetching clients:', error);
+      console.error('Error fetching team members:', error);
     } finally {
       setLoading(false);
     }
@@ -40,7 +40,7 @@ const ClientsManager = () => {
   const openAddModal = () => {
     setModalMode('add');
     setEditingItem(null);
-    setFormData({ name: '', logo: '', url: '#' });
+    setFormData({ name: '', track: '', logo: '', url: '#' });
     setModalOpen(true);
   };
 
@@ -49,6 +49,7 @@ const ClientsManager = () => {
     setEditingItem(client);
     setFormData({
       name: client.name,
+      track: client.track || '',
       logo: client.logo,
       url: client.url || '#'
     });
@@ -69,7 +70,8 @@ const ClientsManager = () => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
     const filtered = clients.filter(client => 
-      client.name.toLowerCase().includes(query)
+      client.name.toLowerCase().includes(query) || 
+      (client.track && client.track.toLowerCase().includes(query))
     );
     setFilteredClients(filtered);
   };
@@ -96,24 +98,27 @@ const ClientsManager = () => {
 
       if (modalMode === 'add') {
         setClients(prev => [...prev, submissionData]);
+        setFilteredClients(prev => [...prev, submissionData]);
       } else {
-        setClients(prev => prev.map(c => c.id === editingItem.id ? submissionData : c));
+        const updated = clients.map(c => c.id === editingItem.id ? submissionData : c);
+        setClients(updated);
+        setFilteredClients(updated);
       }
 
       closeModal();
       Swal.fire({
         icon: 'success',
         title: 'Success!',
-        text: `Client ${modalMode === 'add' ? 'added' : 'updated'} successfully!`,
+        text: `Team member ${modalMode === 'add' ? 'added' : 'updated'} successfully!`,
         timer: 2000,
         showConfirmButton: false,
       });
     } catch (error) {
-      console.error('Error saving client:', error);
+      console.error('Error saving team member:', error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Error saving client',
+        text: 'Error saving team member',
       });
     }
   };
@@ -130,16 +135,18 @@ const ClientsManager = () => {
 
     if (!result.isConfirmed) return;
     try {
-      setClients(prev => prev.filter(c => c.id !== id));
+      const updated = clients.filter(c => c.id !== id);
+      setClients(updated);
+      setFilteredClients(updated);
       Swal.fire({
         icon: 'success',
         title: 'Deleted!',
-        text: 'Client deleted successfully!',
+        text: 'Team member deleted successfully!',
         timer: 2000,
         showConfirmButton: false,
       });
     } catch (error) {
-      console.error('Error deleting client:', error);
+      console.error('Error deleting team member:', error);
     }
   };
 
@@ -155,15 +162,15 @@ const ClientsManager = () => {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="h2 text-white-2">Clients Manager</h1>
-          <p className="text-muted-foreground text-sm mt-1">Manage your client logos and links</p>
+          <h1 className="h2 text-white-2">Myteam Manager</h1>
+          <p className="text-muted-foreground text-sm mt-1">Manage your team members, their tracks and portfolios</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Search clients..."
+              placeholder="Search developers..."
               value={searchQuery}
               onChange={handleSearch}
               className="form-input !pl-10 !py-2 !w-64"
@@ -171,7 +178,7 @@ const ClientsManager = () => {
           </div>
           <button onClick={openAddModal} className="form-btn !w-auto !px-6">
             <Plus className="w-5 h-5" />
-            <span>Add Client</span>
+            <span>Add Member</span>
           </button>
         </div>
       </div>
@@ -183,14 +190,15 @@ const ClientsManager = () => {
             className="bg-card border border-border rounded-[20px] p-6 flex flex-col items-center gap-4 group relative"
             style={{ background: 'var(--bg-gradient-jet)' }}
           >
-            <div className="w-24 h-24 rounded-xl bg-onyx border border-border flex items-center justify-center overflow-hidden p-4">
-              <img src={client.logo} alt={client.name} className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all" />
+            <div className="w-24 h-24 rounded-xl bg-onyx border border-border flex items-center justify-center overflow-hidden">
+              <img src={client.logo} alt={client.name} className="w-full h-full object-cover transition-all" />
             </div>
             <div className="text-center">
               <h3 className="text-foreground font-medium">{client.name}</h3>
+              <p className="text-orange-yellow text-xs mb-2">{client.track || 'No Track'}</p>
               <a href={client.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center justify-center gap-1 mt-1">
                 <LinkIcon className="w-3 h-3" />
-                Visit Website
+                Portfolio / LinkedIn
               </a>
             </div>
             <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -209,7 +217,7 @@ const ClientsManager = () => {
         <div className="admin-modal-overlay active" onClick={closeModal}>
           <div className="admin-modal max-w-md" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="h3 text-white-2">{modalMode === 'add' ? 'Add Client' : 'Edit Client'}</h3>
+              <h3 className="h3 text-white-2">{modalMode === 'add' ? 'Add Member' : 'Edit Member'}</h3>
               <button onClick={closeModal} className="p-2 rounded-lg bg-onyx text-muted-foreground hover:text-foreground">
                 <X className="w-5 h-5" />
               </button>
@@ -217,7 +225,7 @@ const ClientsManager = () => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="text-light-gray/70 text-xs uppercase mb-2 block">Company Logo</label>
+                <label className="text-light-gray/70 text-xs uppercase mb-2 block">Member Photo</label>
                 <div className="border-2 border-dashed border-border rounded-xl p-6 text-center">
                   {formData.logo ? (
                     <div className="relative">
@@ -229,18 +237,25 @@ const ClientsManager = () => {
                   ) : (
                     <label className="cursor-pointer">
                       <ImageIcon className="w-10 h-10 mx-auto text-muted-foreground mb-2" />
-                      <p className="text-muted-foreground text-sm">Click to upload logo</p>
+                      <p className="text-muted-foreground text-sm">Click to upload photo</p>
                       <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
                     </label>
                   )}
                 </div>
               </div>
               <div>
-                <label className="text-light-gray/70 text-xs uppercase mb-2 block">Company Name</label>
+                <label className="text-light-gray/70 text-xs uppercase mb-2 block">Full Name</label>
                 <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="form-input" required />
               </div>
               <div>
-                <label className="text-light-gray/70 text-xs uppercase mb-2 block">Website URL</label>
+                <label className="text-light-gray/70 text-xs uppercase mb-2 block">Track (e.g. Full Stack Developer)</label>
+                <div className="relative">
+                  <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input type="text" name="track" value={formData.track} onChange={handleInputChange} className="form-input !pl-10" placeholder="Developer Track" required />
+                </div>
+              </div>
+              <div>
+                <label className="text-light-gray/70 text-xs uppercase mb-2 block">Portfolio / LinkedIn URL</label>
                 <input type="url" name="url" value={formData.url} onChange={handleInputChange} className="form-input" placeholder="https://..." />
               </div>
 

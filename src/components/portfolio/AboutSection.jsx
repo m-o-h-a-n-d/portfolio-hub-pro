@@ -195,19 +195,23 @@ const AboutSection = () => {
         document.body
       )}
 
-      {/* Clients */}
+      {/* Myteam */}
       <section className="mb-4">
-        <h3 className="h3 mb-5">Clients</h3>
+        <h3 className="h3 mb-5">Myteam</h3>
         <div className="-mx-[15px] px-[15px]">
             <ul className="flex gap-[30px] overflow-x-auto has-scrollbar pb-6 scroll-smooth snap-x">
-            {clients?.clients?.map((client) => (
-                <li key={client.id} className="min-w-[50%] md:min-w-[calc(33.33%-20px)] lg:min-w-[calc(25%-30px)] flex-shrink-0 snap-start">
-                <a href={client.url} className="block group">
-                    <img 
-                    src={client.logo} 
-                    alt={client.name}
-                    className="w-full grayscale group-hover:grayscale-0 transition-all duration-300 opacity-60 group-hover:opacity-100"
-                    />
+            {clients?.clients?.map((member) => (
+                <li key={member.id} className="min-w-[150px] md:min-w-[180px] flex-shrink-0 snap-start">
+                <a href={member.url} target="_blank" rel="noopener noreferrer" className="block group text-center">
+                    <div className="relative overflow-hidden rounded-xl mb-3">
+                      <img 
+                      src={member.logo} 
+                      alt={member.name}
+                      className="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-110"
+                      />
+                    </div>
+                    <h4 className="text-white-1 font-medium text-lg mb-1">{member.name}</h4>
+                    <p className="text-orange-yellow text-sm">{member.track}</p>
                 </a>
                 </li>
             ))}

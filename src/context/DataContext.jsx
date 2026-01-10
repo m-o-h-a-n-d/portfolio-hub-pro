@@ -8,8 +8,8 @@ import {
   API_SKILLS_GET,
   API_PORTFOLIO_LIST,
   API_BLOG_LIST,
-  API_TESTIMONIALS_LIST,
-  API_CLIENTS_LIST,
+  API_CERTIFICATES_LIST,
+  API_TEAM_LIST,
   API_SERVICES_LIST,
   API_SETTINGS_GET
 } from '../api/endpoints';
@@ -20,8 +20,8 @@ const ResumeContext = createContext(null);
 const PortfolioContext = createContext(null);
 const BlogContext = createContext(null);
 const ServicesContext = createContext(null);
-const TestimonialsContext = createContext(null);
-const ClientsContext = createContext(null);
+const CertificatesContext = createContext(null);
+const TeamContext = createContext(null);
 const SettingsContext = createContext(null);
 
 // Custom hooks for accessing data
@@ -30,8 +30,8 @@ export const useResume = () => useContext(ResumeContext);
 export const usePortfolio = () => useContext(PortfolioContext);
 export const useBlog = () => useContext(BlogContext);
 export const useServices = () => useContext(ServicesContext);
-export const useTestimonials = () => useContext(TestimonialsContext);
-export const useClients = () => useContext(ClientsContext);
+export const useCertificates = () => useContext(CertificatesContext);
+export const useTeam = () => useContext(TeamContext);
 export const useSettings = () => useContext(SettingsContext);
 
 // Data Provider Component
@@ -41,8 +41,8 @@ export const DataProvider = ({ children }) => {
   const [portfolio, setPortfolio] = useState(null);
   const [blog, setBlog] = useState(null);
   const [services, setServices] = useState(null);
-  const [testimonials, setTestimonials] = useState(null);
-  const [clients, setClients] = useState(null);
+  const [certificates, setCertificates] = useState(null);
+  const [team, setTeam] = useState(null);
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -60,8 +60,8 @@ export const DataProvider = ({ children }) => {
           skillsRes,
           portfolioRes,
           blogRes,
-          testimonialsRes,
-          clientsRes,
+          certificatesRes,
+          teamRes,
           servicesRes,
           settingsRes
         ] = await Promise.all([
@@ -72,8 +72,8 @@ export const DataProvider = ({ children }) => {
           apiGet(API_SKILLS_GET),
           apiGet(API_PORTFOLIO_LIST),
           apiGet(API_BLOG_LIST),
-          apiGet(API_TESTIMONIALS_LIST),
-          apiGet(API_CLIENTS_LIST),
+          apiGet(API_CERTIFICATES_LIST),
+          apiGet(API_TEAM_LIST),
           apiGet(API_SERVICES_LIST),
           apiGet(API_SETTINGS_GET)
         ]);
@@ -91,8 +91,8 @@ export const DataProvider = ({ children }) => {
         setResume(reconstructedResume);
         setPortfolio(portfolioRes.data);
         setBlog(blogRes.data);
-        setTestimonials(testimonialsRes.data);
-        setClients(clientsRes.data);
+        setCertificates(certificatesRes.data);
+        setTeam(teamRes.data);
         setServices(servicesRes.data);
         setSettings(settingsRes.data);
 
@@ -135,11 +135,11 @@ export const DataProvider = ({ children }) => {
           <PortfolioContext.Provider value={portfolio}>
             <BlogContext.Provider value={blog}>
               <ServicesContext.Provider value={services}>
-                <TestimonialsContext.Provider value={testimonials}>
-                  <ClientsContext.Provider value={clients}>
+                <CertificatesContext.Provider value={certificates}>
+                  <TeamContext.Provider value={team}>
                     {children}
-                  </ClientsContext.Provider>
-                </TestimonialsContext.Provider>
+                  </TeamContext.Provider>
+                </CertificatesContext.Provider>
               </ServicesContext.Provider>
             </BlogContext.Provider>
           </PortfolioContext.Provider>

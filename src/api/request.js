@@ -12,8 +12,8 @@ import portfolioData from './mockData/portfolio.json';
 import blogData from './mockData/blog.json';
 import messagesData from './mockData/messages.json';
 import servicesData from './mockData/services.json';
-import testimonialsData from './mockData/testimonials.json';
-import clientsData from './mockData/clients.json';
+import certificatesData from './mockData/certificates.json';
+import teamData from './mockData/team.json';
 import settingsData from './mockData/settings.json';
 
 // Mock data mapping
@@ -27,8 +27,8 @@ const mockDataMap = {
   '/blog': blogData,
   '/messages': messagesData,
   '/services': servicesData,
-  '/testimonials': testimonialsData,
-  '/clients': clientsData,
+  '/certificates': certificatesData,
+  '/team': teamData,
   '/settings': settingsData,
 };
 

@@ -183,7 +183,7 @@
     @apply relative z-10;
   }
 
-  .testimonial-text {
+  .certificate-text {
     white-space: normal; /* ينزل سطر جديد */
     overflow-wrap: break-word; /* يكسر الكلمات الطويلة */
     word-break: break-word;

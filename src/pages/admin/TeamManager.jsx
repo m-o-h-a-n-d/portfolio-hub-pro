@@ -3,9 +3,9 @@ import { apiGet, apiPost } from '../../api/request';
 import { Plus, Edit2, Trash2, X, Save, Image as ImageIcon, Link as LinkIcon, Search, Briefcase } from 'lucide-react';
 import Swal from '../../lib/swal';
 
-const ClientsManager = () => {
-  const [clients, setClients] = useState([]);
-  const [filteredClients, setFilteredClients] = useState([]);
+const TeamManager = () => {
+  const [team, setTeam] = useState([]);
+  const [filteredTeam, setFilteredTeam] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -19,17 +19,17 @@ const ClientsManager = () => {
   });
 
   useEffect(() => {
-    fetchClients();
+    fetchTeam();
   }, []);
 
-  const fetchClients = async () => {
+  const fetchTeam = async () => {
     try {
       setLoading(true);
-      const response = await apiGet('/clients');
-      const data = response.data.clients || response.data;
-      const clientsList = Array.isArray(data) ? data : [];
-      setClients(clientsList);
-      setFilteredClients(clientsList);
+      const response = await apiGet('/team');
+      const data = response.data.team || response.data;
+      const teamList = Array.isArray(data) ? data : [];
+      setTeam(teamList);
+      setFilteredTeam(teamList);
     } catch (error) {
       console.error('Error fetching team members:', error);
     } finally {
@@ -44,14 +44,14 @@ const ClientsManager = () => {
     setModalOpen(true);
   };
 
-  const openEditModal = (client) => {
+  const openEditModal = (member) => {
     setModalMode('edit');
-    setEditingItem(client);
+    setEditingItem(member);
     setFormData({
-      name: client.name,
-      track: client.track || '',
-      logo: client.logo,
-      url: client.url || '#'
+      name: member.name,
+      track: member.track || '',
+      logo: member.logo,
+      url: member.url || '#'
     });
     setModalOpen(true);
   };
@@ -69,11 +69,11 @@ const ClientsManager = () => {
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
-    const filtered = clients.filter(client => 
-      client.name.toLowerCase().includes(query) || 
-      (client.track && client.track.toLowerCase().includes(query))
+    const filtered = team.filter(member => 
+      member.name.toLowerCase().includes(query) || 
+      (member.track && member.track.toLowerCase().includes(query))
     );
-    setFilteredClients(filtered);
+    setFilteredTeam(filtered);
   };
 
   const handleImageUpload = (e) => {
@@ -94,15 +94,15 @@ const ClientsManager = () => {
         ...formData,
         id: editingItem?.id || Date.now()
       };
-      await apiPost('/clients', submissionData);
+      await apiPost('/team', submissionData);
 
       if (modalMode === 'add') {
-        setClients(prev => [...prev, submissionData]);
-        setFilteredClients(prev => [...prev, submissionData]);
+        setTeam(prev => [...prev, submissionData]);
+        setFilteredTeam(prev => [...prev, submissionData]);
       } else {
-        const updated = clients.map(c => c.id === editingItem.id ? submissionData : c);
-        setClients(updated);
-        setFilteredClients(updated);
+        const updated = team.map(c => c.id === editingItem.id ? submissionData : c);
+        setTeam(updated);
+        setFilteredTeam(updated);
       }
 
       closeModal();
@@ -135,9 +135,9 @@ const ClientsManager = () => {
 
     if (!result.isConfirmed) return;
     try {
-      const updated = clients.filter(c => c.id !== id);
-      setClients(updated);
-      setFilteredClients(updated);
+      const updated = team.filter(c => c.id !== id);
+      setTeam(updated);
+      setFilteredTeam(updated);
       Swal.fire({
         icon: 'success',
         title: 'Deleted!',
@@ -162,7 +162,7 @@ const ClientsManager = () => {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="h2 text-white-2">Myteam Manager</h1>
+          <h1 className="h2 text-white-2">team Manager</h1>
           <p className="text-muted-foreground text-sm mt-1">Manage your team members, their tracks and portfolios</p>
         </div>
         <div className="flex items-center gap-3">
@@ -184,28 +184,28 @@ const ClientsManager = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredClients.map((client) => (
+        {filteredTeam.map((member) => (
           <div 
-            key={client.id}
+            key={member.id}
             className="bg-card border border-border rounded-[20px] p-6 flex flex-col items-center gap-4 group relative"
             style={{ background: 'var(--bg-gradient-jet)' }}
           >
             <div className="w-24 h-24 rounded-xl bg-onyx border border-border flex items-center justify-center overflow-hidden">
-              <img src={client.logo} alt={client.name} className="w-full h-full object-cover transition-all" />
+              <img src={member.logo} alt={member.name} className="w-full h-full object-cover transition-all" />
             </div>
             <div className="text-center">
-              <h3 className="text-foreground font-medium">{client.name}</h3>
-              <p className="text-orange-yellow text-xs mb-2">{client.track || 'No Track'}</p>
-              <a href={client.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center justify-center gap-1 mt-1">
+              <h3 className="text-foreground font-medium">{member.name}</h3>
+              <p className="text-orange-yellow text-xs mb-2">{member.track || 'No Track'}</p>
+              <a href={member.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center justify-center gap-1 mt-1">
                 <LinkIcon className="w-3 h-3" />
                 Portfolio / LinkedIn
               </a>
             </div>
             <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button onClick={() => openEditModal(client)} className="p-2 rounded-lg bg-onyx text-primary hover:bg-primary/20">
+              <button onClick={() => openEditModal(member)} className="p-2 rounded-lg bg-onyx text-primary hover:bg-primary/20">
                 <Edit2 className="w-4 h-4" />
               </button>
-              <button onClick={() => handleDelete(client.id)} className="p-2 rounded-lg bg-onyx text-destructive hover:bg-destructive/20">
+              <button onClick={() => handleDelete(member.id)} className="p-2 rounded-lg bg-onyx text-destructive hover:bg-destructive/20">
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
@@ -274,4 +274,4 @@ const ClientsManager = () => {
   );
 };
 
-export default ClientsManager;
+export default TeamManager;

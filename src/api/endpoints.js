@@ -75,14 +75,14 @@ export const API_BLOG_UPDATE = `${BASE_URL}/blog`;
 export const API_BLOG_DELETE = `${BASE_URL}/blog`;
 
 // ==========================================
-// 7. Testimonials & Clients
+// 7. Certificates & Team
 // ==========================================
-// [GET] List testimonials
-export const API_TESTIMONIALS_LIST = `${BASE_URL}/testimonials`;
-// [POST] Add testimonial
-export const API_TESTIMONIALS_CREATE = `${BASE_URL}/testimonials`;
-// [DELETE] Delete testimonial
-export const API_TESTIMONIALS_DELETE = `${BASE_URL}/testimonials`;
+// [GET] List certificates
+export const API_CERTIFICATES_LIST = `${BASE_URL}/certificates`;
+// [POST] Add certificate
+export const API_CERTIFICATES_CREATE = `${BASE_URL}/certificates`;
+// [DELETE] Delete certificate
+export const API_CERTIFICATES_DELETE = `${BASE_URL}/certificates`;
 
 // ==========================================
 // 7.5 Services Section
@@ -96,12 +96,12 @@ export const API_SERVICES_UPDATE = (id) => `${BASE_URL}/services/${id}`;
 // [DELETE] Delete service (Requires ID)
 export const API_SERVICES_DELETE = (id) => `${BASE_URL}/services/${id}`;
 
-// [GET] List clients
-export const API_CLIENTS_LIST = `${BASE_URL}/clients`;
-// [POST] Add client
-export const API_CLIENTS_CREATE = `${BASE_URL}/clients`;
-// [DELETE] Delete client
-export const API_CLIENTS_DELETE = `${BASE_URL}/clients`;
+// [GET] List team
+export const API_TEAM_LIST = `${BASE_URL}/team`;
+// [POST] Add team member
+export const API_TEAM_CREATE = `${BASE_URL}/team`;
+// [DELETE] Delete team member
+export const API_TEAM_DELETE = `${BASE_URL}/team`;
 
 // ==========================================
 // 8. Communication

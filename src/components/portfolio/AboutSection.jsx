@@ -1,4 +1,4 @@
-import { useProfile, useServices, useTestimonials, useClients } from '../../context/DataContext';
+import { useProfile, useServices, useCertificates, useTeam } from '../../context/DataContext';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { 
@@ -31,8 +31,8 @@ const serviceIcons = {
 const AboutSection = () => {
   const profile = useProfile();
   const services = useServices();
-  const certificates = useTestimonials();
-  const clients = useClients();
+  const certificates = useCertificates();
+  const team = useTeam();
   const [selectedCertificate, setSelectedCertificate] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -97,7 +97,7 @@ const AboutSection = () => {
         
         <div className="-mx-[15px] md:-mx-[30px] px-[15px] md:px-[30px]">
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[15px] md:gap-[30px]">
-            {certificates?.testimonials?.map((certificate) => (
+            {certificates?.certificates?.map((certificate) => (
               <li 
                 key={certificate.id} 
                 className="relative group cursor-pointer"
@@ -195,12 +195,12 @@ const AboutSection = () => {
         document.body
       )}
 
-      {/* Myteam */}
+      {/* team */}
       <section className="mb-4">
-        <h3 className="h3 mb-5">Myteam</h3>
+        <h3 className="h3 mb-5">team</h3>
         <div className="-mx-[15px] px-[15px]">
             <ul className="flex gap-[30px] overflow-x-auto has-scrollbar pb-6 scroll-smooth snap-x">
-            {clients?.clients?.map((member) => (
+            {team?.team?.map((member) => (
                 <li key={member.id} className="min-w-[150px] md:min-w-[180px] flex-shrink-0 snap-start">
                 <a href={member.url} target="_blank" rel="noopener noreferrer" className="block group text-center">
                     <div className="relative overflow-hidden rounded-xl mb-3">

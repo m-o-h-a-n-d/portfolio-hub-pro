@@ -47,7 +47,7 @@ const DashboardLayout = () => {
     { path: '/admin/portfolio', icon: Briefcase, label: 'Portfolio' },
     { path: '/admin/services', icon: LayoutDashboard, label: 'Services' },
     { path: '/admin/blogs', icon: Newspaper, label: 'Blogs' },
-    { path: '/admin/clients', icon: Users, label: 'Myteam' },
+    { path: '/admin/team', icon: Users, label: 'team' },
     { path: '/admin/certificates', icon: Award, label: 'Certificates' },
     { path: '/admin/messages', icon: MessageSquare, label: 'Messages' },
     { path: '/admin/settings', icon: Settings, label: 'Settings & CV' },

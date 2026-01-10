@@ -20,7 +20,7 @@ import PortfolioManager from "./pages/admin/PortfolioManager";
 import MessagesInbox from "./pages/admin/MessagesInbox";
 import SettingsManager from "./pages/admin/SettingsManager";
 import BlogsManager from "./pages/admin/BlogsManager";
-import ClientsManager from "./pages/admin/ClientsManager";
+import TeamManager from "./pages/admin/TeamManager";
 import CertificatesManager from "./pages/admin/CertificatesManager";
 import ServicesManager from "./pages/admin/ServicesManager";
 import ForgetPassword from "./pages/admin/ForgetPassword";
@@ -62,7 +62,7 @@ const App = () => (
               <Route path="messages" element={<MessagesInbox />} />
               <Route path="settings" element={<SettingsManager />} />
               <Route path="blogs" element={<BlogsManager />} />
-              <Route path="clients" element={<ClientsManager />} />
+              <Route path="team" element={<TeamManager />} />
               <Route path="certificates" element={<CertificatesManager />} />
               <Route path="services" element={<ServicesManager />} />
             </Route>

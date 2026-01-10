@@ -26,9 +26,9 @@ const CertificatesManager = () => {
   const fetchCertificates = async () => {
     try {
       setLoading(true);
-      const response = await apiGet('/testimonials');
-      // Handle both { testimonials: [] } and [] formats
-      const data = response.data.testimonials || response.data;
+      const response = await apiGet('/certificates');
+      // Handle both { certificates: [] } and [] formats
+      const data = response.data.certificates || response.data;
       const certificatesList = Array.isArray(data) ? data : [];
       setCertificates(certificatesList);
       setFilteredCertificates(certificatesList);
@@ -105,7 +105,7 @@ const CertificatesManager = () => {
         ...formData,
         id: editingItem?.id || Date.now()
       };
-      await apiPost('/testimonials', submissionData);
+      await apiPost('/certificates', submissionData);
 
       if (modalMode === 'add') {
         setCertificates(prev => [...prev, submissionData]);

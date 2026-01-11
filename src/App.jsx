@@ -67,7 +67,9 @@ const App = () => (
               <Route path="services" element={<ServicesManager />} />
             </Route>
             
-            {/* 404 */}
+            {/* Error Pages */}
+            <Route path="/error/500" element={<NotFound code="500" message="Internal Server Error. Something went wrong on our end." />} />
+            <Route path="/error/403" element={<NotFound code="403" message="Access Denied. You don't have permission to view this page." />} />
             <Route path="*" element={<NotFound />} />
               </Routes>
             </NotificationProvider>

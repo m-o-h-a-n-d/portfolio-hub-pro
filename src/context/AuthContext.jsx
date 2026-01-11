@@ -1,4 +1,5 @@
 import { useState, createContext, useContext, useEffect } from 'react';
+import ReactLogoAnimation from '../components/portfolio/ReactLogoAnimation';
 import { isAuthenticated, removeAuthToken, apiFetch, setAuthToken } from '../api/request';
 import { useNavigate } from 'react-router-dom';
 
@@ -59,79 +60,7 @@ export const AuthProvider = ({ children }) => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <svg
-          className="w-16 h-16 animate-spin"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{
-            animationDuration: '3s',
-          }}
-        >
-          {/* React Logo */}
-          <circle
-            cx="12"
-            cy="12"
-            r="2"
-            fill="currentColor"
-            className="text-primary"
-          />
-          {/* Electron orbits */}
-          <ellipse
-            cx="12"
-            cy="12"
-            rx="8"
-            ry="3"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            className="text-primary/60"
-          />
-          <ellipse
-            cx="12"
-            cy="12"
-            rx="8"
-            ry="3"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            className="text-primary/60"
-            transform="rotate(60 12 12)"
-          />
-          <ellipse
-            cx="12"
-            cy="12"
-            rx="8"
-            ry="3"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            className="text-primary/60"
-            transform="rotate(120 12 12)"
-          />
-          {/* Electrons */}
-          <circle
-            cx="20"
-            cy="12"
-            r="1.5"
-            fill="currentColor"
-            className="text-primary"
-          />
-          <circle
-            cx="8"
-            cy="16"
-            r="1.5"
-            fill="currentColor"
-            className="text-primary"
-          />
-          <circle
-            cx="8"
-            cy="8"
-            r="1.5"
-            fill="currentColor"
-            className="text-primary"
-          />
-        </svg>
+        <ReactLogoAnimation size="w-16 h-16" />
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react';
+import ReactLogoAnimation from '../components/portfolio/ReactLogoAnimation';
 import { apiGet } from '../api/request';
 import { 
   API_PROFILE_GET, 
@@ -111,81 +112,8 @@ export const DataProvider = ({ children }) => {
     return (
       <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
         <div className="text-center">
-          {/* React Logo Animation */}
           <div className="flex items-center justify-center mb-8">
-            <svg
-              className="w-24 h-24 animate-spin"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{
-                animationDuration: '3s',
-              }}
-            >
-              {/* React Logo */}
-              <circle
-                cx="12"
-                cy="12"
-                r="2"
-                fill="currentColor"
-                className="text-primary"
-              />
-              {/* Electron orbits */}
-              <ellipse
-                cx="12"
-                cy="12"
-                rx="8"
-                ry="3"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                className="text-primary/60"
-              />
-              <ellipse
-                cx="12"
-                cy="12"
-                rx="8"
-                ry="3"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                className="text-primary/60"
-                transform="rotate(60 12 12)"
-              />
-              <ellipse
-                cx="12"
-                cy="12"
-                rx="8"
-                ry="3"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                className="text-primary/60"
-                transform="rotate(120 12 12)"
-              />
-              {/* Electrons */}
-              <circle
-                cx="20"
-                cy="12"
-                r="1.5"
-                fill="currentColor"
-                className="text-primary"
-              />
-              <circle
-                cx="8"
-                cy="16"
-                r="1.5"
-                fill="currentColor"
-                className="text-primary"
-              />
-              <circle
-                cx="8"
-                cy="8"
-                r="1.5"
-                fill="currentColor"
-                className="text-primary"
-              />
-            </svg>
+            <ReactLogoAnimation size="w-24 h-24" />
           </div>
           <p className="text-muted-foreground text-lg font-medium">Loading portfolio...</p>
         </div>
